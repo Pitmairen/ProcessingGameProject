@@ -1,2 +1,2 @@
-# processing_game
-Group project in the course "Systems development and modeling" NTNU Aalesund.
+# <b>Processing game</b>
+Group project in the course "ID202712 Systems development and modeling" NTNU Aalesund.
