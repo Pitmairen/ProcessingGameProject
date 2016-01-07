@@ -1,4 +1,5 @@
-ProcessingGameProject/ProcessingGameProject/build
-ProcessingGameProject/ProcessingGameProject/nbproject
-ProcessingGameProject/ProcessingGameProject/build.xml
-ProcessingGameProject/ProcessingGameProject/manifest.mf
+/ProcessingGameProject/build
+/ProcessingGameProject/nbproject
+
+/ProcessingGameProject/build.xml
+/ProcessingGameProject/manifest.mf

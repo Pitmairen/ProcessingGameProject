@@ -1,4 +1,4 @@
-package ProcessingGameProject;
+package Backend;
 
 /**
  * The player.
@@ -7,10 +7,10 @@ package ProcessingGameProject;
  */
 public class Player {
 
-    int playerPositionX;
-    int playerPositionY;
-    int playerSpeedX;
-    int playerSpeedY;
+    private int playerPositionX;
+    private int playerPositionY;
+    private int playerSpeedX;
+    private int playerSpeedY;
 
     /**
      * Constructor.
@@ -20,7 +20,7 @@ public class Player {
      * @param speedX Players speed in x direction.
      * @param speedY Players speed in y direction.
      */
-    Player(int positionX, int positionY, int speedX, int speedY) {
+    public Player(int positionX, int positionY, int speedX, int speedY) {
         this.playerPositionX = positionX;
         this.playerPositionY = positionY;
         this.playerSpeedX = speedX;
