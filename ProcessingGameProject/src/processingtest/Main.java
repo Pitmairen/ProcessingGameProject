@@ -6,11 +6,11 @@ package processingtest;
 public class Main {
 
     /**
-     * Needed to start the processing application in NetBeans.
+     * Needed in order to run processing in NetBeans.
      *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Test.main("processingtest.Test");
+        Processing.main("processingtest.Processing");
     }
 }

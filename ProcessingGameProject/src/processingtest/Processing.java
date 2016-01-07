@@ -5,37 +5,34 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 
 /**
- * Testing out features in processing.
+ * Main class for handling the processing part of the application.
  *
  * @author Kristian Honningsvag.
  */
-public class Test extends PApplet {
+public class Processing extends PApplet {
 
-    private int playerPositionX;
-    private int playerPositionY;
-
+    private Player player;
     private ArrayList enemies;
 
     /**
-     * Needed to start the processing application in NetBeans.
-     *
-     * @param args the command line arguments
+     * Processing initial setup.
      */
-    public static void main(String[] args) {
-        Test.main("processingtest.Test");
-    }
-
     @Override
     public void setup() {
-        playerPositionX = 300;
-        playerPositionY = 300;
+        player = new Player(300, 250, 0, 0);
     }
 
+    /**
+     * Processing rendering settings.
+     */
     @Override
     public void settings() {
         size(800, 600);
     }
 
+    /**
+     * Processing draw loop.
+     */
     @Override
     public void draw() {
         clear();
@@ -45,24 +42,27 @@ public class Test extends PApplet {
         }
     }
 
+    /**
+     * Key events.
+     */
     @Override
     public void keyPressed() {
         if (keyPressed == true) {
             // Move up.
             if (keyCode == KeyEvent.VK_E) {
-                playerPositionY = playerPositionY - 10;
+                player.setPlayerPositionY(player.getPlayerPositionY() - 10);
             }
             // Move down.
             if (keyCode == KeyEvent.VK_D) {
-                playerPositionY = playerPositionY + 10;
+                player.setPlayerPositionY(player.getPlayerPositionY() + 10);
             }
             // Move left.
             if (keyCode == KeyEvent.VK_S) {
-                playerPositionX = playerPositionX - 10;
+                player.setPlayerPositionX(player.getPlayerPositionX() - 10);
             }
             // Move right.
             if (keyCode == KeyEvent.VK_F) {
-                playerPositionX = playerPositionX + 10;
+                player.setPlayerPositionX(player.getPlayerPositionX() + 10);
             }
         }
     }
@@ -74,7 +74,7 @@ public class Test extends PApplet {
         strokeWeight(1);
         stroke(0, 0, 255);
         fill(0, 200, 200);
-        ellipse(playerPositionX, playerPositionY, 20, 20);
+        ellipse(player.getPlayerPositionX(), player.getPlayerPositionY(), 20, 20);
     }
 
     /**
@@ -83,6 +83,6 @@ public class Test extends PApplet {
     private void fire() {
         strokeWeight(2);
         stroke(255, 0, 0);
-        line(playerPositionX, playerPositionY, mouseX, mouseY);
+        line(player.getPlayerPositionX(), player.getPlayerPositionY(), mouseX, mouseY);
     }
 }
