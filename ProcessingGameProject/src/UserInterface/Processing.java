@@ -15,11 +15,15 @@ public class Processing extends PApplet {
     private Player player;
     private ArrayList enemies;
 
+    private final int playFieldSizeX = 1366;
+    private final int playFieldSizeY = 768;
+
     /**
      * Processing initial setup.
      */
     @Override
     public void setup() {
+        frameRate(60);
         player = new Player(300, 250, 0, 0);
     }
 
@@ -28,7 +32,7 @@ public class Processing extends PApplet {
      */
     @Override
     public void settings() {
-        size(800, 600);
+        size(playFieldSizeX, playFieldSizeY);
     }
 
     /**
@@ -51,19 +55,19 @@ public class Processing extends PApplet {
         if (keyPressed == true) {
             // Move up.
             if (keyCode == KeyEvent.VK_E) {
-                player.setPlayerPositionY(player.getPlayerPositionY() - 10);
+                player.setPlayerSpeedY(player.getPlayerSpeedY() - 0.1f);
             }
             // Move down.
             if (keyCode == KeyEvent.VK_D) {
-                player.setPlayerPositionY(player.getPlayerPositionY() + 10);
+                player.setPlayerSpeedY(player.getPlayerSpeedY() + 0.1f);
             }
             // Move left.
             if (keyCode == KeyEvent.VK_S) {
-                player.setPlayerPositionX(player.getPlayerPositionX() - 10);
+                player.setPlayerSpeedX(player.getPlayerSpeedX() - 0.1f);
             }
             // Move right.
             if (keyCode == KeyEvent.VK_F) {
-                player.setPlayerPositionX(player.getPlayerPositionX() + 10);
+                player.setPlayerSpeedX(player.getPlayerSpeedX() + 0.1f);
             }
         }
     }
@@ -72,6 +76,7 @@ public class Processing extends PApplet {
      * Draws the player.
      */
     private void drawPlayer() {
+        player.move();
         strokeWeight(1);
         stroke(0, 0, 255);
         fill(0, 200, 200);

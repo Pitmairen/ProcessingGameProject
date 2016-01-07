@@ -7,10 +7,10 @@ package Backend;
  */
 public class Player {
 
-    private int playerPositionX;
-    private int playerPositionY;
-    private int playerSpeedX;
-    private int playerSpeedY;
+    private float playerPositionX;
+    private float playerPositionY;
+    private float playerSpeedX;
+    private float playerSpeedY;
 
     /**
      * Constructor.
@@ -27,39 +27,44 @@ public class Player {
         this.playerSpeedY = speedY;
     }
 
+    public void move() {
+        playerPositionX = playerPositionX + playerSpeedX;
+        playerPositionY = playerPositionY + playerSpeedY;
+    }
+
     public void accelerate() {
         playerSpeedX++;
     }
 
-    public void setPlayerPositionX(int playerPositionX) {
+    public void setPlayerPositionX(float playerPositionX) {
         this.playerPositionX = playerPositionX;
     }
 
-    public void setPlayerPositionY(int playerPositionY) {
+    public void setPlayerPositionY(float playerPositionY) {
         this.playerPositionY = playerPositionY;
     }
 
-    public void setPlayerSpeedX(int playerSpeedX) {
+    public void setPlayerSpeedX(float playerSpeedX) {
         this.playerSpeedX = playerSpeedX;
     }
 
-    public void setPlayerSpeedY(int playerSpeedY) {
+    public void setPlayerSpeedY(float playerSpeedY) {
         this.playerSpeedY = playerSpeedY;
     }
 
-    public int getPlayerPositionX() {
+    public float getPlayerPositionX() {
         return playerPositionX;
     }
 
-    public int getPlayerPositionY() {
+    public float getPlayerPositionY() {
         return playerPositionY;
     }
 
-    public int getPlayerSpeedX() {
+    public float getPlayerSpeedX() {
         return playerSpeedX;
     }
 
-    public int getPlayerSpeedY() {
+    public float getPlayerSpeedY() {
         return playerSpeedY;
     }
 }
