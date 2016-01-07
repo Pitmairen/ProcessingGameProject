@@ -1,4 +1,4 @@
-package processingtest;
+package ProcessingGameProject;
 
 /**
  * @author Kristian Honningsvag.
