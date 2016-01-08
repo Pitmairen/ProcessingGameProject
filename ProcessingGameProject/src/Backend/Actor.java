@@ -8,133 +8,201 @@ package Backend;
 public abstract class Actor {
 
     // Position.
-    protected float positionX;
-    protected float positionY;
+    protected double positionX;
+    protected double positionY;
 
     // Speed.
-    protected float speedX;
-    protected float speedY;
+    protected double speedX;
+    protected double speedY;
     protected double speedT;
+    protected double speedLimit;
 
     // Direction.
     protected double direction;
 
+    // Acceleration.
+    protected float accelerationX;
+    protected float accelerationY;
+
     // Characteristics.
-    protected double speedLimit;
-    protected float acceleration;
-    protected float friction;
-    protected float bounceDampening;
+    protected float airResistance;
+    protected float bounceAmplifier;
 
     /**
      * Constructor.
      */
-    protected Actor(float positionX, float positionY, float speedX, float speedY) {
+    protected Actor(double positionX, double positionY, double speedX, double speedY) {
 
         this.positionX = positionX;
         this.positionY = positionY;
         this.speedX = speedX;
         this.speedY = speedY;
+
+        calculateSpeed();
+        calculateDirection();
+
+        speedLimit = 20;
+        accelerationX = 0;
+        accelerationY = 0;
+        airResistance = 0;
+        bounceAmplifier = 1;
     }
 
     /**
-     * Calculates the direction and speed of the actors current movement.
+     * Calculates the actors total speed.
+     */
+    protected void calculateSpeed() {
+        speedT = Math.sqrt(Math.pow(speedX, 2) + Math.pow(speedY, 2));
+    }
+
+    /**
+     * Calculates the direction of the actors current movement.
      * NB: Processing operates with an inverse y-axis.
      */
     protected void calculateDirection() {
 
         double angle = Math.atan(speedY / speedX);
-        this.speedT = Math.sqrt(Math.pow(speedX, 2) + Math.pow(speedY, 2));
 
         // If speed vector lies in processing quadrant 1
         if (speedX > 0 && speedY > 0) {
-            this.direction = angle;
+            direction = angle;
         }
         // If speed vector lies in processing quadrant 2
         if (speedX < 0 && speedY > 0) {
-            this.direction = angle + Math.PI;
+            direction = angle + Math.PI;
         }
         // If speed vector lies in processing quadrant 3
         if (speedX < 0 && speedY < 0) {
-            this.direction = angle + Math.PI;
+            direction = angle + Math.PI;
         }
         // If speed vector lies in processing quadrant 4
         if (speedX > 0 && speedY < 0) {
-            this.direction = angle + 2 * Math.PI;
+            direction = angle + 2 * Math.PI;
         }
 
         // If speed vector is straight to the right.
         if (speedX > 0 && speedY == 0) {
-            this.direction = 0;
+            direction = 0;
         }
         // If speed vector is straight down.
         if (speedX == 0 && speedY > 0) {
-            this.direction = Math.PI / 2;
+            direction = Math.PI / 2;
         }
         // If speed vector is straight to the left.
         if (speedX < 0 && speedY == 0) {
-            this.direction = Math.PI;
+            direction = Math.PI;
         }
         // If speed vector is straight up.
         if (speedX == 0 && speedY < 0) {
-            this.direction = (2 * Math.PI) - (Math.PI / 2);
+            direction = (2 * Math.PI) - (Math.PI / 2);
         }
         // If standing still.
         if (speedX == 0 && speedY == 0) {
-            this.direction = 0;
+            direction = 0;
         }
     }
 
-    // Setters.
-    public void setPositionX(float playerPositionX) {
-        this.positionX = playerPositionX;
+    /**
+     * Call this function for each turn in the simulation.
+     */
+    protected void act() {
+        positionX = positionX + speedX;
+        positionY = positionY + speedY;
+        friction();
+        calculateSpeed();
+        calculateDirection();
     }
 
-    public void setPositionY(float playerPositionY) {
-        this.positionY = playerPositionY;
+    /**
+     * Makes the actor gradually come to a halt if no acceleration is applied.
+     */
+    private void friction() {
+
+        if (speedX > 0 && speedX > airResistance) {
+            speedX = speedX - airResistance;
+        }
+        if (speedX < 0 && Math.abs(speedX) > airResistance) {
+            speedX = speedX + airResistance;
+        }
+        if (speedY > 0 && speedY > airResistance) {
+            speedY = speedY - airResistance;
+        }
+        if (speedY < 0 && Math.abs(speedY) > airResistance) {
+            speedY = speedY + airResistance;
+        }
+
+        // Complete halt if speed is lower than friction value.
+        if (Math.abs(speedX) > 0 && Math.abs(speedX) < airResistance) {
+            speedX = 0;
+        }
+        if (Math.abs(speedY) > 0 && Math.abs(speedY) < airResistance) {
+            speedY = 0;
+        }
     }
 
-    public void setSpeedX(float playerSpeedX) {
-        this.speedX = playerSpeedX;
-    }
+    /**
+     * Changes actor speed and direction upon collision with the outer walls.
+     *
+     * @param wall The wall that was hit.
+     */
+    public void wallBounce(String wall) {
 
-    public void setSpeedY(float playerSpeedY) {
-        this.speedY = playerSpeedY;
-    }
+        switch (wall) {
 
-    public void setSpeedT(double speedT) {
-        this.speedT = speedT;
-    }
+            // Right wall was hit.
+            case "right":
+                if (speedX > 0) {
+                    speedX = speedX * (-bounceAmplifier);
+//                    speedY = speedY * (bounceAmplifier);
+                    act();
+                    break;
+                }
 
-    public void setDirection(double direction) {
-        this.direction = direction;
-    }
+            // Lower wall was hit.
+            case "lower":
+                if (speedY > 0) {
+//                    speedX = speedX * (bounceAmplifier);
+                    speedY = speedY * (-bounceAmplifier);
+                    act();
+                    break;
+                }
 
-    public void setAcceleration(float acceleration) {
-        this.acceleration = acceleration;
-    }
+            // Left wall was hit.
+            case "left":
+                if (speedX < 0) {
+                    speedX = speedX * (-bounceAmplifier);
+//                    speedY = speedY * (bounceAmplifier);
+                    act();
+                    break;
+                }
 
-    public void setFriction(float friction) {
-        this.friction = friction;
-    }
-
-    public void setBounceDampening(float bounceDampening) {
-        this.bounceDampening = bounceDampening;
+            // Upper wall was hit.
+            case "upper":
+                if (speedY < 0) {
+//                    speedX = speedX * (bounceAmplifier);
+                    speedY = speedY * (-bounceAmplifier);
+                    act();
+                    break;
+                }
+        }
+        calculateSpeed();
+        calculateDirection();
     }
 
     // Getters.
-    public float getPositionX() {
+    public double getPositionX() {
         return positionX;
     }
 
-    public float getPositionY() {
+    public double getPositionY() {
         return positionY;
     }
 
-    public float getSpeedX() {
+    public double getSpeedX() {
         return speedX;
     }
 
-    public float getSpeedY() {
+    public double getSpeedY() {
         return speedY;
     }
 
@@ -142,19 +210,64 @@ public abstract class Actor {
         return speedT;
     }
 
+    public double getSpeedLimit() {
+        return speedLimit;
+    }
+
     public double getDirection() {
         return direction;
     }
 
-    public float getAcceleration() {
-        return acceleration;
+    public float getAccelerationX() {
+        return accelerationX;
     }
 
-    public float getFriction() {
-        return friction;
+    public float getAccelerationY() {
+        return accelerationY;
+    }
+
+    public float getAirResistance() {
+        return airResistance;
     }
 
     public float getBounceDampening() {
-        return bounceDampening;
+        return bounceAmplifier;
+    }
+
+    // Setters.
+    public void setPositionX(float positionX) {
+        this.positionX = positionX;
+    }
+
+    public void setPositionY(float positionY) {
+        this.positionY = positionY;
+    }
+
+    public void setSpeedX(float speedX) {
+        this.speedX = speedX;
+    }
+
+    public void setSpeedY(float speedY) {
+        this.speedY = speedY;
+    }
+
+    public void setSpeedLimit(double speedLimit) {
+        this.speedLimit = speedLimit;
+    }
+
+    public void setAccelerationX(float accelerationX) {
+        this.accelerationX = accelerationX;
+    }
+
+    public void setAccelerationY(float accelerationY) {
+        this.accelerationY = accelerationY;
+    }
+
+    public void setAirResistance(float airResistance) {
+        this.airResistance = airResistance;
+    }
+
+    public void setBounceDampening(float bounceDampening) {
+        this.bounceAmplifier = bounceDampening;
     }
 }

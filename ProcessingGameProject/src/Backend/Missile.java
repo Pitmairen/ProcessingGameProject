@@ -7,33 +7,29 @@ package Backend;
  */
 public class Missile extends Actor {
 
+    private double targetAngle;
+
     /**
      * Constructor.
      */
-    public Missile(float positionX, float positionY, float speedX, float speedY) {
+    public Missile(double positionX, double positionY, double speedX, double speedY, double targetAngle) {
         super(positionX, positionY, speedX, speedY);
 
-        this.speedLimit = 20;
-        this.acceleration = 1.08f;
-        this.friction = 0.06f;
-        this.bounceDampening = 0.4f;
+        speedLimit = 9;
+        accelerationX = 1.06f;
+        accelerationY = 1.06f;
+        airResistance = 0.06f;
+        bounceAmplifier = 1.2f;
+
+        this.targetAngle = targetAngle;
     }
 
     /**
      * Call this function for each turn in the simulation.
      */
     public void act() {
-        updatePosition();
-        calculateDirection();
         accelerate();
-    }
-
-    /**
-     * Updates the missiles position.
-     */
-    private void updatePosition() {
-        positionX = positionX + speedX;
-        positionY = positionY + speedY;
+        super.act();
     }
 
     /**
@@ -41,9 +37,8 @@ public class Missile extends Actor {
      */
     private void accelerate() {
         if (speedT < speedLimit) {
-
-            this.speedX = this.speedX * this.acceleration;
-            this.speedY = this.speedY * this.acceleration;
+            speedX = speedX + (accelerationX * Math.cos(targetAngle));
+            speedY = speedY + (accelerationY * Math.sin(targetAngle));
         }
     }
 }
