@@ -9,11 +9,14 @@ public class Player {
 
     private float positionX;
     private float positionY;
+
     private float speedX;
     private float speedY;
-
     private double speedT;
+
     private double direction;
+
+    private double speedLimit = 8;
 
     private float acceleration = 0.35f;
     private float friction = 0.06f;
@@ -59,19 +62,27 @@ public class Player {
      */
     public void accelerate(String direction) {
         if (direction.equalsIgnoreCase("up")) {
-            setSpeedY(getSpeedY() - acceleration);
+            if (speedY > (-speedLimit)) {
+                this.speedY = speedY - acceleration;
+            }
         }
         // Accelerate downwards.
         if (direction.equalsIgnoreCase("down")) {
-            setSpeedY(getSpeedY() + acceleration);
+            if (speedY < (speedLimit)) {
+                this.speedY = speedY + acceleration;
+            }
         }
         // Accelerate left.
         if (direction.equalsIgnoreCase("left")) {
-            setSpeedX(getSpeedX() - acceleration);
+            if (speedX > (-speedLimit)) {
+                this.speedX = speedX - acceleration;
+            }
         }
         // Accelerate right.
         if (direction.equalsIgnoreCase("right")) {
-            setSpeedX(getSpeedX() + acceleration);
+            if (speedX < (speedLimit)) {
+                this.speedX = speedX + acceleration;
+            }
         }
     }
 

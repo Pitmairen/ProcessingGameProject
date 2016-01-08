@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import processing.core.PApplet;
+import processing.core.PFont;
 
 /**
  * Main class for handling the processing part of the application.
@@ -22,6 +23,12 @@ public class Processing extends PApplet {
     private int outerWallThickness = 4;
     private int playerDiameter = 20;
 
+    // Key presses.
+    private boolean up = false;
+    private boolean down = false;
+    private boolean left = false;
+    private boolean right = false;
+
     /**
      * Processing initial setup.
      */
@@ -37,6 +44,7 @@ public class Processing extends PApplet {
     @Override
     public void settings() {
         size(windowSizeX, windowSizeY);
+//        fullScreen();
     }
 
     /**
@@ -45,13 +53,33 @@ public class Processing extends PApplet {
     @Override
     public void draw() {
         clear();
+        cursor(CROSS);
         drawOuterWalls();
         drawPlayer();
         displayMovement();
-        if (mousePressed) {
+        if (mousePressed && (mouseButton == LEFT)) {
             fire();
         }
+        movePlayer();
         detectWallCollision();
+    }
+
+    /**
+     * Tells the player to accelerate in a given direction.
+     */
+    private void movePlayer() {
+        if (up) {
+            player.accelerate("up");
+        }
+        if (down) {
+            player.accelerate("down");
+        }
+        if (left) {
+            player.accelerate("left");
+        }
+        if (right) {
+            player.accelerate("right");
+        }
     }
 
     /**
@@ -59,23 +87,49 @@ public class Processing extends PApplet {
      */
     @Override
     public void keyPressed() {
-        if (keyPressed == true) {
-            // Accelerate upwards.
-            if (keyCode == KeyEvent.VK_E) {
-                player.accelerate("up");
-            }
-            // Accelerate downwards.
-            if (keyCode == KeyEvent.VK_D) {
-                player.accelerate("down");
-            }
-            // Accelerate left.
-            if (keyCode == KeyEvent.VK_S) {
-                player.accelerate("left");
-            }
-            // Accelerate right.
-            if (keyCode == KeyEvent.VK_F) {
-                player.accelerate("right");
-            }
+
+        // Accelerate upwards.
+        if (keyCode == KeyEvent.VK_E) {
+            up = true;
+        }
+        // Accelerate downwards.
+        if (keyCode == KeyEvent.VK_D) {
+            down = true;
+            player.accelerate("down");
+        }
+        // Accelerate left.
+        if (keyCode == KeyEvent.VK_S) {
+            left = true;
+            player.accelerate("left");
+        }
+        // Accelerate right.
+        if (keyCode == KeyEvent.VK_F) {
+            right = true;
+            player.accelerate("right");
+        }
+    }
+
+    /**
+     * Key release events.
+     */
+    @Override
+    public void keyReleased() {
+
+        // Accelerate upwards.
+        if (keyCode == KeyEvent.VK_E) {
+            up = false;
+        }
+        // Accelerate downwards.
+        if (keyCode == KeyEvent.VK_D) {
+            down = false;
+        }
+        // Accelerate left.
+        if (keyCode == KeyEvent.VK_S) {
+            left = false;
+        }
+        // Accelerate right.
+        if (keyCode == KeyEvent.VK_F) {
+            right = false;
         }
     }
 
@@ -105,9 +159,13 @@ public class Processing extends PApplet {
      * Displays the players current speed and direction.
      */
     public void displayMovement() {
-        DecimalFormat df = new DecimalFormat("0.00");
-        System.out.println("Speed: " + df.format(player.getSpeedT()) + " p/t");
-        System.out.println("Angle: " + df.format(player.getDirection()) + " rad");
+        DecimalFormat speedTextFormat = new DecimalFormat("00.0");
+        DecimalFormat angleTextFormat = new DecimalFormat("0.0");
+
+        PFont f = createFont("Arial", 12, true);
+        textFont(f, 16);
+        text("Speed: " + speedTextFormat.format(player.getSpeedT()) + " p/t", 10, 30);
+        text("Angle: " + angleTextFormat.format(player.getDirection()) + " rad", 10, 50);
     }
 
     /**
