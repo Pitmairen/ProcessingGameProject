@@ -2,6 +2,7 @@ package UserInterface;
 
 import Backend.Player;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import processing.core.PApplet;
 
@@ -15,8 +16,11 @@ public class Processing extends PApplet {
     private Player player;
     private ArrayList enemies;
 
-    private final int playFieldSizeX = 1366;
-    private final int playFieldSizeY = 768;
+    private final int windowSizeX = 1366;
+    private final int windowSizeY = 768;
+
+    private int outerWallThickness = 4;
+    private int playerDiameter = 20;
 
     /**
      * Processing initial setup.
@@ -32,55 +36,102 @@ public class Processing extends PApplet {
      */
     @Override
     public void settings() {
-        size(playFieldSizeX, playFieldSizeY);
+        size(windowSizeX, windowSizeY);
     }
 
     /**
-     * Processing draw loop.
+     * The processing draw loop.
      */
     @Override
     public void draw() {
         clear();
+        drawOuterWalls();
         drawPlayer();
+        displayMovement();
         if (mousePressed) {
             fire();
         }
+        detectWallCollision();
     }
 
     /**
-     * Key events.
+     * Key press events.
      */
     @Override
     public void keyPressed() {
         if (keyPressed == true) {
-            // Move up.
+            // Accelerate upwards.
             if (keyCode == KeyEvent.VK_E) {
-                player.setPlayerSpeedY(player.getPlayerSpeedY() - 0.1f);
+                player.accelerate("up");
             }
-            // Move down.
+            // Accelerate downwards.
             if (keyCode == KeyEvent.VK_D) {
-                player.setPlayerSpeedY(player.getPlayerSpeedY() + 0.1f);
+                player.accelerate("down");
             }
-            // Move left.
+            // Accelerate left.
             if (keyCode == KeyEvent.VK_S) {
-                player.setPlayerSpeedX(player.getPlayerSpeedX() - 0.1f);
+                player.accelerate("left");
             }
-            // Move right.
+            // Accelerate right.
             if (keyCode == KeyEvent.VK_F) {
-                player.setPlayerSpeedX(player.getPlayerSpeedX() + 0.1f);
+                player.accelerate("right");
             }
         }
+    }
+
+    /**
+     * Detects wall collisions.
+     */
+    private void detectWallCollision() {
+        // Right wall.
+        if (player.getPositionX() + (playerDiameter / 2) >= (windowSizeX - outerWallThickness)) {
+            player.wallBounce("right");
+        }
+        // Lower wall.
+        if (player.getPositionY() + (playerDiameter / 2) >= (windowSizeY - outerWallThickness)) {
+            player.wallBounce("lower");
+        }
+        // Left wall.
+        if (player.getPositionX() - (playerDiameter / 2) <= (0 + outerWallThickness)) {
+            player.wallBounce("left");
+        }
+        // Upper wall.
+        if (player.getPositionY() - (playerDiameter / 2) <= (0 + outerWallThickness)) {
+            player.wallBounce("upper");
+        }
+    }
+
+    /**
+     * Displays the players current speed and direction.
+     */
+    public void displayMovement() {
+        DecimalFormat df = new DecimalFormat("0.00");
+        System.out.println("Speed: " + df.format(player.getSpeedT()) + " p/t");
+        System.out.println("Angle: " + df.format(player.getDirection()) + " rad");
+    }
+
+    /**
+     * Draws the outer walls.
+     */
+    private void drawOuterWalls() {
+        strokeWeight(outerWallThickness);
+        stroke(153, 153, 5);
+        fill(0);
+        rect(0 + outerWallThickness / 2,
+                0 + outerWallThickness / 2,
+                windowSizeX - outerWallThickness,
+                windowSizeY - outerWallThickness);
     }
 
     /**
      * Draws the player.
      */
     private void drawPlayer() {
-        player.move();
+        player.act();
         strokeWeight(1);
-        stroke(0, 0, 255);
+        stroke(0, 200, 200);
         fill(0, 200, 200);
-        ellipse(player.getPlayerPositionX(), player.getPlayerPositionY(), 20, 20);
+        ellipse(player.getPositionX(), player.getPositionY(), playerDiameter, playerDiameter);
     }
 
     /**
@@ -89,6 +140,6 @@ public class Processing extends PApplet {
     private void fire() {
         strokeWeight(2);
         stroke(255, 0, 0);
-        line(player.getPlayerPositionX(), player.getPlayerPositionY(), mouseX, mouseY);
+        line(player.getPositionX(), player.getPositionY(), mouseX, mouseY);
     }
 }
