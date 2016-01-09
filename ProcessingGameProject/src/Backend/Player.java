@@ -18,11 +18,13 @@ public class Player extends Actor {
         accelerationY = 0.2f;
         airResistance = 0.06f;
         bounceAmplifier = 1.2f;
+        hitPoints = 30;
     }
 
     /**
      * Call this function for each turn in the simulation.
      */
+    @Override
     public void act() {
         super.act();
     }

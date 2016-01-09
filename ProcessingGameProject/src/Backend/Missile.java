@@ -20,6 +20,7 @@ public class Missile extends Actor {
         accelerationY = 1.06f;
         airResistance = 0.06f;
         bounceAmplifier = 1.2f;
+        hitPoints = 1;
 
         this.targetAngle = targetAngle;
     }

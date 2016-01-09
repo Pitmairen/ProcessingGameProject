@@ -27,6 +27,7 @@ public abstract class Actor {
     // Characteristics.
     protected float airResistance;
     protected float bounceAmplifier;
+    protected float hitPoints;
 
     /**
      * Constructor.
@@ -38,68 +39,23 @@ public abstract class Actor {
         this.speedX = speedX;
         this.speedY = speedY;
 
-        calculateSpeed();
-        calculateDirection();
+        updateVectors();
 
         speedLimit = 20;
         accelerationX = 0;
         accelerationY = 0;
         airResistance = 0;
         bounceAmplifier = 1;
+        hitPoints = 10;
     }
 
     /**
-     * Calculates the actors total speed.
+     * Updates the actors total speed and direction of the current movement.
      */
-    protected void calculateSpeed() {
+    protected void updateVectors() {
         speedT = Math.sqrt(Math.pow(speedX, 2) + Math.pow(speedY, 2));
-    }
+        direction = NumberCruncher.calculateAngle(speedX, speedY);
 
-    /**
-     * Calculates the direction of the actors current movement.
-     * NB: Processing operates with an inverse y-axis.
-     */
-    protected void calculateDirection() {
-
-        double angle = Math.atan(speedY / speedX);
-
-        // If speed vector lies in processing quadrant 1
-        if (speedX > 0 && speedY > 0) {
-            direction = angle;
-        }
-        // If speed vector lies in processing quadrant 2
-        if (speedX < 0 && speedY > 0) {
-            direction = angle + Math.PI;
-        }
-        // If speed vector lies in processing quadrant 3
-        if (speedX < 0 && speedY < 0) {
-            direction = angle + Math.PI;
-        }
-        // If speed vector lies in processing quadrant 4
-        if (speedX > 0 && speedY < 0) {
-            direction = angle + 2 * Math.PI;
-        }
-
-        // If speed vector is straight to the right.
-        if (speedX > 0 && speedY == 0) {
-            direction = 0;
-        }
-        // If speed vector is straight down.
-        if (speedX == 0 && speedY > 0) {
-            direction = Math.PI / 2;
-        }
-        // If speed vector is straight to the left.
-        if (speedX < 0 && speedY == 0) {
-            direction = Math.PI;
-        }
-        // If speed vector is straight up.
-        if (speedX == 0 && speedY < 0) {
-            direction = (2 * Math.PI) - (Math.PI / 2);
-        }
-        // If standing still.
-        if (speedX == 0 && speedY == 0) {
-            direction = 0;
-        }
     }
 
     /**
@@ -109,8 +65,7 @@ public abstract class Actor {
         positionX = positionX + speedX;
         positionY = positionY + speedY;
         friction();
-        calculateSpeed();
-        calculateDirection();
+        updateVectors();
     }
 
     /**
@@ -148,7 +103,6 @@ public abstract class Actor {
     public void wallBounce(String wall) {
 
         switch (wall) {
-
             // Right wall was hit.
             case "right":
                 if (speedX > 0) {
@@ -157,7 +111,6 @@ public abstract class Actor {
                     act();
                     break;
                 }
-
             // Lower wall was hit.
             case "lower":
                 if (speedY > 0) {
@@ -166,7 +119,6 @@ public abstract class Actor {
                     act();
                     break;
                 }
-
             // Left wall was hit.
             case "left":
                 if (speedX < 0) {
@@ -175,7 +127,6 @@ public abstract class Actor {
                     act();
                     break;
                 }
-
             // Upper wall was hit.
             case "upper":
                 if (speedY < 0) {
@@ -185,8 +136,7 @@ public abstract class Actor {
                     break;
                 }
         }
-        calculateSpeed();
-        calculateDirection();
+        updateVectors();
     }
 
     // Getters.
@@ -230,24 +180,28 @@ public abstract class Actor {
         return airResistance;
     }
 
-    public float getBounceDampening() {
+    public float getBounceAmplifier() {
         return bounceAmplifier;
     }
 
+    public float getHitPoints() {
+        return hitPoints;
+    }
+
     // Setters.
-    public void setPositionX(float positionX) {
+    public void setPositionX(double positionX) {
         this.positionX = positionX;
     }
 
-    public void setPositionY(float positionY) {
+    public void setPositionY(double positionY) {
         this.positionY = positionY;
     }
 
-    public void setSpeedX(float speedX) {
+    public void setSpeedX(double speedX) {
         this.speedX = speedX;
     }
 
-    public void setSpeedY(float speedY) {
+    public void setSpeedY(double speedY) {
         this.speedY = speedY;
     }
 
@@ -267,7 +221,11 @@ public abstract class Actor {
         this.airResistance = airResistance;
     }
 
-    public void setBounceDampening(float bounceDampening) {
-        this.bounceAmplifier = bounceDampening;
+    public void setBounceAmplifier(float bounceAmplifier) {
+        this.bounceAmplifier = bounceAmplifier;
+    }
+
+    public void setHitPoints(float hitPoints) {
+        this.hitPoints = hitPoints;
     }
 }
