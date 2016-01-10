@@ -34,10 +34,16 @@ public class Processing extends PApplet {
     // Player.
     private int playerDiameter = 30;
     private int[] playerRGBA = new int[]{0, 70, 200, 255};
+    private int playerTurretLength = 20;
+    private int playerTurretWidth = 3;
+    private int[] playerTurretRGBA = new int[]{30, 30, 200, 255};
 
     // Enemies.
     private int enemyFrigateDiameter = 20;
-    private int[] enemyFrigateRGBA = new int[]{200, 50, 50, 255};
+    private int[] enemyFrigateRGBA = new int[]{200, 30, 30, 255};
+    private int enemyFrigateTurretLength = 10;
+    private int enemyFrigateTurretWidth = 3;
+    private int[] enemyFrigateTurretRGBA = new int[]{70, 100, 100, 255};
 
     // Objects.
     private int missileDiameter = 5;
@@ -61,6 +67,7 @@ public class Processing extends PApplet {
     private ArrayList<Missile> missiles = new ArrayList<Missile>();
     private boolean gameRunning = false;
     private boolean deathScreen = false;
+    private int enemyFrigateHit = 0;
 
     /**
      * Initial processing setup.
@@ -97,6 +104,7 @@ public class Processing extends PApplet {
             drawHUD();
             movePlayer();
             detectPlayerWallCollision();
+            checkMissileHit();
             detectMissilesWallCollision();
         }
         if (deathScreen) {
@@ -117,6 +125,7 @@ public class Processing extends PApplet {
         deathScreen = false;
         gameRunning = false;
         missiles = new ArrayList<Missile>();
+        enemyFrigateHit = 0;
     }
 
     /**
@@ -309,10 +318,11 @@ public class Processing extends PApplet {
         stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
+        text("HP: " + playerHP, 14, 28);
         text("Speed: " + playerSpeed + " p/t", 14, 48);
         text("Angle: " + playerAngle + " rad", 14, 68);
         text("Active missiles: " + missiles.size(), 14, 108);
-        text("HP: " + playerHP, 14, 28);
+        text("Missile hits: " + enemyFrigateHit, 14, 128);
     }
 
     /**
@@ -328,7 +338,7 @@ public class Processing extends PApplet {
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
         text("Press any key to start", 500, 300);
-        text("\n" + "Acceleration: E, S, D, F"
+        text("Acceleration: E, S, D, F"
                 + "\n" + "Fire primary: Left mouse button"
                 + "\n" + "Fire Secondary: Right mouse button", 500, 350);
     }
@@ -346,29 +356,60 @@ public class Processing extends PApplet {
         fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
 
         text("You Were Defeated", 500, 300);
-        text(" Press \"Enter\" to return to Start Menu", 426, 330);
+        text(" Your score were " + enemyFrigateHit, 500, 330);
+        text(" Press \"Enter\" to return to Start Menu", 426, 370);
     }
 
     /**
      * Draws the player.
      */
     private void drawPlayer() {
+
         player.act();
+
+        // Draw main body.
         strokeWeight(0);
         stroke(playerRGBA[0], playerRGBA[1], playerRGBA[2]);
         fill(playerRGBA[0], playerRGBA[1], playerRGBA[2]);
         ellipse((float) player.getPositionX(), (float) player.getPositionY(), playerDiameter, playerDiameter);
+
+        // Draw turret.
+        double xVector = mouseX - player.getPositionX();
+        double yVector = mouseY - player.getPositionY();
+        double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
+
+        strokeWeight(playerTurretWidth);
+        stroke(playerTurretRGBA[0], playerTurretRGBA[1], playerTurretRGBA[2]);
+        fill(playerTurretRGBA[0], playerTurretRGBA[1], playerTurretRGBA[2]);
+        line((float) player.getPositionX(), (float) player.getPositionY(),
+                (float) player.getPositionX() + (float) (playerTurretLength * Math.cos(targetAngle)),
+                (float) player.getPositionY() + (float) (playerTurretLength * Math.sin(targetAngle)));
     }
 
     /**
      * Draws the enemy frigate.
      */
     private void drawEnemyFrigate() {
+
         enemyFrigate.act();
+
+        // Draw main body.
         strokeWeight(0);
         stroke(enemyFrigateRGBA[0], enemyFrigateRGBA[1], enemyFrigateRGBA[2]);
         fill(enemyFrigateRGBA[0], enemyFrigateRGBA[1], enemyFrigateRGBA[2]);
         ellipse((float) enemyFrigate.getPositionX(), (float) enemyFrigate.getPositionY(), enemyFrigateDiameter, enemyFrigateDiameter);
+
+        // Draw turret.
+        double xVector = mouseX - player.getPositionX();
+        double yVector = mouseY - player.getPositionY();
+        double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
+
+        strokeWeight(enemyFrigateTurretWidth);
+        stroke(enemyFrigateTurretRGBA[0], enemyFrigateTurretRGBA[1], enemyFrigateTurretRGBA[2]);
+        fill(enemyFrigateTurretRGBA[0], enemyFrigateTurretRGBA[1], enemyFrigateTurretRGBA[2]);
+        line((float) enemyFrigate.getPositionX(), (float) enemyFrigate.getPositionY(),
+                (float) enemyFrigate.getPositionX() + (float) (enemyFrigateTurretLength * Math.cos(enemyFrigate.getDirection())),
+                (float) enemyFrigate.getPositionY() + (float) (enemyFrigateTurretLength * Math.sin(enemyFrigate.getDirection())));
     }
 
     /**
@@ -448,6 +489,24 @@ public class Processing extends PApplet {
                 && (Math.abs(player.getPositionY() - enemyFrigate.getPositionY()) < (playerDiameter / 2) + (enemyFrigateDiameter / 2))) {
             gameRunning = false;
             deathScreen = true;
+        }
+    }
+    
+    /**
+     * Counts missile hits on the enemy frigate by the player.
+     */
+    private void checkMissileHit() {
+        Iterator<Missile> it = missiles.iterator();
+        while (it.hasNext()) {
+
+            Missile missile = it.next();
+
+            if ((Math.abs(missile.getPositionX() - enemyFrigate.getPositionX()) < (missileDiameter / 2) + (enemyFrigateDiameter / 2))
+                    && (Math.abs(missile.getPositionY() - enemyFrigate.getPositionY()) < (missileDiameter / 2) + (enemyFrigateDiameter / 2))) {
+
+                enemyFrigateHit++;
+                it.remove();
+            }
         }
     }
 
