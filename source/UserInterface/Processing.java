@@ -400,10 +400,6 @@ public class Processing extends PApplet {
         ellipse((float) enemyFrigate.getPositionX(), (float) enemyFrigate.getPositionY(), enemyFrigateDiameter, enemyFrigateDiameter);
 
         // Draw turret.
-        double xVector = mouseX - player.getPositionX();
-        double yVector = mouseY - player.getPositionY();
-        double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
-
         strokeWeight(enemyFrigateTurretWidth);
         stroke(enemyFrigateTurretRGBA[0], enemyFrigateTurretRGBA[1], enemyFrigateTurretRGBA[2]);
         fill(enemyFrigateTurretRGBA[0], enemyFrigateTurretRGBA[1], enemyFrigateTurretRGBA[2]);
