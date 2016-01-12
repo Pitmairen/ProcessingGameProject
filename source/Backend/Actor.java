@@ -1,98 +1,123 @@
 package Backend;
 
+import UserInterface.GUIHandler;
+
 /**
  * Super class for all actors.
  *
  * @author Kristian Honningsvag.
  */
-public abstract class Actor {
+public abstract class Actor implements Drawable {
 
     // Position.
-    protected double positionX;
-    protected double positionY;
-
-    // Speed.
-    protected double speedX;
-    protected double speedY;
-    protected double speedT;
-    protected double speedLimit;
+    protected double positionX;     // pixels
+    protected double positionY;     // pixels
 
     // Direction.
-    protected double direction;
+    protected double heading;       // radians
+    protected double course;        // radians    (derived value)
+
+    // Speed.
+    protected double speedX;        // pixels/ms
+    protected double speedY;        // pixels/ms
+    protected double speedT;        // pixels/ms  (derived value)
+    protected double speedLimit;    // pixels/ms
 
     // Acceleration.
-    protected float accelerationX;
-    protected float accelerationY;
+    protected double accelerationX;   // pixels/ms^2
+    protected double accelerationY;   // pixels/ms^2
 
-    // Characteristics.
-    protected float airResistance;
-    protected float bounceAmplifier;
-    protected float hitPoints;
+    // Attributes.
+    protected double hitBoxRadius;    // pixels
+    protected double drag;            // pixels/ms^2
+    protected double bounceModifier;
+    protected double hitPoints;
+
+    protected GameEngine gameEngine;
 
     /**
      * Constructor.
+     *
+     * @param positionX Actors X-position in pixels.
+     * @param positionY Actors Y-position in pixels.
+     * @param gameEngine
      */
-    protected Actor(double positionX, double positionY, double speedX, double speedY) {
+    protected Actor(double positionX, double positionY, GameEngine gameEngine) {
 
+        // Common for all actors.
         this.positionX = positionX;
         this.positionY = positionY;
-        this.speedX = speedX;
-        this.speedY = speedY;
+        this.gameEngine = gameEngine;
+
+        // Default values. Overwrite as necessary.
+        heading = 0;
+        speedX = 0;
+        speedY = 0;
+        speedLimit = 0.5f;
+        accelerationX = 0.001f;
+        accelerationY = 0.001f;
+        hitBoxRadius = 20;
+        drag = 0.0005f;
+        bounceModifier = 1.2f;
+        hitPoints = 10;
 
         updateVectors();
-
-        speedLimit = 20;
-        accelerationX = 0;
-        accelerationY = 0;
-        airResistance = 0;
-        bounceAmplifier = 1;
-        hitPoints = 10;
     }
+
+    @Override
+    public abstract void draw(GUIHandler GUIHandler);
 
     /**
      * Updates the actors total speed and direction of the current movement.
      */
     protected void updateVectors() {
         speedT = Math.sqrt(Math.pow(speedX, 2) + Math.pow(speedY, 2));
-        direction = NumberCruncher.calculateAngle(speedX, speedY);
-
+        course = NumberCruncher.calculateAngle(speedX, speedY);
     }
 
     /**
-     * Call this function for each turn in the simulation.
+     * Updates the actors state. Should be called once each millisecond.
      */
     protected void act() {
+        updatePosition();
+        addFriction();
+        updateVectors();
+    }
+
+    /**
+     * Updates the actors position.
+     */
+    private void updatePosition() {
+        // s = s0 + v*t, t=1
         positionX = positionX + speedX;
         positionY = positionY + speedY;
-        friction();
-        updateVectors();
     }
 
     /**
      * Makes the actor gradually come to a halt if no acceleration is applied.
      */
-    private void friction() {
+    private void addFriction() {
 
-        if (speedX > 0 && speedX > airResistance) {
-            speedX = speedX - airResistance;
+        if (speedX > 0 && speedX > drag) {
+            speedX = speedX - drag;
         }
-        if (speedX < 0 && Math.abs(speedX) > airResistance) {
-            speedX = speedX + airResistance;
+        if (speedX < 0 && Math.abs(speedX) > drag) {
+            speedX = speedX + drag;
         }
-        if (speedY > 0 && speedY > airResistance) {
-            speedY = speedY - airResistance;
+        if (speedY > 0 && speedY > drag) {
+            speedY = speedY - drag;
         }
-        if (speedY < 0 && Math.abs(speedY) > airResistance) {
-            speedY = speedY + airResistance;
+        if (speedY < 0 && Math.abs(speedY) > drag) {
+            speedY = speedY + drag;
         }
 
-        // Complete halt if speed is lower than friction value.
-        if (Math.abs(speedX) > 0 && Math.abs(speedX) < airResistance) {
-            speedX = 0;
-        }
-        if (Math.abs(speedY) > 0 && Math.abs(speedY) < airResistance) {
-            speedY = 0;
-        }
+//        // Complete halt if speed is lower than drag value.
+//        if (Math.abs(speedX) > 0 && Math.abs(speedX) < drag) {
+//            speedX = 0;
+//        }
+//        if (Math.abs(speedY) > 0 && Math.abs(speedY) < drag) {
+//            speedY = 0;
+//        }
     }
 
     /**
@@ -106,7 +131,7 @@ public abstract class Actor {
             // Right wall was hit.
             case "right":
                 if (speedX > 0) {
-                    speedX = speedX * (-bounceAmplifier);
+                    speedX = speedX * (-bounceModifier);
 //                    speedY = speedY * (bounceAmplifier);
                     act();
                     break;
@@ -115,14 +140,14 @@ public abstract class Actor {
             case "lower":
                 if (speedY > 0) {
 //                    speedX = speedX * (bounceAmplifier);
-                    speedY = speedY * (-bounceAmplifier);
+                    speedY = speedY * (-bounceModifier);
                     act();
                     break;
                 }
             // Left wall was hit.
             case "left":
                 if (speedX < 0) {
-                    speedX = speedX * (-bounceAmplifier);
+                    speedX = speedX * (-bounceModifier);
 //                    speedY = speedY * (bounceAmplifier);
                     act();
                     break;
@@ -131,7 +156,7 @@ public abstract class Actor {
             case "upper":
                 if (speedY < 0) {
 //                    speedX = speedX * (bounceAmplifier);
-                    speedY = speedY * (-bounceAmplifier);
+                    speedY = speedY * (-bounceModifier);
                     act();
                     break;
                 }
@@ -146,6 +171,10 @@ public abstract class Actor {
 
     public double getPositionY() {
         return positionY;
+    }
+
+    public double getHeading() {
+        return heading;
     }
 
     public double getSpeedX() {
@@ -164,28 +193,36 @@ public abstract class Actor {
         return speedLimit;
     }
 
-    public double getDirection() {
-        return direction;
+    public double getCourse() {
+        return course;
     }
 
-    public float getAccelerationX() {
+    public double getAccelerationX() {
         return accelerationX;
     }
 
-    public float getAccelerationY() {
+    public double getAccelerationY() {
         return accelerationY;
     }
 
-    public float getAirResistance() {
-        return airResistance;
+    public double getHitBoxRadius() {
+        return hitBoxRadius;
     }
 
-    public float getBounceAmplifier() {
-        return bounceAmplifier;
+    public double getDrag() {
+        return drag;
     }
 
-    public float getHitPoints() {
+    public double getBounceModifier() {
+        return bounceModifier;
+    }
+
+    public double getHitPoints() {
         return hitPoints;
+    }
+
+    public GameEngine getGameEngine() {
+        return gameEngine;
     }
 
     // Setters.
@@ -195,6 +232,10 @@ public abstract class Actor {
 
     public void setPositionY(double positionY) {
         this.positionY = positionY;
+    }
+
+    public void setHeading(double heading) {
+        this.heading = heading;
     }
 
     public void setSpeedX(double speedX) {
@@ -209,23 +250,28 @@ public abstract class Actor {
         this.speedLimit = speedLimit;
     }
 
-    public void setAccelerationX(float accelerationX) {
+    public void setAccelerationX(double accelerationX) {
         this.accelerationX = accelerationX;
     }
 
-    public void setAccelerationY(float accelerationY) {
+    public void setAccelerationY(double accelerationY) {
         this.accelerationY = accelerationY;
     }
 
-    public void setAirResistance(float airResistance) {
-        this.airResistance = airResistance;
+    public void setHitBoxRadius(double hitBoxRadius) {
+        this.hitBoxRadius = hitBoxRadius;
     }
 
-    public void setBounceAmplifier(float bounceAmplifier) {
-        this.bounceAmplifier = bounceAmplifier;
+    public void setDrag(double drag) {
+        this.drag = drag;
     }
 
-    public void setHitPoints(float hitPoints) {
+    public void setBounceModifier(double bounceModifier) {
+        this.bounceModifier = bounceModifier;
+    }
+
+    public void setHitPoints(double hitPoints) {
         this.hitPoints = hitPoints;
     }
+
 }

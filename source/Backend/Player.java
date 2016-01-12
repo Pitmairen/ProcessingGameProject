@@ -1,32 +1,58 @@
 package Backend;
 
+import UserInterface.GUIHandler;
+
 /**
  * The player.
  *
  * @author Kristian Honningsvag.
  */
-public class Player extends Actor {
+public class Player extends Actor implements Drawable {
+
+    // Shape.
+    private int turretLength = 20;
+    private int turretWidth = 3;
+
+    // Color.
+    private int[] bodyRGBA = new int[]{0, 70, 200, 255};
+    private int[] turretRGBA = new int[]{30, 30, 200, 255};
 
     /**
      * Constructor.
      */
-    public Player(double positionX, double positionY, double speedX, double speedY) {
-        super(positionX, positionY, speedX, speedY);
+    public Player(double positionX, double positionY, GameEngine gameEngine) {
 
-        speedLimit = 6;
-        accelerationX = 0.2f;
-        accelerationY = 0.2f;
-        airResistance = 0.06f;
-        bounceAmplifier = 1.2f;
+        super(positionX, positionY, gameEngine);
+
+        speedLimit = 0.5f;
+        accelerationX = 0.001f;
+        accelerationY = 0.001f;
+        hitBoxRadius = 30;
+        drag = 0.0005f;
+        bounceModifier = 1.2f;
         hitPoints = 30;
     }
 
-    /**
-     * Call this function for each turn in the simulation.
-     */
     @Override
-    public void act() {
-        super.act();
+    public void draw(GUIHandler guiHandler) {
+
+        // Draw main body.
+        guiHandler.strokeWeight(0);
+        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+        guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius, (float) hitBoxRadius);
+
+        // Draw turret.
+        double xVector = guiHandler.mouseX - this.getPositionX();
+        double yVector = guiHandler.mouseY - this.getPositionY();
+        double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
+
+        guiHandler.strokeWeight(turretWidth);
+        guiHandler.stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
+        guiHandler.fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
+        guiHandler.line((float) this.getPositionX(), (float) this.getPositionY(),
+                (float) this.getPositionX() + (float) (turretLength * Math.cos(targetAngle)),
+                (float) this.getPositionY() + (float) (turretLength * Math.sin(targetAngle)));
     }
 
     /**
@@ -59,4 +85,5 @@ public class Player extends Actor {
             }
         }
     }
+
 }

@@ -2,8 +2,8 @@ package Backend;
 
 /**
  * Calculates vectors, angles, and other values to be used in the simulation.
- * NB: Processing operates with an inverse y-axis. This means that positive Y is
- * down, and radial angles have their positive direction clockwise.
+ * NB: Positive Y-axis is downwards, and radial angles have their positive
+ * direction clockwise.
  *
  * @author Kristian Honningsvag.
  */
@@ -21,19 +21,19 @@ public abstract class NumberCruncher {
         double angle = Math.atan(yVector / xVector);
         double targetAngle = 0;
 
-        // If vector lies in processing quadrant 1
+        // If vector lies in quadrant 1
         if (xVector > 0 && yVector > 0) {
             targetAngle = angle;
         }
-        // If vector lies in processing quadrant 2
+        // If vector lies in quadrant 2
         if (xVector < 0 && yVector > 0) {
             targetAngle = angle + Math.PI;
         }
-        // If vector lies in processing quadrant 3
+        // If vector lies in quadrant 3
         if (xVector < 0 && yVector < 0) {
             targetAngle = angle + Math.PI;
         }
-        // If vector lies in processing quadrant 4
+        // If vector lies in quadrant 4
         if (xVector > 0 && yVector < 0) {
             targetAngle = angle + 2 * Math.PI;
         }
@@ -60,4 +60,5 @@ public abstract class NumberCruncher {
         }
         return targetAngle;
     }
+
 }

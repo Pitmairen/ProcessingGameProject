@@ -1,0 +1,201 @@
+package UserInterface;
+
+import Backend.Actor;
+import Backend.GameEngine;
+
+import java.text.DecimalFormat;
+import processing.core.PApplet;
+import processing.core.PFont;
+
+/**
+ * Handles rendering the GUI. Also listens for user input and sends it to the
+ * game engine.
+ *
+ * @author Kristian Honningsvag.
+ */
+public class GUIHandler extends PApplet {
+
+    // Main GUIHandler.
+    private final int windowSizeX = 1366;
+    private final int windowSizeY = 768;
+    private int outerWallThickness = 4;
+    private int[] outerWallsRGBA = new int[]{153, 153, 153, 255};
+    private int[] backgroundRGBA = new int[]{0, 0, 0, 255};
+
+    // HUD.
+    private int[] hudRGBA = new int[]{80, 150, 40, 255};
+    private int[] deathScreenRGBA = new int[]{200, 50, 40, 255};
+
+    private GameEngine gameEngine;
+
+    /**
+     * Processing initial setup.
+     */
+    @Override
+    public void setup() {
+        frameRate(60);
+        cursor(CROSS);
+        gameEngine = new GameEngine(this, "Game Engine");
+    }
+
+    /**
+     * Processing rendering settings.
+     */
+    @Override
+    public void settings() {
+        size(windowSizeX, windowSizeY);
+//        fullScreen();
+    }
+
+    /**
+     * Processing draw loop.
+     */
+    @Override
+    public void draw() {
+
+        drawOuterWalls();
+
+        if (gameEngine.isPlayerAlive() && !gameEngine.isSimulationRunning()) {
+            drawStartScreen();
+        }
+
+        if (!gameEngine.isPlayerAlive() && gameEngine.isSimulationRunning()) {
+            drawDeathScreen();
+        }
+
+        if (gameEngine.isSimulationRunning()) {
+
+            if (gameEngine.isPlayerAlive()) {
+                drawHUD();
+            }
+
+            // Draw actors.
+            gameEngine.getPlayer().draw(this);
+            for (Actor actor : gameEngine.getEnemies()) {
+                actor.draw(this);
+            }
+            for (Actor actor : gameEngine.getProjectiles()) {
+                actor.draw(this);
+            }
+            for (Actor actor : gameEngine.getItems()) {
+                actor.draw(this);
+            }
+        }
+    }
+
+    /**
+     * Draws the outer walls.
+     */
+    private void drawOuterWalls() {
+        strokeWeight(outerWallThickness);
+        stroke(outerWallsRGBA[0], outerWallsRGBA[1], outerWallsRGBA[2]);
+        fill(backgroundRGBA[0], backgroundRGBA[1], backgroundRGBA[2]);
+        rect(0 + outerWallThickness / 2,
+                0 + outerWallThickness / 2,
+                windowSizeX - outerWallThickness,
+                windowSizeY - outerWallThickness);
+    }
+
+    /**
+     * Draws the HUD.
+     */
+    public void drawHUD() {
+        DecimalFormat format1 = new DecimalFormat("00.0");
+        DecimalFormat format2 = new DecimalFormat("0.0");
+
+        String playerSpeed = format1.format(gameEngine.getPlayer().getSpeedT());
+        String playerAngle = format2.format(gameEngine.getPlayer().getHeading());
+        String playerHP = format2.format(gameEngine.getPlayer().getHitPoints());
+        PFont font = createFont("Arial", 14, true);
+        textFont(font);
+
+        strokeWeight(1);
+        stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
+        fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
+
+        text("HP: " + playerHP, 14, 28);
+        text("Speed: " + playerSpeed + " p/t", 14, 48);
+        text("Angle: " + playerAngle + " rad", 14, 68);
+        text("Active bullets: " + gameEngine.getProjectiles().size(), 14, 108);
+    }
+
+    /**
+     * Draws the start screen.
+     */
+    public void drawStartScreen() {
+
+        PFont font = createFont("Arial", 20, true);
+        textFont(font);
+
+        strokeWeight(1);
+        stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
+        fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
+
+        text("Press any key to start", 500, 300);
+        text("Acceleration: E, S, D, F"
+                + "\n" + "Fire primary: Left mouse button"
+                + "\n" + "Fire Secondary: Right mouse button", 500, 350);
+    }
+
+    /**
+     * Draws the death screen.
+     */
+    public void drawDeathScreen() {
+
+        PFont font = createFont("Arial", 20, true);
+        textFont(font);
+
+        strokeWeight(1);
+        stroke(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
+        fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
+
+        text("You Were Defeated", 500, 300);
+        text(" Press \"Enter\" to return to Start Menu", 426, 370);
+    }
+
+    /**
+     * Detect key press events.
+     */
+    @Override
+    public void keyPressed() {
+        gameEngine.keyboardInput(keyCode, true);
+    }
+
+    /**
+     * Detect key release events.
+     */
+    @Override
+    public void keyReleased() {
+        gameEngine.keyboardInput(keyCode, false);
+    }
+
+    /**
+     * Detect mouse press events.
+     */
+    @Override
+    public void mousePressed() {
+        gameEngine.mouseInput(mouseButton, true);
+    }
+
+    /**
+     * Detect mouse release events.
+     */
+    @Override
+    public void mouseReleased() {
+        gameEngine.mouseInput(mouseButton, false);
+    }
+
+    // Getters.
+    public int getWindowSizeX() {
+        return windowSizeX;
+    }
+
+    public int getWindowSizeY() {
+        return windowSizeY;
+    }
+
+    public int getOuterWallThickness() {
+        return outerWallThickness;
+    }
+
+}
