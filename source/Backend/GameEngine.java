@@ -22,9 +22,8 @@ public class GameEngine implements Runnable {
     private Thread thread;
     private final String THREAD_NAME;
 
-    // Environment variables.
-    private volatile boolean playerAlive;
-    private volatile boolean simulationRunning;
+    // Environment variable.
+    private volatile String simulationState = "startScreen";
 
     private Timer timer;
     private double timeSinceLastCalculation;
@@ -64,108 +63,127 @@ public class GameEngine implements Runnable {
 
         timer = new Timer();
         simulationClear();
-        simulationSetMode("menuScreen");
 
         while (true) {
 
-            if (enter) {
-                simulationSetMode("gameplay");
-            }
+            switch (simulationState) {
 
-            while (simulationRunning && playerAlive) {
-
-                if (timer.timePassed() >= 1) {
-
-                    // User input.
-                    if (up) {
-                        player.accelerate("up");
-                    }
-                    if (down) {
-                        player.accelerate("down");
-                    }
-                    if (left) {
-                        player.accelerate("left");
-                    }
-                    if (right) {
-                        player.accelerate("right");
-                    }
-                    if (firePrimary) {
-                    }
-                    if (fireSecondary) {
-                    }
-                    if (swapPrimary) {
-                    }
-                    if (swapSecondary) {
-                    }
-                    if (space) {
-                    }
-                    if (tab) {
-                    }
+                case "startScreen": {
                     if (enter) {
+                        simulationState = "gameplay";
                     }
+                    break;
+                }
 
-                    // Make actors act.
-                    player.act();
-                    for (Actor actor : enemies) {
-                        actor.act();
-                    }
-                    for (Actor actor : projectiles) {
-                        actor.act();
-                    }
-                    for (Actor actor : items) {
-                        actor.act();
-                    }
+                case "gameplay": {
+                    if (timer.timePassed() >= 1) {
+                        if (up) {
+                            player.accelerate("up");
+                        }
+                        if (down) {
+                            player.accelerate("down");
+                        }
+                        if (left) {
+                            player.accelerate("left");
+                        }
+                        if (right) {
+                            player.accelerate("right");
+                        }
+                        if (firePrimary) {
+                            
+                            player.fireBullet();
+                        }
+                        if (fireSecondary) {
+                            player.fireLaser(fireSecondary);
+                        }
+                        if (swapPrimary) {
+                        }
+                        if (swapSecondary) {
+                        }
+                        if (space) {
+                            simulationState = "menuScreen";
+                        }
+                        if (tab) {
+                        }
+                        if (enter) {
+                        }
 
-                    detectWallCollision();
-                    checkMissileHit();
-                    detectPlayerEnemyCollision();
-                    timer.restart();
+                        player.act();
+
+                        for (Actor actor : enemies) {
+                            actor.act();
+                        }
+
+                        for (Actor actor : projectiles) {
+                            actor.act();
+                        }
+
+                        for (Actor actor : items) {
+                            actor.act();
+                        }
+                        detectWallCollision();
+                        checkMissileHit();
+                        detectPlayerEnemyCollision();
+                        timer.restart();
+
+                        player.fireLaser(fireSecondary);
+
+                        break;
+                    }
+                }
+
+                case "menuScreen": {
+                    if (enter) {
+                        simulationState = "gameplay";
+                    }
+                    break;
+                }
+
+                case "deathScreen": {
+
+                    if (timer.timePassed() >= 1) {
+
+                        if (space) {
+                            simulationClear();
+                            simulationState = "startScreen";
+                        }
+
+                        player.act();
+
+                        for (Actor actor : enemies) {
+                            actor.act();
+                        }
+
+                        for (Actor actor : projectiles) {
+                            actor.act();
+                        }
+
+                        for (Actor actor : items) {
+                            actor.act();
+                        }
+                        detectWallCollision();
+                        checkMissileHit();
+                        detectPlayerEnemyCollision();
+                        timer.restart();
+                    }
+                    break;
                 }
             }
-
         }
     }
-    
-    
 
     /**
      * Clears and re-initializes the simulation.
      */
     private void simulationClear() {
 
-        player = new Player(300, 250, this);
+        player = new Player(300, 250, this, guiHandler);
 
         enemies = new ArrayList<Actor>();
-        enemies.add(new Frigate(1100, 600, this));
+        enemies.add(new Frigate(1100, 600, this, guiHandler));
 
         projectiles = new ArrayList<Actor>();
         items = new ArrayList<Actor>();
-    }
-
-
-
-    /**
-     * Sets the mode of the simulation.
-     *
-     * @param mode Name of the mode.
-     */
-    private void simulationSetMode(String mode) {
-        if (mode.equalsIgnoreCase("startScreen")) {
-            simulationRunning = false;
-            playerAlive = false;
-        }
-        if (mode.equalsIgnoreCase("gameplay")) {
-            simulationRunning = true;
-            playerAlive = true;
-        }
-        if (mode.equalsIgnoreCase("pauseScreen")) {
-            simulationRunning = false;
-            playerAlive = true;
-        }
-        if (mode.equalsIgnoreCase("deathScreen")) {
-            simulationRunning = true;
-            playerAlive = false;
-        }
     }
 
     /**
@@ -299,7 +317,7 @@ public class GameEngine implements Runnable {
 
             if ((Math.abs(player.getPositionX() - actor.getPositionX()) < player.getHitBoxRadius() + actor.getHitBoxRadius())
                     && (Math.abs(player.getPositionY() - actor.getPositionY()) < player.getHitBoxRadius() + actor.getHitBoxRadius())) {
-                simulationSetMode("deathScreen");
+                simulationState = "deathScreen";
             }
         }
     }
@@ -326,34 +344,6 @@ public class GameEngine implements Runnable {
             }
         }
     }
-//    /**
-//     * Fires the laser from the player to the mouse cursor.
-//     */
-//    private void fireLaser() {
-//
-//        double xVector = 100 * (mouseX - player.getPositionX());
-//        double yVector = 100 * (mouseY - player.getPositionY());
-//
-//        strokeWeight(2);
-//        stroke(255, 0, 0);
-//        line((float) player.getPositionX(), (float) player.getPositionY(),
-//                mouseX + (float) xVector, mouseY + (float) yVector);
-//    }
-//
-//    /**
-//     * Fires a missile from the player to the mouse cursor.
-//     */
-//    private void fireMissile() {
-//
-//        double xVector = guiHandler.mouseX - player.getPositionX();
-//        double yVector = guiHandler.mouseY - player.getPositionY();
-//        double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
-//
-//        Actor bullet = new Bullet(player.getPositionX(), player.getPositionY(), 0,
-//                player.getSpeedX(), player.getSpeedY(), 20, 0, 0, targetAngle);
-//
-//        missiles.add(missile);
-//    }
 
     public Player getPlayer() {
         return player;
@@ -375,14 +365,6 @@ public class GameEngine implements Runnable {
         return guiHandler;
     }
 
-    public boolean isSimulationRunning() {
-        return simulationRunning;
-    }
-
-    public boolean isPlayerAlive() {
-        return playerAlive;
-    }
-
     public double getTimeSinceLastCalculation() {
         return timeSinceLastCalculation;
     }
@@ -397,6 +379,10 @@ public class GameEngine implements Runnable {
 
     public Timer getTimer() {
         return timer;
+    }
+
+    public String getSimulationState() {
+        return simulationState;
     }
 
 }

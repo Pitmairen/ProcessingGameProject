@@ -17,32 +17,35 @@ public class Player extends Actor implements Drawable {
     private int[] bodyRGBA = new int[]{0, 70, 200, 255};
     private int[] turretRGBA = new int[]{30, 30, 200, 255};
 
+    // Environment variable.
+    private volatile boolean laserActive = false;
+
     private int score = 0;
 
     /**
      * Constructor.
      */
-    public Player(double positionX, double positionY, GameEngine gameEngine) {
+    public Player(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler) {
 
-        super(positionX, positionY, gameEngine);
+        super(positionX, positionY, gameEngine, guiHandler);
 
         speedLimit = 0.5f;
         accelerationX = 0.001f;
         accelerationY = 0.001f;
-        hitBoxRadius = 30;
+        hitBoxRadius = 15;
         drag = 0.0005f;
         bounceModifier = 1.2f;
         hitPoints = 30;
     }
 
     @Override
-    public void draw(GUIHandler guiHandler) {
+    public void draw() {
 
         // Draw main body.
         guiHandler.strokeWeight(0);
         guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
         guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius, (float) hitBoxRadius);
+        guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
 
         // Draw turret.
         double xVector = guiHandler.mouseX - this.getPositionX();
@@ -55,6 +58,17 @@ public class Player extends Actor implements Drawable {
         guiHandler.line((float) this.getPositionX(), (float) this.getPositionY(),
                 (float) this.getPositionX() + (float) (turretLength * Math.cos(targetAngle)),
                 (float) this.getPositionY() + (float) (turretLength * Math.sin(targetAngle)));
+
+        // If the laser is being fired.
+        if (laserActive) {
+            xVector = 100 * (guiHandler.mouseX - positionX);
+            yVector = 100 * (guiHandler.mouseY - positionY);
+
+            guiHandler.strokeWeight(2);
+            guiHandler.stroke(255, 0, 0);
+            guiHandler.line((float) positionX, (float) positionY,
+                    guiHandler.mouseX + (float) xVector, guiHandler.mouseY + (float) yVector);
+        }
     }
 
     /**
@@ -89,6 +103,31 @@ public class Player extends Actor implements Drawable {
     }
 
     /**
+     * Fires the laser from the player to the mouse cursor.
+     *
+     * @param laserActive State of the laser.
+     */
+    public void fireLaser(boolean laserActive) {
+        this.laserActive = laserActive;
+//        double xVector = 100 * (guiHandler.mouseX - positionX);
+//        double yVector = 100 * (guiHandler.mouseY - positionY);
+    }
+
+    /**
+     * Fires a missile from the player to the mouse cursor.
+     */
+    public void fireBullet() {
+
+        double xVector = guiHandler.mouseX - positionX;
+        double yVector = guiHandler.mouseY - positionY;
+        double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
+
+        Actor bullet = new Bullet(positionX, positionY, gameEngine, guiHandler, targetAngle);
+
+        gameEngine.getProjectiles().add(bullet);
+    }
+
+    /**
      * Increases the players score by an given amount.
      *
      * @param points How much to increase the score by.
@@ -100,6 +139,11 @@ public class Player extends Actor implements Drawable {
     // Getters.
     public int getScore() {
         return score;
+    }
+
+    // Setters.
+    public void setLaserActive(boolean laserActive) {
+        this.laserActive = laserActive;
     }
 
 }

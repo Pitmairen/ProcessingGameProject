@@ -20,14 +20,14 @@ public class Frigate extends Actor implements Drawable {
     /**
      * Constructor.
      */
-    public Frigate(double positionX, double positionY, GameEngine gameEngine) {
+    public Frigate(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler) {
 
-        super(positionX, positionY, gameEngine);
+        super(positionX, positionY, gameEngine, guiHandler);
 
         speedLimit = 0.7f;
         accelerationX = 0.0013f;
         accelerationY = 0.0013f;
-        hitBoxRadius = 20;
+        hitBoxRadius = 10;
         drag = 0.0005f;
         bounceModifier = 1.2f;
         hitPoints = 5;
@@ -40,13 +40,13 @@ public class Frigate extends Actor implements Drawable {
     }
 
     @Override
-    public void draw(GUIHandler guiHandler) {
+    public void draw() {
 
         // Draw main body.
         guiHandler.strokeWeight(0);
         guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
         guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius, (float) hitBoxRadius);
+        guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
 
         // Draw turret.
         guiHandler.strokeWeight(turretWidth);

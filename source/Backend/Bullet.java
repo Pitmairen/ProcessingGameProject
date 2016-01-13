@@ -17,9 +17,9 @@ public class Bullet extends Actor implements Drawable {
     /**
      * Constructor.
      */
-    public Bullet(double positionX, double positionY, GameEngine gameEngine, double targetAngle) {
+    public Bullet(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler, double targetAngle) {
 
-        super(positionX, positionY, gameEngine);
+        super(positionX, positionY, gameEngine, guiHandler);
 
         accelerationX = 0;
         accelerationY = 0;
@@ -41,11 +41,11 @@ public class Bullet extends Actor implements Drawable {
     }
 
     @Override
-    public void draw(GUIHandler guiHandler) {
+    public void draw() {
         guiHandler.strokeWeight(0);
         guiHandler.stroke(missileRGBA[0], missileRGBA[1], missileRGBA[2]);
         guiHandler.fill(missileRGBA[0], missileRGBA[1], missileRGBA[2]);
-        guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius, (float) hitBoxRadius);
+        guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
     }
 
 }

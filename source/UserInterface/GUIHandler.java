@@ -4,6 +4,7 @@ import Backend.Actor;
 import Backend.GameEngine;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -53,36 +54,64 @@ public class GUIHandler extends PApplet {
     @Override
     public void draw() {
 
-        drawOuterWalls();
+        switch (gameEngine.getSimulationState()) {
 
-        if (!gameEngine.isSimulationRunning() && !gameEngine.isPlayerAlive()) {
-            drawStartScreen();
-        }
+            case "startScreen": {
+                drawOuterWalls();
+                drawStartScreen();
+                break;
+            }
 
-        if (gameEngine.isSimulationRunning() && !gameEngine.isPlayerAlive()) {
-            drawDeathScreen();
-        }
-
-        if (!gameEngine.isSimulationRunning() && gameEngine.isPlayerAlive()) {
-            // drawMenuScreen();
-        }
-
-        if (gameEngine.isSimulationRunning()) {
-
-            if (gameEngine.isPlayerAlive()) {
+            case "gameplay": {
+                drawOuterWalls();
+                // Draw actors.
+                gameEngine.getPlayer().draw();
+                for (Actor actor : (ArrayList<Actor>) gameEngine.getEnemies().clone()) {
+                    if (actor != null) {
+                        actor.draw();
+                    }
+                }
+                for (Actor actor : (ArrayList<Actor>) gameEngine.getProjectiles().clone()) {
+                    if (actor != null) {
+                        actor.draw();
+                    }
+                }
+                for (Actor actor : (ArrayList<Actor>) gameEngine.getItems().clone()) {
+                    if (actor != null) {
+                        actor.draw();
+                    }
+                }
                 drawHUD();
+                break;
             }
 
-            // Draw actors.
-            gameEngine.getPlayer().draw(this);
-            for (Actor actor : gameEngine.getEnemies()) {
-                actor.draw(this);
+            case "menuScreen": {
+                drawOuterWalls();
+                drawMenuScreen();
+                break;
             }
-            for (Actor actor : gameEngine.getProjectiles()) {
-                actor.draw(this);
-            }
-            for (Actor actor : gameEngine.getItems()) {
-                actor.draw(this);
+
+            case "deathScreen": {
+                drawOuterWalls();
+                drawDeathScreen();
+                // Draw actors.
+                gameEngine.getPlayer().draw();
+                for (Actor actor : (ArrayList<Actor>) gameEngine.getEnemies().clone()) {
+                    if (actor != null) {
+                        actor.draw();
+                    }
+                }
+                for (Actor actor : (ArrayList<Actor>) gameEngine.getProjectiles().clone()) {
+                    if (actor != null) {
+                        actor.draw();
+                    }
+                }
+                for (Actor actor : (ArrayList<Actor>) gameEngine.getItems().clone()) {
+                    if (actor != null) {
+                        actor.draw();
+                    }
+                }
+                break;
             }
         }
     }
@@ -142,10 +171,31 @@ public class GUIHandler extends PApplet {
         stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
-        text("Press \"Enter\" to start, or \"Escape\" to quit.", 500, 300);
-        text("Acceleration: E, S, D, F"
+        text("Press \"Enter\" to start."
+                + "\n" + "Press  \"Escape\" to quit."
+                + "\n"
+                + "\n" + "Keybindings:"
+                + "\n" + "Acceleration: E, S, D, F"
                 + "\n" + "Fire primary: Left mouse button"
-                + "\n" + "Fire Secondary: Right mouse button", 500, 350);
+                + "\n" + "Fire Secondary: Right mouse button", 500, 300);
+    }
+
+    /**
+     * Draws the menu screen.
+     */
+    public void drawMenuScreen() {
+
+        PFont font = createFont("Arial", 20, true);
+        textFont(font);
+
+        strokeWeight(1);
+        stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
+        fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
+
+        text("PAUSED"
+                + "\n"
+                + "\n" + "Press \"Enter\" to unpause."
+                + "\n" + "Press  \"Escape\" to quit.", 500, 300);
     }
 
     /**
@@ -160,8 +210,11 @@ public class GUIHandler extends PApplet {
         stroke(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
         fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
 
-        text("You Were Defeated", 500, 300);
-        text(" Press \"Enter\" to return to Start Menu", 426, 370);
+        text("You Were Defeated"
+                + "\n" + "Your score where " + gameEngine.getPlayer().getScore()
+                + "\n"
+                + "\n" + "Press \"Space\" to return to Start Menu."
+                + "\n" + "Press  \"Escape\" to quit.", 500, 300);
     }
 
     /**

@@ -34,6 +34,7 @@ public abstract class Actor implements Drawable {
     protected double hitPoints;
 
     protected GameEngine gameEngine;
+    protected GUIHandler guiHandler;
 
     /**
      * Constructor.
@@ -41,13 +42,15 @@ public abstract class Actor implements Drawable {
      * @param positionX Actors X-position in pixels.
      * @param positionY Actors Y-position in pixels.
      * @param gameEngine
+     * @param guiHandler
      */
-    protected Actor(double positionX, double positionY, GameEngine gameEngine) {
+    protected Actor(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler) {
 
         // Common for all actors.
         this.positionX = positionX;
         this.positionY = positionY;
         this.gameEngine = gameEngine;
+        this.guiHandler = guiHandler;
 
         // Default values. Overwrite as necessary.
         heading = 0;
@@ -65,7 +68,7 @@ public abstract class Actor implements Drawable {
     }
 
     @Override
-    public abstract void draw(GUIHandler GUIHandler);
+    public abstract void draw();
 
     /**
      * Updates the actors total speed and direction of the current movement.
