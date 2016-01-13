@@ -23,10 +23,8 @@ public class GameEngine implements Runnable {
     private final String THREAD_NAME;
 
     // Environment variables.
-    private boolean simulationRunning;
-    private boolean playerAlive;
-    private boolean menuScreen;
-    private boolean restart;
+    private volatile boolean playerAlive;
+    private volatile boolean simulationRunning;
 
     private Timer timer;
     private double timeSinceLastCalculation;
@@ -40,7 +38,9 @@ public class GameEngine implements Runnable {
     private boolean fireSecondary = false;
     private boolean swapPrimary = false;
     private boolean swapSecondary = false;
-    private boolean activateAuxiliary = false;
+    private boolean space = false;
+    private boolean tab = false;
+    private boolean enter = false;
 
     /**
      * Constructor.
@@ -64,41 +64,48 @@ public class GameEngine implements Runnable {
 
         timer = new Timer();
         simulationClear();
-        simulationRunning = false;
-        playerAlive = true;
+        simulationSetMode("menuScreen");
 
         while (true) {
 
-            if (true) {
-                simulationRunning = true;
+            if (enter) {
+                simulationSetMode("gameplay");
             }
 
-            while (simulationRunning) {
-                // Each tick of the simulation.
+            while (simulationRunning && playerAlive) {
+
                 if (timer.timePassed() >= 1) {
 
-                    // Accelerate upwards.
+                    // User input.
                     if (up) {
                         player.accelerate("up");
                     }
-                    // Accelerate downwards.
                     if (down) {
                         player.accelerate("down");
                     }
-                    // Accelerate left.
                     if (left) {
                         player.accelerate("left");
                     }
-                    // Accelerate right.
                     if (right) {
                         player.accelerate("right");
                     }
-
-                    timer.restart();
+                    if (firePrimary) {
+                    }
+                    if (fireSecondary) {
+                    }
+                    if (swapPrimary) {
+                    }
+                    if (swapSecondary) {
+                    }
+                    if (space) {
+                    }
+                    if (tab) {
+                    }
+                    if (enter) {
+                    }
 
                     // Make actors act.
                     player.act();
-
                     for (Actor actor : enemies) {
                         actor.act();
                     }
@@ -108,12 +115,18 @@ public class GameEngine implements Runnable {
                     for (Actor actor : items) {
                         actor.act();
                     }
+
                     detectWallCollision();
+                    checkMissileHit();
+                    detectPlayerEnemyCollision();
+                    timer.restart();
                 }
             }
 
         }
     }
+    
+    
 
     /**
      * Clears and re-initializes the simulation.
@@ -129,18 +142,37 @@ public class GameEngine implements Runnable {
         items = new ArrayList<Actor>();
     }
 
+
+
     /**
-     * Pauses the simulation.
+     * Sets the mode of the simulation.
+     *
+     * @param mode Name of the mode.
      */
-    private void simulationPause() {
-        simulationRunning = false;
+    private void simulationSetMode(String mode) {
+        if (mode.equalsIgnoreCase("startScreen")) {
+            simulationRunning = false;
+            playerAlive = false;
+        }
+        if (mode.equalsIgnoreCase("gameplay")) {
+            simulationRunning = true;
+            playerAlive = true;
+        }
+        if (mode.equalsIgnoreCase("pauseScreen")) {
+            simulationRunning = false;
+            playerAlive = true;
+        }
+        if (mode.equalsIgnoreCase("deathScreen")) {
+            simulationRunning = true;
+            playerAlive = false;
+        }
     }
 
     /**
      * Handles keyboard input.
      *
-     * @param keyCode
-     * @param keyState
+     * @param keyCode The button that was pressed.
+     * @param keyState Whether the button was pressed or released.
      */
     public void keyboardInput(int keyCode, boolean keyState) {
 
@@ -170,23 +202,23 @@ public class GameEngine implements Runnable {
         }
         // Use auxiliary.
         if (keyCode == KeyEvent.VK_SPACE) {
-            activateAuxiliary = keyState;
+            space = keyState;
         }
-        // Open menu.
+        // Open menu / pause game.
         if (keyCode == KeyEvent.VK_TAB) {
-            menuScreen = keyState;
+            tab = keyState;
         }
-        // Restart game.
+        // Confirm.
         if (keyCode == KeyEvent.VK_ENTER) {
-            restart = keyState;
+            enter = keyState;
         }
     }
 
     /**
      * Handles mouse input.
      *
-     * @param mouseButton
-     * @param keyState
+     * @param mouseButton The button that was pressed.
+     * @param keyState Whether the button was pressed or released.
      */
     public void mouseInput(int mouseButton, boolean keyState) {
 
@@ -267,27 +299,33 @@ public class GameEngine implements Runnable {
 
             if ((Math.abs(player.getPositionX() - actor.getPositionX()) < player.getHitBoxRadius() + actor.getHitBoxRadius())
                     && (Math.abs(player.getPositionY() - actor.getPositionY()) < player.getHitBoxRadius() + actor.getHitBoxRadius())) {
-                playerAlive = false;
+                simulationSetMode("deathScreen");
             }
         }
     }
-//    /**
-//     * Counts missile hits on the enemy frigate by the player.
-//     */
-//    private void checkMissileHit() {
-//        Iterator<Bullet> it = missiles.iterator();
-//        while (it.hasNext()) {
-//
-//            Bullet missile = it.next();
-//
-//            if ((Math.abs(missile.getPositionX() - enemyFrigate.getPositionX()) < (missileDiameter / 2) + (enemyFrigateDiameter / 2))
-//                    && (Math.abs(missile.getPositionY() - enemyFrigate.getPositionY()) < (missileDiameter / 2) + (enemyFrigateDiameter / 2))) {
-//
-//                enemyFrigateHit++;
-//                it.remove();
-//            }
-//        }
-//    }
+
+    /**
+     * Counts missile hits on the enemy frigate by the player.
+     */
+    private void checkMissileHit() {
+        Iterator<Actor> it = projectiles.iterator();
+        while (it.hasNext()) {
+
+            Actor projectile = it.next();
+
+            while (it.hasNext()) {
+
+                Actor enemy = it.next();
+
+                if ((Math.abs(projectile.getPositionX() - enemy.getPositionX()) < projectile.getHitBoxRadius() + enemy.getHitBoxRadius())
+                        && (Math.abs(projectile.getPositionY() - enemy.getPositionY()) < projectile.getHitBoxRadius() + enemy.getHitBoxRadius())) {
+
+                    player.increaseScore(1);
+                    it.remove();
+                }
+            }
+        }
+    }
 //    /**
 //     * Fires the laser from the player to the mouse cursor.
 //     */

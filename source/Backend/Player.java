@@ -17,6 +17,8 @@ public class Player extends Actor implements Drawable {
     private int[] bodyRGBA = new int[]{0, 70, 200, 255};
     private int[] turretRGBA = new int[]{30, 30, 200, 255};
 
+    private int score = 0;
+
     /**
      * Constructor.
      */
@@ -84,6 +86,20 @@ public class Player extends Actor implements Drawable {
                 speedX = speedX + accelerationX;
             }
         }
+    }
+
+    /**
+     * Increases the players score by an given amount.
+     *
+     * @param points How much to increase the score by.
+     */
+    public void increaseScore(int points) {
+        this.score = score + points;
+    }
+
+    // Getters.
+    public int getScore() {
+        return score;
     }
 
 }

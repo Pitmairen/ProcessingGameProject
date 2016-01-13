@@ -111,11 +111,11 @@ public abstract class Actor implements Drawable {
             speedY = speedY + drag;
         }
 
-//        // Complete halt if speed is lower than drag value.
-//        if (Math.abs(speedX) > 0 && Math.abs(speedX) < drag) {
+//        // Complete halt if speed is very low.
+//        if (Math.abs(speedX) > 0 && Math.abs(speedX) < 0.0001) {
 //            speedX = 0;
 //        }
-//        if (Math.abs(speedY) > 0 && Math.abs(speedY) < drag) {
+//        if (Math.abs(speedY) > 0 && Math.abs(speedY) < 0.0001) {
 //            speedY = 0;
 //        }
     }

@@ -55,12 +55,16 @@ public class GUIHandler extends PApplet {
 
         drawOuterWalls();
 
-        if (gameEngine.isPlayerAlive() && !gameEngine.isSimulationRunning()) {
+        if (!gameEngine.isSimulationRunning() && !gameEngine.isPlayerAlive()) {
             drawStartScreen();
         }
 
-        if (!gameEngine.isPlayerAlive() && gameEngine.isSimulationRunning()) {
+        if (gameEngine.isSimulationRunning() && !gameEngine.isPlayerAlive()) {
             drawDeathScreen();
+        }
+
+        if (!gameEngine.isSimulationRunning() && gameEngine.isPlayerAlive()) {
+            // drawMenuScreen();
         }
 
         if (gameEngine.isSimulationRunning()) {
@@ -100,11 +104,16 @@ public class GUIHandler extends PApplet {
      * Draws the HUD.
      */
     public void drawHUD() {
-        DecimalFormat format1 = new DecimalFormat("00.0");
-        DecimalFormat format2 = new DecimalFormat("0.0");
 
-        String playerSpeed = format1.format(gameEngine.getPlayer().getSpeedT());
-        String playerAngle = format2.format(gameEngine.getPlayer().getHeading());
+        DecimalFormat format1 = new DecimalFormat("0");
+        DecimalFormat format2 = new DecimalFormat("00");
+        DecimalFormat format3 = new DecimalFormat("000");
+        DecimalFormat format4 = new DecimalFormat("0.0");
+        DecimalFormat format5 = new DecimalFormat("00.0");
+        DecimalFormat format6 = new DecimalFormat("000.0");
+
+        String playerSpeed = format2.format(gameEngine.getPlayer().getSpeedT() * 100);
+        String playerAngle = format4.format(gameEngine.getPlayer().getCourse());
         String playerHP = format2.format(gameEngine.getPlayer().getHitPoints());
         PFont font = createFont("Arial", 14, true);
         textFont(font);
@@ -114,9 +123,11 @@ public class GUIHandler extends PApplet {
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
         text("HP: " + playerHP, 14, 28);
-        text("Speed: " + playerSpeed + " p/t", 14, 48);
+        text("Speed: " + playerSpeed + " m/s", 14, 48);
         text("Angle: " + playerAngle + " rad", 14, 68);
-        text("Active bullets: " + gameEngine.getProjectiles().size(), 14, 108);
+        text("Projectiles on screen: " + gameEngine.getProjectiles().size(), 14, 108);
+        text("Score: " + gameEngine.getPlayer().getScore(), 14, 128);
+
     }
 
     /**
@@ -131,7 +142,7 @@ public class GUIHandler extends PApplet {
         stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
-        text("Press any key to start", 500, 300);
+        text("Press \"Enter\" to start, or \"Escape\" to quit.", 500, 300);
         text("Acceleration: E, S, D, F"
                 + "\n" + "Fire primary: Left mouse button"
                 + "\n" + "Fire Secondary: Right mouse button", 500, 350);
