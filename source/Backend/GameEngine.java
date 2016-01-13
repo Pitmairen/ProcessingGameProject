@@ -24,6 +24,7 @@ public class GameEngine implements Runnable {
 
     // Environment variable.
     private volatile String simulationState = "startScreen";
+    private int simulationSpeed = 1;  // Milliseconds between rounds.
 
     private Timer timer;
     private double timeSinceLastCalculation;
@@ -76,7 +77,7 @@ public class GameEngine implements Runnable {
                 }
 
                 case "gameplay": {
-                    if (timer.timePassed() >= 1) {
+                    if (timer.timePassed() >= simulationSpeed) {
                         if (up) {
                             player.accelerate("up");
                         }
@@ -90,7 +91,7 @@ public class GameEngine implements Runnable {
                             player.accelerate("right");
                         }
                         if (firePrimary) {
-                            
+
                             player.fireBullet();
                         }
                         if (fireSecondary) {
@@ -141,7 +142,7 @@ public class GameEngine implements Runnable {
 
                 case "deathScreen": {
 
-                    if (timer.timePassed() >= 1) {
+                    if (timer.timePassed() >= simulationSpeed) {
 
                         if (space) {
                             simulationClear();
@@ -326,20 +327,22 @@ public class GameEngine implements Runnable {
      * Counts missile hits on the enemy frigate by the player.
      */
     private void checkMissileHit() {
-        Iterator<Actor> it = projectiles.iterator();
-        while (it.hasNext()) {
+        Iterator<Actor> projectilesIterator = projectiles.iterator();
+        while (projectilesIterator.hasNext()) {
 
-            Actor projectile = it.next();
+            Actor projectile = projectilesIterator.next();
 
-            while (it.hasNext()) {
+            Iterator<Actor> enemiesIterator = enemies.iterator();
 
-                Actor enemy = it.next();
+            while (enemiesIterator.hasNext()) {
+
+                Actor enemy = enemiesIterator.next();
 
                 if ((Math.abs(projectile.getPositionX() - enemy.getPositionX()) < projectile.getHitBoxRadius() + enemy.getHitBoxRadius())
                         && (Math.abs(projectile.getPositionY() - enemy.getPositionY()) < projectile.getHitBoxRadius() + enemy.getHitBoxRadius())) {
 
                     player.increaseScore(1);
-                    it.remove();
+                    projectilesIterator.remove();
                 }
             }
         }
