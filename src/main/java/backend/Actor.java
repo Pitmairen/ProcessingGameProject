@@ -8,11 +8,7 @@ import userinterface.GUIHandler;
  *
  * @author Kristian Honningsvag.
  */
-public abstract class Actor implements Drawable {
-
-    // Position.
-    protected double positionX;     // pixels
-    protected double positionY;     // pixels
+public abstract class Actor extends InteractableEntity implements Drawable {
 
     // Direction.
     protected double heading;       // radians
@@ -34,24 +30,12 @@ public abstract class Actor implements Drawable {
     protected double bounceModifier;
     protected double hitPoints;
 
-    protected GameEngine gameEngine;
-    protected GUIHandler guiHandler;
-
     /**
      * Constructor.
-     *
-     * @param positionX Actors X-position in pixels.
-     * @param positionY Actors Y-position in pixels.
-     * @param gameEngine
-     * @param guiHandler
      */
     protected Actor(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler) {
 
-        // Common for all actors.
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.gameEngine = gameEngine;
-        this.guiHandler = guiHandler;
+        super(positionX, positionY, gameEngine, guiHandler);
 
         // Default values. Overwrite as necessary.
         heading = 0;

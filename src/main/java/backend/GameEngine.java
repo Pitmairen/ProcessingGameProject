@@ -270,8 +270,8 @@ public class GameEngine implements Runnable {
 
             Actor actor = it.next();
 
-            if (actor.getPositionX() + (actor.getHitBoxRadius()) >= (guiHandler.getWindowSizeX() - guiHandler.getOuterWallThickness()) // Right wall.
-                    || actor.getPositionY() + (actor.getHitBoxRadius()) >= (guiHandler.getWindowSizeY() - guiHandler.getOuterWallThickness()) // Lower wall.
+            if (actor.getPositionX() + (actor.getHitBoxRadius()) >= (guiHandler.getWidth() - guiHandler.getOuterWallThickness()) // Right wall.
+                    || actor.getPositionY() + (actor.getHitBoxRadius()) >= (guiHandler.getHeight() - guiHandler.getOuterWallThickness()) // Lower wall.
                     || actor.getPositionX() - (actor.getHitBoxRadius()) <= (0 + guiHandler.getOuterWallThickness()) // Left wall.
                     || actor.getPositionY() - (actor.getHitBoxRadius()) <= (0 + guiHandler.getOuterWallThickness())) // Upper wall
             {
@@ -280,20 +280,20 @@ public class GameEngine implements Runnable {
         }
 
         // Right wall.
-        if (player.getPositionX() + (player.getHitBoxRadius()) >= (guiHandler.getWindowSizeX() - guiHandler.getOuterWallThickness())) {
+        if (player.getPositionX() + (player.getHitBoxRadius()) >= (guiHandler.getWidth() - guiHandler.getOuterWallThickness())) {
             player.wallBounce("right");
         }
         for (Actor actor : enemies) {
-            if (actor.getPositionX() + actor.getHitBoxRadius() >= (guiHandler.getWindowSizeX() - guiHandler.getOuterWallThickness())) {
+            if (actor.getPositionX() + actor.getHitBoxRadius() >= (guiHandler.getWidth() - guiHandler.getOuterWallThickness())) {
                 actor.wallBounce("right");
             }
         }
         // Lower wall.
-        if (player.getPositionY() + player.getHitBoxRadius() >= (guiHandler.getWindowSizeY() - guiHandler.getOuterWallThickness())) {
+        if (player.getPositionY() + player.getHitBoxRadius() >= (guiHandler.getHeight() - guiHandler.getOuterWallThickness())) {
             player.wallBounce("lower");
         }
         for (Actor actor : enemies) {
-            if (actor.getPositionY() + actor.getHitBoxRadius() >= (guiHandler.getWindowSizeY() - guiHandler.getOuterWallThickness())) {
+            if (actor.getPositionY() + actor.getHitBoxRadius() >= (guiHandler.getHeight() - guiHandler.getOuterWallThickness())) {
                 actor.wallBounce("lower");
             }
         }

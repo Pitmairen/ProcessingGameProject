@@ -17,8 +17,6 @@ import processing.core.PFont;
 public class GUIHandler extends PApplet {
 
     // Main GUIHandler.
-    private final int windowSizeX = 1366;
-    private final int windowSizeY = 768;
     private int outerWallThickness = 4;
     private int[] outerWallsRGBA = new int[]{153, 153, 153, 255};
     private int[] backgroundRGBA = new int[]{0, 0, 0, 255};
@@ -44,8 +42,7 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void settings() {
-        size(windowSizeX, windowSizeY);
-//        fullScreen();
+        fullScreen(P2D);
     }
 
     /**
@@ -125,8 +122,8 @@ public class GUIHandler extends PApplet {
         fill(backgroundRGBA[0], backgroundRGBA[1], backgroundRGBA[2]);
         rect(0 + outerWallThickness / 2,
                 0 + outerWallThickness / 2,
-                windowSizeX - outerWallThickness,
-                windowSizeY - outerWallThickness);
+                width - outerWallThickness,
+                height - outerWallThickness);
     }
 
     /**
@@ -250,12 +247,12 @@ public class GUIHandler extends PApplet {
     }
 
     // Getters.
-    public int getWindowSizeX() {
-        return windowSizeX;
+    public int getWidth() {
+        return width;
     }
 
-    public int getWindowSizeY() {
-        return windowSizeY;
+    public int getHeight() {
+        return height;
     }
 
     public int getOuterWallThickness() {
