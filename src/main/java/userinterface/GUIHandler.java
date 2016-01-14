@@ -1,7 +1,7 @@
 package userinterface;
 
-import backend.Actor;
 import backend.GameEngine;
+import backend.InteractableEntity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import processing.core.PFont;
  */
 public class GUIHandler extends PApplet {
 
-    // Main GUIHandler.
+    // Main GUI.
     private int outerWallThickness = 4;
     private int[] outerWallsRGBA = new int[]{153, 153, 153, 255};
     private int[] backgroundRGBA = new int[]{0, 0, 0, 255};
@@ -61,23 +61,7 @@ public class GUIHandler extends PApplet {
 
             case "gameplay": {
                 drawOuterWalls();
-                // Draw actors.
-                gameEngine.getPlayer().draw();
-                for (Actor actor : (ArrayList<Actor>) gameEngine.getEnemies().clone()) {
-                    if (actor != null) {
-                        actor.draw();
-                    }
-                }
-                for (Actor actor : (ArrayList<Actor>) gameEngine.getProjectiles().clone()) {
-                    if (actor != null) {
-                        actor.draw();
-                    }
-                }
-                for (Actor actor : (ArrayList<Actor>) gameEngine.getItems().clone()) {
-                    if (actor != null) {
-                        actor.draw();
-                    }
-                }
+                drawEntities();
                 drawHUD();
                 break;
             }
@@ -91,23 +75,7 @@ public class GUIHandler extends PApplet {
             case "deathScreen": {
                 drawOuterWalls();
                 drawDeathScreen();
-                // Draw actors.
-                gameEngine.getPlayer().draw();
-                for (Actor actor : (ArrayList<Actor>) gameEngine.getEnemies().clone()) {
-                    if (actor != null) {
-                        actor.draw();
-                    }
-                }
-                for (Actor actor : (ArrayList<Actor>) gameEngine.getProjectiles().clone()) {
-                    if (actor != null) {
-                        actor.draw();
-                    }
-                }
-                for (Actor actor : (ArrayList<Actor>) gameEngine.getItems().clone()) {
-                    if (actor != null) {
-                        actor.draw();
-                    }
-                }
+                drawEntities();
                 break;
             }
         }
@@ -153,7 +121,6 @@ public class GUIHandler extends PApplet {
         text("Angle: " + playerAngle + " rad", 14, 68);
         text("Projectiles on screen: " + gameEngine.getProjectiles().size(), 14, 108);
         text("Score: " + gameEngine.getPlayer().getScore(), 14, 128);
-
     }
 
     /**
@@ -212,6 +179,18 @@ public class GUIHandler extends PApplet {
                 + "\n"
                 + "\n" + "Press \"Space\" to return to Start Menu."
                 + "\n" + "Press  \"Escape\" to quit.", 500, 300);
+    }
+
+    /**
+     * Draw all interactable entities.
+     */
+    private void drawEntities() {
+        // Draw entities.
+        for (InteractableEntity entity : (ArrayList<InteractableEntity>) gameEngine.getAllEntities().clone()) {
+            if (entity != null) {
+                entity.draw();
+            }
+        }
     }
 
     /**

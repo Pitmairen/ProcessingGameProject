@@ -126,6 +126,7 @@ public class Player extends Actor implements Drawable {
         Actor bullet = new Bullet(positionX, positionY, gameEngine, guiHandler, targetAngle);
 
         gameEngine.getProjectiles().add(bullet);
+        gameEngine.getAllEntities().add(bullet);
     }
 
     /**

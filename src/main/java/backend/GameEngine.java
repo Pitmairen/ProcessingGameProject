@@ -18,6 +18,7 @@ public class GameEngine implements Runnable {
     private ArrayList<Actor> enemies;
     private ArrayList<Actor> projectiles;
     private ArrayList<Actor> items;
+    private ArrayList<InteractableEntity> allEntities;
 
     private GUIHandler guiHandler;
 
@@ -185,11 +186,16 @@ public class GameEngine implements Runnable {
      * Clears and re-initializes the simulation.
      */
     private void simulationClear() {
+        
+        allEntities = new ArrayList<InteractableEntity>();
 
         player = new Player(300, 250, this, guiHandler);
+        allEntities.add(player);
 
         enemies = new ArrayList<Actor>();
-        enemies.add(new Frigate(1100, 600, this, guiHandler));
+        Actor enemy = new Frigate(1100, 600, this, guiHandler);
+        enemies.add(enemy);
+        allEntities.add(enemy);
 
         projectiles = new ArrayList<Actor>();
         items = new ArrayList<Actor>();
@@ -276,6 +282,7 @@ public class GameEngine implements Runnable {
                     || actor.getPositionY() - (actor.getHitBoxRadius()) <= (0 + guiHandler.getOuterWallThickness())) // Upper wall
             {
                 it.remove();
+                allEntities.remove(actor);
             }
         }
 
@@ -351,11 +358,13 @@ public class GameEngine implements Runnable {
 
                     player.increaseScore(1);
                     projectilesIterator.remove();
+                    allEntities.remove(projectile);
                 }
             }
         }
     }
-
+    
+    // Getters.
     public Player getPlayer() {
         return player;
     }
@@ -394,6 +403,10 @@ public class GameEngine implements Runnable {
 
     public String getSimulationState() {
         return simulationState;
+    }
+
+    public ArrayList<InteractableEntity> getAllEntities() {
+        return allEntities;
     }
 
 }
