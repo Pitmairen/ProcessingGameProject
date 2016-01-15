@@ -1,5 +1,7 @@
-package backend;
+package backend.actor;
 
+import backend.GameEngine;
+import backend.NumberCruncher;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
 
@@ -63,8 +65,8 @@ public class Frigate extends Actor implements Drawable {
      */
     private void approachPlayer() {
 
-        double xVector = gameEngine.getPlayer().getPositionX() - this.positionX;
-        double yVector = gameEngine.getPlayer().getPositionY() - this.positionY;
+        double xVector = gameEngine.getCurrentLevel().getPlayer().getPositionX() - this.positionX;
+        double yVector = gameEngine.getCurrentLevel().getPlayer().getPositionY() - this.positionY;
         double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
 
         if (speedT < speedLimit) {

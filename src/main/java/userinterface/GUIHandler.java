@@ -1,7 +1,7 @@
 package userinterface;
 
 import backend.GameEngine;
-import backend.InteractableEntity;
+import backend.actor.Actor;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -106,9 +106,9 @@ public class GUIHandler extends PApplet {
         DecimalFormat format5 = new DecimalFormat("00.0");
         DecimalFormat format6 = new DecimalFormat("000.0");
 
-        String playerSpeed = format2.format(gameEngine.getPlayer().getSpeedT() * 100);
-        String playerAngle = format4.format(gameEngine.getPlayer().getCourse());
-        String playerHP = format2.format(gameEngine.getPlayer().getHitPoints());
+        String playerSpeed = format2.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT() * 100);
+        String playerAngle = format4.format(gameEngine.getCurrentLevel().getPlayer().getCourse());
+        String playerHP = format2.format(gameEngine.getCurrentLevel().getPlayer().getHitPoints());
         PFont font = createFont("Arial", 14, true);
         textFont(font);
 
@@ -119,8 +119,8 @@ public class GUIHandler extends PApplet {
         text("HP: " + playerHP, 14, 28);
         text("Speed: " + playerSpeed + " m/s", 14, 48);
         text("Angle: " + playerAngle + " rad", 14, 68);
-        text("Projectiles on screen: " + gameEngine.getProjectiles().size(), 14, 108);
-        text("Score: " + gameEngine.getPlayer().getScore(), 14, 128);
+        text("Projectiles on screen: " + gameEngine.getCurrentLevel().getProjectiles().size(), 14, 108);
+        text("Score: " + gameEngine.getCurrentLevel().getPlayer().getScore(), 14, 128);
     }
 
     /**
@@ -175,20 +175,20 @@ public class GUIHandler extends PApplet {
         fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
 
         text("You Were Defeated"
-                + "\n" + "Your score where " + gameEngine.getPlayer().getScore()
+                + "\n" + "Your score where " + gameEngine.getCurrentLevel().getPlayer().getScore()
                 + "\n"
                 + "\n" + "Press \"Space\" to return to Start Menu."
                 + "\n" + "Press  \"Escape\" to quit.", 500, 300);
     }
 
     /**
-     * Draw all interactable entities.
+     * Draw all actors.
      */
     private void drawEntities() {
         // Draw entities.
-        for (InteractableEntity entity : (ArrayList<InteractableEntity>) gameEngine.getAllEntities().clone()) {
-            if (entity != null) {
-                entity.draw();
+        for (Actor actor : (ArrayList<Actor>) gameEngine.getCurrentLevel().getActors().clone()) {
+            if (actor != null) {
+                actor.draw();
             }
         }
     }

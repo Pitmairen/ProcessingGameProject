@@ -1,10 +1,12 @@
 package backend;
 
+import backend.actor.Actor;
+import backend.level.Level;
+import backend.level.LevelTest;
 import userinterface.GUIHandler;
+
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -14,11 +16,7 @@ import java.util.logging.Logger;
  */
 public class GameEngine implements Runnable {
 
-    private Player player;
-    private ArrayList<Actor> enemies;
-    private ArrayList<Actor> projectiles;
-    private ArrayList<Actor> items;
-    private ArrayList<InteractableEntity> allEntities;
+    private Level currentLevel;
 
     private GUIHandler guiHandler;
 
@@ -66,10 +64,10 @@ public class GameEngine implements Runnable {
     public void run() {
 
         timer = new Timer();
-        simulationClear();
+        currentLevel = new LevelTest(this, guiHandler);
 
         while (true) {
-            
+
             switch (simulationState) {
 
                 case "startScreen": {
@@ -82,23 +80,23 @@ public class GameEngine implements Runnable {
                 case "gameplay": {
                     if (timer.timePassed() >= simulationSpeed) {
                         if (up) {
-                            player.accelerate("up");
+                            currentLevel.getPlayer().accelerate("up");
                         }
                         if (down) {
-                            player.accelerate("down");
+                            currentLevel.getPlayer().accelerate("down");
                         }
                         if (left) {
-                            player.accelerate("left");
+                            currentLevel.getPlayer().accelerate("left");
                         }
                         if (right) {
-                            player.accelerate("right");
+                            currentLevel.getPlayer().accelerate("right");
                         }
                         if (firePrimary) {
 
-                            player.fireBullet();
+                            currentLevel.getPlayer().fireBullet();
                         }
                         if (fireSecondary) {
-                            player.fireLaser(fireSecondary);
+                            currentLevel.getPlayer().fireLaser(fireSecondary);
                         }
                         if (swapPrimary) {
                         }
@@ -111,27 +109,12 @@ public class GameEngine implements Runnable {
                         }
                         if (enter) {
                         }
-
-                        player.act();
-
-                        for (Actor actor : enemies) {
-                            actor.act();
-                        }
-
-                        for (Actor actor : projectiles) {
-                            actor.act();
-                        }
-
-                        for (Actor actor : items) {
-                            actor.act();
-                        }
+                        actAll();
                         detectWallCollision();
                         checkMissileHit();
                         detectPlayerEnemyCollision();
                         timer.restart();
-
-                        player.fireLaser(fireSecondary);
-
+                        currentLevel.getPlayer().fireLaser(fireSecondary);
                         break;
                     }
                 }
@@ -144,27 +127,12 @@ public class GameEngine implements Runnable {
                 }
 
                 case "deathScreen": {
-
                     if (timer.timePassed() >= simulationSpeed) {
-
                         if (space) {
-                            simulationClear();
+                            currentLevel = new LevelTest(this, guiHandler);
                             simulationState = "startScreen";
                         }
-
-                        player.act();
-
-                        for (Actor actor : enemies) {
-                            actor.act();
-                        }
-
-                        for (Actor actor : projectiles) {
-                            actor.act();
-                        }
-
-                        for (Actor actor : items) {
-                            actor.act();
-                        }
+                        actAll();
                         detectWallCollision();
                         checkMissileHit();
                         detectPlayerEnemyCollision();
@@ -181,24 +149,15 @@ public class GameEngine implements Runnable {
             }
         }
     }
-
+    
     /**
-     * Clears and re-initializes the simulation.
+     * Makes all actors act.
      */
-    private void simulationClear() {
-        
-        allEntities = new ArrayList<InteractableEntity>();
-
-        player = new Player(300, 250, this, guiHandler);
-        allEntities.add(player);
-
-        enemies = new ArrayList<Actor>();
-        Actor enemy = new Frigate(1100, 600, this, guiHandler);
-        enemies.add(enemy);
-        allEntities.add(enemy);
-
-        projectiles = new ArrayList<Actor>();
-        items = new ArrayList<Actor>();
+    private void actAll() {
+        // Make actors act.
+        for (Actor actor : currentLevel.getActors()) {
+            actor.act();
+        }
     }
 
     /**
@@ -271,7 +230,7 @@ public class GameEngine implements Runnable {
     private void detectWallCollision() {
 
         // Projectiles.
-        Iterator<Actor> it = projectiles.iterator();
+        Iterator<Actor> it = currentLevel.getProjectiles().iterator();
         while (it.hasNext()) {
 
             Actor actor = it.next();
@@ -282,42 +241,42 @@ public class GameEngine implements Runnable {
                     || actor.getPositionY() - (actor.getHitBoxRadius()) <= (0 + guiHandler.getOuterWallThickness())) // Upper wall
             {
                 it.remove();
-                allEntities.remove(actor);
+                currentLevel.getActors().remove(actor);
             }
         }
 
         // Right wall.
-        if (player.getPositionX() + (player.getHitBoxRadius()) >= (guiHandler.getWidth() - guiHandler.getOuterWallThickness())) {
-            player.wallBounce("right");
+        if (currentLevel.getPlayer().getPositionX() + (currentLevel.getPlayer().getHitBoxRadius()) >= (guiHandler.getWidth() - guiHandler.getOuterWallThickness())) {
+            currentLevel.getPlayer().wallBounce("right");
         }
-        for (Actor actor : enemies) {
+        for (Actor actor : currentLevel.getEnemies()) {
             if (actor.getPositionX() + actor.getHitBoxRadius() >= (guiHandler.getWidth() - guiHandler.getOuterWallThickness())) {
                 actor.wallBounce("right");
             }
         }
         // Lower wall.
-        if (player.getPositionY() + player.getHitBoxRadius() >= (guiHandler.getHeight() - guiHandler.getOuterWallThickness())) {
-            player.wallBounce("lower");
+        if (currentLevel.getPlayer().getPositionY() + currentLevel.getPlayer().getHitBoxRadius() >= (guiHandler.getHeight() - guiHandler.getOuterWallThickness())) {
+            currentLevel.getPlayer().wallBounce("lower");
         }
-        for (Actor actor : enemies) {
+        for (Actor actor : currentLevel.getEnemies()) {
             if (actor.getPositionY() + actor.getHitBoxRadius() >= (guiHandler.getHeight() - guiHandler.getOuterWallThickness())) {
                 actor.wallBounce("lower");
             }
         }
         // Left wall.
-        if (player.getPositionX() - player.getHitBoxRadius() <= (0 + guiHandler.getOuterWallThickness())) {
-            player.wallBounce("left");
+        if (currentLevel.getPlayer().getPositionX() - currentLevel.getPlayer().getHitBoxRadius() <= (0 + guiHandler.getOuterWallThickness())) {
+            currentLevel.getPlayer().wallBounce("left");
         }
-        for (Actor actor : enemies) {
+        for (Actor actor : currentLevel.getEnemies()) {
             if (actor.getPositionX() - actor.getHitBoxRadius() <= (0 + guiHandler.getOuterWallThickness())) {
                 actor.wallBounce("left");
             }
         }
         // Upper wall.
-        if (player.getPositionY() - player.getHitBoxRadius() <= (0 + guiHandler.getOuterWallThickness())) {
-            player.wallBounce("upper");
+        if (currentLevel.getPlayer().getPositionY() - currentLevel.getPlayer().getHitBoxRadius() <= (0 + guiHandler.getOuterWallThickness())) {
+            currentLevel.getPlayer().wallBounce("upper");
         }
-        for (Actor actor : enemies) {
+        for (Actor actor : currentLevel.getEnemies()) {
             if (actor.getPositionY() - actor.getHitBoxRadius() <= (0 + guiHandler.getOuterWallThickness())) {
                 actor.wallBounce("upper");
             }
@@ -329,10 +288,10 @@ public class GameEngine implements Runnable {
      */
     private void detectPlayerEnemyCollision() {
 
-        for (Actor actor : enemies) {
+        for (Actor actor : currentLevel.getEnemies()) {
 
-            if ((Math.abs(player.getPositionX() - actor.getPositionX()) < player.getHitBoxRadius() + actor.getHitBoxRadius())
-                    && (Math.abs(player.getPositionY() - actor.getPositionY()) < player.getHitBoxRadius() + actor.getHitBoxRadius())) {
+            if ((Math.abs(currentLevel.getPlayer().getPositionX() - actor.getPositionX()) < currentLevel.getPlayer().getHitBoxRadius() + actor.getHitBoxRadius())
+                    && (Math.abs(currentLevel.getPlayer().getPositionY() - actor.getPositionY()) < currentLevel.getPlayer().getHitBoxRadius() + actor.getHitBoxRadius())) {
                 simulationState = "deathScreen";
             }
         }
@@ -342,12 +301,12 @@ public class GameEngine implements Runnable {
      * Counts missile hits on the enemy frigate by the player.
      */
     private void checkMissileHit() {
-        Iterator<Actor> projectilesIterator = projectiles.iterator();
+        Iterator<Actor> projectilesIterator = currentLevel.getProjectiles().iterator();
         while (projectilesIterator.hasNext()) {
 
             Actor projectile = projectilesIterator.next();
 
-            Iterator<Actor> enemiesIterator = enemies.iterator();
+            Iterator<Actor> enemiesIterator = currentLevel.getEnemies().iterator();
 
             while (enemiesIterator.hasNext()) {
 
@@ -356,31 +315,15 @@ public class GameEngine implements Runnable {
                 if ((Math.abs(projectile.getPositionX() - enemy.getPositionX()) < projectile.getHitBoxRadius() + enemy.getHitBoxRadius())
                         && (Math.abs(projectile.getPositionY() - enemy.getPositionY()) < projectile.getHitBoxRadius() + enemy.getHitBoxRadius())) {
 
-                    player.increaseScore(1);
+                    currentLevel.getPlayer().increaseScore(1);
                     projectilesIterator.remove();
-                    allEntities.remove(projectile);
+                    currentLevel.getActors().remove(projectile);
                 }
             }
         }
     }
     
     // Getters.
-    public Player getPlayer() {
-        return player;
-    }
-
-    public ArrayList<Actor> getEnemies() {
-        return enemies;
-    }
-
-    public ArrayList<Actor> getProjectiles() {
-        return projectiles;
-    }
-
-    public ArrayList<Actor> getItems() {
-        return items;
-    }
-
     public GUIHandler getGuiHandler() {
         return guiHandler;
     }
@@ -405,8 +348,8 @@ public class GameEngine implements Runnable {
         return simulationState;
     }
 
-    public ArrayList<InteractableEntity> getAllEntities() {
-        return allEntities;
+    public Level getCurrentLevel() {
+        return currentLevel;
     }
 
 }

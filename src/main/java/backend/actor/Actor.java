@@ -1,5 +1,7 @@
-package backend;
+package backend.actor;
 
+import backend.GameEngine;
+import backend.NumberCruncher;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
 
@@ -8,7 +10,14 @@ import userinterface.GUIHandler;
  *
  * @author Kristian Honningsvag.
  */
-public abstract class Actor extends InteractableEntity implements Drawable {
+public abstract class Actor implements Drawable {
+
+    // Position.
+    protected double positionX;     // pixels
+    protected double positionY;     // pixels
+
+    protected GameEngine gameEngine;
+    protected GUIHandler guiHandler;
 
     // Direction.
     protected double heading;       // radians
@@ -32,10 +41,19 @@ public abstract class Actor extends InteractableEntity implements Drawable {
 
     /**
      * Constructor.
+     *
+     * @param positionX Actors X-position in pixels.
+     * @param positionY Actors Y-position in pixels.
+     * @param gameEngine
+     * @param guiHandler
      */
     protected Actor(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler) {
 
-        super(positionX, positionY, gameEngine, guiHandler);
+        // Common for all interactable entitys
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.gameEngine = gameEngine;
+        this.guiHandler = guiHandler;
 
         // Default values. Overwrite as necessary.
         heading = 0;
@@ -66,7 +84,7 @@ public abstract class Actor extends InteractableEntity implements Drawable {
     /**
      * Updates the actors state. Should be called once each millisecond.
      */
-    protected void act() {
+    public void act() {
         updatePosition();
         addFriction();
         updateVectors();

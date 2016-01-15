@@ -1,5 +1,6 @@
-package backend;
+package backend.actor;
 
+import backend.GameEngine;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
 
