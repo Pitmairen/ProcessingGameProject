@@ -2,6 +2,7 @@ package backend.actor;
 
 import backend.GameEngine;
 import backend.NumberCruncher;
+import backend.Timer;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
 
@@ -24,6 +25,8 @@ public class Player extends Actor implements Drawable {
     private volatile boolean laserActive = false;
 
     private int score = 0;
+    private int fireRate = 200;
+    private Timer timer;
 
     /**
      * Constructor.
@@ -39,6 +42,8 @@ public class Player extends Actor implements Drawable {
         drag = 0.0005f;
         bounceModifier = 1.2f;
         hitPoints = 30;
+
+        timer = new Timer();
     }
 
     @Override
@@ -117,18 +122,23 @@ public class Player extends Actor implements Drawable {
     }
 
     /**
-     * Fires a missile from the player to the mouse cursor.
+     * Fires a bullet from the player to the mouse cursor.
      */
     public void fireBullet() {
 
-        double xVector = guiHandler.mouseX - positionX;
-        double yVector = guiHandler.mouseY - positionY;
-        double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
+        // Wait for timer for each shot.
+        if (timer.timePassed() >= fireRate) {
+            double xVector = guiHandler.mouseX - positionX;
+            double yVector = guiHandler.mouseY - positionY;
+            double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
 
-        Actor bullet = new Bullet(positionX, positionY, gameEngine, guiHandler, targetAngle);
+            Actor bullet = new Bullet(positionX, positionY, gameEngine, guiHandler, targetAngle);
 
-        gameEngine.getCurrentLevel().getProjectiles().add(bullet);
-        gameEngine.getCurrentLevel().getActors().add(bullet);
+            gameEngine.getCurrentLevel().getProjectiles().add(bullet);
+            gameEngine.getCurrentLevel().getActors().add(bullet);
+
+            timer.restart();
+        }
     }
 
     /**

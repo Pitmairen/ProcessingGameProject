@@ -198,7 +198,7 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void keyPressed() {
-        gameEngine.keyboardInput(keyCode, true);
+        gameEngine.userInput(keyCode, true);
     }
 
     /**
@@ -206,7 +206,7 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void keyReleased() {
-        gameEngine.keyboardInput(keyCode, false);
+        gameEngine.userInput(keyCode, false);
     }
 
     /**
@@ -214,7 +214,7 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void mousePressed() {
-        gameEngine.mouseInput(mouseButton, true);
+        gameEngine.userInput(mouseButton, true);
     }
 
     /**
@@ -222,7 +222,7 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void mouseReleased() {
-        gameEngine.mouseInput(mouseButton, false);
+        gameEngine.userInput(mouseButton, false);
     }
 
     // Getters.

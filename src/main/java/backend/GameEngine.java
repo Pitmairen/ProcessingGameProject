@@ -30,18 +30,18 @@ public class GameEngine implements Runnable {
     private Timer timer;
     private double timeSinceLastCalculation;
 
-    // Key presses.
-    private boolean up = false;
-    private boolean down = false;
-    private boolean left = false;
-    private boolean right = false;
-    private boolean firePrimary = false;
-    private boolean fireSecondary = false;
-    private boolean swapPrimary = false;
-    private boolean swapSecondary = false;
-    private boolean space = false;
-    private boolean tab = false;
-    private boolean enter = false;
+    // If the key is currently beeing pressed.
+    private volatile boolean up = false;
+    private volatile boolean down = false;
+    private volatile boolean left = false;
+    private volatile boolean right = false;
+    private volatile boolean firePrimary = false;
+    private volatile boolean fireSecondary = false;
+    private volatile boolean swapPrimary = false;
+    private volatile boolean swapSecondary = false;
+    private volatile boolean space = false;
+    private volatile boolean tab = false;
+    private volatile boolean enter = false;
 
     /**
      * Constructor.
@@ -66,6 +66,7 @@ public class GameEngine implements Runnable {
         timer = new Timer();
         currentLevel = new LevelTest(this, guiHandler);
 
+        // Main loop.
         while (true) {
 
             switch (simulationState) {
@@ -78,37 +79,9 @@ public class GameEngine implements Runnable {
                 }
 
                 case "gameplay": {
+                    // Wait for timer for each round.
                     if (timer.timePassed() >= simulationSpeed) {
-                        if (up) {
-                            currentLevel.getPlayer().accelerate("up");
-                        }
-                        if (down) {
-                            currentLevel.getPlayer().accelerate("down");
-                        }
-                        if (left) {
-                            currentLevel.getPlayer().accelerate("left");
-                        }
-                        if (right) {
-                            currentLevel.getPlayer().accelerate("right");
-                        }
-                        if (firePrimary) {
-
-                            currentLevel.getPlayer().fireBullet();
-                        }
-                        if (fireSecondary) {
-                            currentLevel.getPlayer().fireLaser(fireSecondary);
-                        }
-                        if (swapPrimary) {
-                        }
-                        if (swapSecondary) {
-                        }
-                        if (space) {
-                            simulationState = "menuScreen";
-                        }
-                        if (tab) {
-                        }
-                        if (enter) {
-                        }
+                        checkUserInput();
                         actAll();
                         detectWallCollision();
                         checkMissileHit();
@@ -141,7 +114,7 @@ public class GameEngine implements Runnable {
                     break;
                 }
             }
-            
+
             try {
                 Thread.sleep(1);
             } catch (InterruptedException ex) {
@@ -149,7 +122,34 @@ public class GameEngine implements Runnable {
             }
         }
     }
-    
+
+    /**
+     * Checks user input.
+     */
+    private void checkUserInput() {
+        if (up) {
+            currentLevel.getPlayer().accelerate("up");
+        }
+        if (down) {
+            currentLevel.getPlayer().accelerate("down");
+        }
+        if (left) {
+            currentLevel.getPlayer().accelerate("left");
+        }
+        if (right) {
+            currentLevel.getPlayer().accelerate("right");
+        }
+        if (firePrimary) {
+            currentLevel.getPlayer().fireBullet();
+        }
+        if (fireSecondary) {
+            currentLevel.getPlayer().fireLaser(fireSecondary);
+        }
+        if (space) {
+            simulationState = "menuScreen";
+        }
+    }
+
     /**
      * Makes all actors act.
      */
@@ -161,12 +161,12 @@ public class GameEngine implements Runnable {
     }
 
     /**
-     * Handles keyboard input.
+     * Handles user input.
      *
      * @param keyCode The button that was pressed.
      * @param keyState Whether the button was pressed or released.
      */
-    public void keyboardInput(int keyCode, boolean keyState) {
+    public void userInput(int keyCode, boolean keyState) {
 
         // Accelerate upwards.
         if (keyCode == KeyEvent.VK_E) {
@@ -183,6 +183,14 @@ public class GameEngine implements Runnable {
         // Accelerate right.
         if (keyCode == KeyEvent.VK_F) {
             right = keyState;
+        }
+        // Fire primary weapon.
+        if (keyCode == 37) {
+            firePrimary = keyState;
+        }
+        // Fire secondary weapon.
+        if (keyCode == 39) {
+            fireSecondary = keyState;
         }
         // Swap primary weapon.
         if (keyCode == KeyEvent.VK_W) {
@@ -203,24 +211,6 @@ public class GameEngine implements Runnable {
         // Confirm.
         if (keyCode == KeyEvent.VK_ENTER) {
             enter = keyState;
-        }
-    }
-
-    /**
-     * Handles mouse input.
-     *
-     * @param mouseButton The button that was pressed.
-     * @param keyState Whether the button was pressed or released.
-     */
-    public void mouseInput(int mouseButton, boolean keyState) {
-
-        // Fire primary weapon.
-        if (mouseButton == 37) {
-            firePrimary = keyState;
-        }
-        // Fire secondary weapon.
-        if (mouseButton == 39) {
-            fireSecondary = keyState;
         }
     }
 
@@ -322,7 +312,7 @@ public class GameEngine implements Runnable {
             }
         }
     }
-    
+
     // Getters.
     public GUIHandler getGuiHandler() {
         return guiHandler;
