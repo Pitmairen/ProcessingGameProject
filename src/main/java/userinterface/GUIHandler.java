@@ -4,7 +4,7 @@ import backend.GameEngine;
 import backend.actor.Actor;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -74,8 +74,8 @@ public class GUIHandler extends PApplet {
 
             case "deathScreen": {
                 drawOuterWalls();
-                drawDeathScreen();
                 drawEntities();
+                drawDeathScreen();
                 break;
             }
         }
@@ -186,7 +186,7 @@ public class GUIHandler extends PApplet {
      */
     private void drawEntities() {
         // Draw entities.
-        for (Actor actor : (ArrayList<Actor>) gameEngine.getCurrentLevel().getActors().clone()) {
+        for (Actor actor : (CopyOnWriteArrayList<Actor>) gameEngine.getCurrentLevel().getActors().clone()) {
             if (actor != null) {
                 actor.draw();
             }
