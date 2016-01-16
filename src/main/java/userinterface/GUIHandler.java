@@ -42,7 +42,7 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void settings() {
-        fullScreen();
+        fullScreen(P2D);
     }
 
     /**

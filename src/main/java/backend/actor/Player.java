@@ -69,13 +69,16 @@ public class Player extends Actor implements Drawable {
 
         // If the laser is being fired.
         if (laserActive) {
-            xVector = 100 * (guiHandler.mouseX - positionX);
-            yVector = 100 * (guiHandler.mouseY - positionY);
+            double screenDiagonalLength = Math.sqrt(Math.pow(gameEngine.getGuiHandler().getWidth(), 2) + Math.pow(gameEngine.getGuiHandler().getHeight(), 2));
+            xVector = guiHandler.mouseX - positionX;
+            yVector = guiHandler.mouseY - positionY;
+            targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
 
             guiHandler.strokeWeight(2);
             guiHandler.stroke(255, 0, 0);
             guiHandler.line((float) positionX, (float) positionY,
-                    guiHandler.mouseX + (float) xVector, guiHandler.mouseY + (float) yVector);
+                    (float) positionX + (float) (screenDiagonalLength * Math.cos(targetAngle)),
+                    (float) positionY + (float) (screenDiagonalLength * Math.sin(targetAngle)));
         }
     }
 
@@ -117,8 +120,7 @@ public class Player extends Actor implements Drawable {
      */
     public void fireLaser(boolean laserActive) {
         this.laserActive = laserActive;
-//        double xVector = 100 * (guiHandler.mouseX - positionX);
-//        double yVector = 100 * (guiHandler.mouseY - positionY);
+        double yVector = guiHandler.mouseY - positionY;
     }
 
     /**
