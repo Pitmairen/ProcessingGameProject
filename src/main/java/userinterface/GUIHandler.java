@@ -141,7 +141,8 @@ public class GUIHandler extends PApplet {
                 + "\n" + "Keybindings:"
                 + "\n" + "Acceleration: E, S, D, F"
                 + "\n" + "Fire primary: Left mouse button"
-                + "\n" + "Fire Secondary: Right mouse button", 500, 300);
+                + "\n" + "Fire Secondary: Right mouse button"
+                + "\n" + "Pause: Space", 500, 300);
     }
 
     /**
