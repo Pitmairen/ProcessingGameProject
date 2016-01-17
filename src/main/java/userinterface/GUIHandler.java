@@ -121,6 +121,7 @@ public class GUIHandler extends PApplet {
         text("Angle: " + playerAngle + " rad", 14, 68);
         text("Projectiles on screen: " + gameEngine.getCurrentLevel().getProjectiles().size(), 14, 108);
         text("Score: " + gameEngine.getCurrentLevel().getPlayer().getScore(), 14, 128);
+        text("FPS: " + (int)frameRate, 14, 148);
     }
 
     /**
