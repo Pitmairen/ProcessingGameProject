@@ -46,6 +46,7 @@ public class CollisionDetector {
                     || actor.getPositionX() - (actor.getHitBoxRadius()) <= (0 + gameEngine.getGuiHandler().getOuterWallThickness()) // Left wall.
                     || actor.getPositionY() - (actor.getHitBoxRadius()) <= (0 + gameEngine.getGuiHandler().getOuterWallThickness())) // Upper wall
             {
+                actor.collide(false);
                 it.remove();
                 gameEngine.getCurrentLevel().getActors().remove(actor);
             }
@@ -122,6 +123,7 @@ public class CollisionDetector {
                         && (Math.abs(projectile.getPositionY() - enemy.getPositionY()) < projectile.getHitBoxRadius() + enemy.getHitBoxRadius())) {
 
                     gameEngine.getCurrentLevel().getPlayer().increaseScore(1);
+                    projectile.collide(true);
                     projectilesIterator.remove();
                     gameEngine.getCurrentLevel().getActors().remove(projectile);
                 }

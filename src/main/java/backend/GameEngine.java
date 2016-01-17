@@ -197,7 +197,8 @@ public class GameEngine implements Runnable {
             currentLevel.getPlayer().accelerate("right");
         }
         if (firePrimary) {
-            currentLevel.getPlayer().fireBullet();
+            //currentLevel.getPlayer().fireBullet();
+            currentLevel.getPlayer().fireFireball();
         }
         if (fireSecondary) {
             currentLevel.getPlayer().fireLaser(fireSecondary);

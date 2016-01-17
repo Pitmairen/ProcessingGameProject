@@ -28,13 +28,15 @@ public class Player extends Actor implements Drawable {
     private int fireRate = 200;
     private Timer timer;
 
+    private FireballCanon canon;
     /**
      * Constructor.
      */
-    public Player(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler) {
+    public Player(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler, FireballCanon canon) {
 
         super(positionX, positionY, gameEngine, guiHandler);
 
+        this.canon = canon;
         speedLimit = 0.45f;
         accelerationX = 0.0013f;
         accelerationY = 0.0013f;
@@ -112,6 +114,25 @@ public class Player extends Actor implements Drawable {
         }
     }
 
+    /**
+     * Fires a new fireball
+     */
+    public void fireFireball() {
+
+        // Wait for timer for each shot.
+        if (timer.timePassed() >= fireRate) {
+            double xVector = guiHandler.mouseX - positionX;
+            double yVector = guiHandler.mouseY - positionY;
+            double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
+
+            this.canon.fire(positionX, positionY, targetAngle);
+
+            timer.restart();
+        }
+    }
+
+            
+    
     /**
      * Increases the players score by an given amount.
      *

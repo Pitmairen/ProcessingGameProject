@@ -90,6 +90,15 @@ public abstract class Actor implements Drawable {
         updatePosition();
         updateVectors();
     }
+    
+    /**
+     * Quick Hack Added to be able to create the explosions for the fireball
+     * 
+     * @param isObject true=enemy false=wall
+     */
+    public void collide(boolean isObject){
+        // Do nothing 
+    }
 
     /**
      * Updates the actors position.

@@ -2,6 +2,7 @@ package backend.level;
 
 import backend.GameEngine;
 import backend.actor.Actor;
+import backend.actor.FireballCanon;
 import backend.actor.Frigate;
 import backend.actor.Player;
 import userinterface.GUIHandler;
@@ -21,13 +22,18 @@ public class LevelTest extends Level {
         super(gameEngine, guiHandler);
 
         levelName = "Test level";
-
-        player = new Player(300, 250, gameEngine, guiHandler);
+        
+        FireballCanon canon = new FireballCanon(gameEngine, guiHandler);
+        allEntities.add(canon);
+        
+        player = new Player(300, 250, gameEngine, guiHandler, canon);
         allEntities.add(player);
 
         Actor enemy = new Frigate(1100, 600, gameEngine, guiHandler);
         enemies.add(enemy);
         allEntities.add(enemy);
+        
+
     }
 
 }
