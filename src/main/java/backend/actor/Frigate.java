@@ -38,7 +38,7 @@ public class Frigate extends Actor implements Drawable {
 
     @Override
     public void act() {
-        approachPlayer();
+        approachTarget();
         super.act();
     }
 
@@ -61,9 +61,9 @@ public class Frigate extends Actor implements Drawable {
     }
 
     /**
-     * Accelerate towards the player.
+     * Accelerate towards the target.
      */
-    private void approachPlayer() {
+    private void approachTarget() {
 
         double xVector = gameEngine.getCurrentLevel().getPlayer().getPositionX() - this.positionX;
         double yVector = gameEngine.getCurrentLevel().getPlayer().getPositionY() - this.positionY;

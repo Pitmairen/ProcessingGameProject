@@ -24,7 +24,7 @@ public class GameEngine implements Runnable {
     private final String THREAD_NAME;
     private volatile String simulationState = "startScreen";
     private boolean applicationRunning = false;
-    private int simulationSpeed = 1;                    // Nr. of milliseconds between runs.
+    private int simulationSpeed = 1;           // Nr. of milliseconds between runs.
 
     // Key states.
     private volatile boolean up = false;

@@ -83,37 +83,6 @@ public class Player extends Actor implements Drawable {
     }
 
     /**
-     * Accelerates the player in the given direction.
-     *
-     * @param direction The direction of the acceleration.
-     */
-    public void accelerate(String direction) {
-        if (direction.equalsIgnoreCase("up")) {
-            if (speedY > (-speedLimit)) {
-                speedY = speedY - accelerationY;
-            }
-        }
-        // Accelerate downwards.
-        if (direction.equalsIgnoreCase("down")) {
-            if (speedY < (speedLimit)) {
-                speedY = speedY + accelerationY;
-            }
-        }
-        // Accelerate left.
-        if (direction.equalsIgnoreCase("left")) {
-            if (speedX > (-speedLimit)) {
-                speedX = speedX - accelerationX;
-            }
-        }
-        // Accelerate right.
-        if (direction.equalsIgnoreCase("right")) {
-            if (speedX < (speedLimit)) {
-                speedX = speedX + accelerationX;
-            }
-        }
-    }
-
-    /**
      * Fires the laser from the player to the mouse cursor.
      *
      * @param laserActive State of the laser.

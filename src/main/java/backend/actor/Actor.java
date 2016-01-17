@@ -16,9 +16,6 @@ public abstract class Actor implements Drawable {
     protected double positionX;     // pixels
     protected double positionY;     // pixels
 
-    protected GameEngine gameEngine;
-    protected GUIHandler guiHandler;
-
     // Direction.
     protected double heading;       // radians
     protected double course;        // radians    (derived value)
@@ -38,6 +35,9 @@ public abstract class Actor implements Drawable {
     protected double drag;            // pixels/ms^2
     protected double bounceModifier;
     protected double hitPoints;
+
+    protected GameEngine gameEngine;
+    protected GUIHandler guiHandler;
 
     /**
      * Constructor.
@@ -63,7 +63,7 @@ public abstract class Actor implements Drawable {
         accelerationX = 0.001f;
         accelerationY = 0.001f;
         hitBoxRadius = 20;
-        drag = 0.0005f;
+        drag = 0.0008f;
         bounceModifier = 1.2f;
         hitPoints = 10;
 
@@ -82,11 +82,12 @@ public abstract class Actor implements Drawable {
     }
 
     /**
-     * Updates the actors state. Should be called once each millisecond.
+     * Updates the actors state. Should be called once each cycle of the
+     * simulation.
      */
     public void act() {
-        updatePosition();
         addFriction();
+        updatePosition();
         updateVectors();
     }
 
@@ -94,8 +95,7 @@ public abstract class Actor implements Drawable {
      * Updates the actors position.
      */
     private void updatePosition() {
-        // s = s0 + v*t, t=1
-        positionX = positionX + speedX;
+        positionX = positionX + speedX;   // s = s0 + v*t, t=1
         positionY = positionY + speedY;
     }
 
@@ -104,26 +104,68 @@ public abstract class Actor implements Drawable {
      */
     private void addFriction() {
 
-        if (speedX > 0 && speedX > drag) {
-            speedX = speedX - drag;
-        }
-        if (speedX < 0 && Math.abs(speedX) > drag) {
-            speedX = speedX + drag;
-        }
-        if (speedY > 0 && speedY > drag) {
-            speedY = speedY - drag;
-        }
-        if (speedY < 0 && Math.abs(speedY) > drag) {
-            speedY = speedY + drag;
+        if (speedX > 0) {
+            if (Math.abs(speedX) < drag) {
+                speedX = 0;
+            } else {
+                speedX = speedX - drag;
+            }
         }
 
-//        // Complete halt if speed is very low.
-//        if (Math.abs(speedX) > 0 && Math.abs(speedX) < 0.0001) {
-//            speedX = 0;
-//        }
-//        if (Math.abs(speedY) > 0 && Math.abs(speedY) < 0.0001) {
-//            speedY = 0;
-//        }
+        if (speedX < 0) {
+            if (Math.abs(speedX) < drag) {
+                speedX = 0;
+            } else {
+                speedX = speedX + drag;
+            }
+        }
+
+        if (speedY > 0) {
+            if (Math.abs(speedY) < drag) {
+                speedY = 0;
+            } else {
+                speedY = speedY - drag;
+            }
+        }
+
+        if (speedY < 0) {
+            if (Math.abs(speedY) < drag) {
+                speedY = 0;
+            } else {
+                speedY = speedY + drag;
+            }
+        }
+    }
+
+    /**
+     * Accelerates the actor in the given direction.
+     *
+     * @param direction The direction of the acceleration.
+     */
+    public void accelerate(String direction) {
+        if (direction.equalsIgnoreCase("up")) {
+            if (speedY > (-speedLimit)) {
+                speedY = speedY - accelerationY;
+            }
+        }
+        // Accelerate downwards.
+        if (direction.equalsIgnoreCase("down")) {
+            if (speedY < (speedLimit)) {
+                speedY = speedY + accelerationY;
+            }
+        }
+        // Accelerate left.
+        if (direction.equalsIgnoreCase("left")) {
+            if (speedX > (-speedLimit)) {
+                speedX = speedX - accelerationX;
+            }
+        }
+        // Accelerate right.
+        if (direction.equalsIgnoreCase("right")) {
+            if (speedX < (speedLimit)) {
+                speedX = speedX + accelerationX;
+            }
+        }
     }
 
     /**

@@ -18,7 +18,7 @@ public class GUIHandler extends PApplet {
 
     // Main GUI.
     private int outerWallThickness = 4;
-    private int[] outerWallsRGBA = new int[]{153, 153, 153, 255};
+    private int[] outerWallsRGBA = new int[]{153, 153, 253, 255};
     private int[] backgroundRGBA = new int[]{0, 0, 0, 255};
 
     // HUD.
