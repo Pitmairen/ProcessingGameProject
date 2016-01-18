@@ -24,8 +24,8 @@ public class CollisionDetector {
     /**
      * Checks for all collisions.
      */
-    public void checkAll() {
-        detectWallCollision();
+    public void checkAll(double timePassed) {
+        detectWallCollision(timePassed);
         checkMissileHit();
         detectPlayerEnemyCollision();
     }
@@ -33,7 +33,7 @@ public class CollisionDetector {
     /**
      * Wall collisions.
      */
-    private void detectWallCollision() {
+    private void detectWallCollision(double timePassed) {
 
         // Projectiles.
         Iterator<Actor> it = gameEngine.getCurrentLevel().getProjectiles().iterator();
@@ -53,38 +53,38 @@ public class CollisionDetector {
 
         // Right wall.
         if (gameEngine.getCurrentLevel().getPlayer().getPositionX() + (gameEngine.getCurrentLevel().getPlayer().getHitBoxRadius()) >= (gameEngine.getGuiHandler().getWidth() - gameEngine.getGuiHandler().getOuterWallThickness())) {
-            gameEngine.getCurrentLevel().getPlayer().wallBounce("right");
+            gameEngine.getCurrentLevel().getPlayer().wallBounce("right", timePassed);
         }
         for (Actor actor : gameEngine.getCurrentLevel().getEnemies()) {
             if (actor.getPositionX() + actor.getHitBoxRadius() >= (gameEngine.getGuiHandler().getWidth() - gameEngine.getGuiHandler().getOuterWallThickness())) {
-                actor.wallBounce("right");
+                actor.wallBounce("right", timePassed);
             }
         }
         // Lower wall.
         if (gameEngine.getCurrentLevel().getPlayer().getPositionY() + gameEngine.getCurrentLevel().getPlayer().getHitBoxRadius() >= (gameEngine.getGuiHandler().getHeight() - gameEngine.getGuiHandler().getOuterWallThickness())) {
-            gameEngine.getCurrentLevel().getPlayer().wallBounce("lower");
+            gameEngine.getCurrentLevel().getPlayer().wallBounce("lower", timePassed);
         }
         for (Actor actor : gameEngine.getCurrentLevel().getEnemies()) {
             if (actor.getPositionY() + actor.getHitBoxRadius() >= (gameEngine.getGuiHandler().getHeight() - gameEngine.getGuiHandler().getOuterWallThickness())) {
-                actor.wallBounce("lower");
+                actor.wallBounce("lower", timePassed);
             }
         }
         // Left wall.
         if (gameEngine.getCurrentLevel().getPlayer().getPositionX() - gameEngine.getCurrentLevel().getPlayer().getHitBoxRadius() <= (0 + gameEngine.getGuiHandler().getOuterWallThickness())) {
-            gameEngine.getCurrentLevel().getPlayer().wallBounce("left");
+            gameEngine.getCurrentLevel().getPlayer().wallBounce("left", timePassed);
         }
         for (Actor actor : gameEngine.getCurrentLevel().getEnemies()) {
             if (actor.getPositionX() - actor.getHitBoxRadius() <= (0 + gameEngine.getGuiHandler().getOuterWallThickness())) {
-                actor.wallBounce("left");
+                actor.wallBounce("left", timePassed);
             }
         }
         // Upper wall.
         if (gameEngine.getCurrentLevel().getPlayer().getPositionY() - gameEngine.getCurrentLevel().getPlayer().getHitBoxRadius() <= (0 + gameEngine.getGuiHandler().getOuterWallThickness())) {
-            gameEngine.getCurrentLevel().getPlayer().wallBounce("upper");
+            gameEngine.getCurrentLevel().getPlayer().wallBounce("upper", timePassed);
         }
         for (Actor actor : gameEngine.getCurrentLevel().getEnemies()) {
             if (actor.getPositionY() - actor.getHitBoxRadius() <= (0 + gameEngine.getGuiHandler().getOuterWallThickness())) {
-                actor.wallBounce("upper");
+                actor.wallBounce("upper", timePassed);
             }
         }
     }

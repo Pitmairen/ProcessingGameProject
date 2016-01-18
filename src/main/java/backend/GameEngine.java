@@ -6,123 +6,96 @@ import backend.level.LevelTest;
 import userinterface.GUIHandler;
 
 import java.awt.event.KeyEvent;
-import java.util.logging.Logger;
 
 /**
  * Handles the simulation.
  *
  * @author Kristian Honningsvag.
  */
-public class GameEngine implements Runnable {
+public class GameEngine {
 
     private GUIHandler guiHandler;
     private CollisionDetector collisionDetector;
     private Level currentLevel;
-    private Timer timer;
 
-    private Thread thread;
-    private final String THREAD_NAME;
-    private volatile String simulationState = "startScreen";
-    private boolean applicationRunning = false;
-    private int simulationSpeed = 1;           // Nr. of milliseconds between runs.
+    private String simulationState = "startScreen";
+    private double timePassed;
 
     // Key states.
-    private volatile boolean up = false;
-    private volatile boolean down = false;
-    private volatile boolean left = false;
-    private volatile boolean right = false;
-    private volatile boolean firePrimary = false;
-    private volatile boolean fireSecondary = false;
-    private volatile boolean swapPrimary = false;
-    private volatile boolean swapSecondary = false;
-    private volatile boolean space = false;
-    private volatile boolean tab = false;
-    private volatile boolean enter = false;
+    private boolean up = false;
+    private boolean down = false;
+    private boolean left = false;
+    private boolean right = false;
+    private boolean firePrimary = false;
+    private boolean fireSecondary = false;
+    private boolean swapPrimary = false;
+    private boolean swapSecondary = false;
+    private boolean space = false;
+    private boolean tab = false;
+    private boolean enter = false;
 
     /**
      * Constructor.
      *
      * @param guiHandler
      */
-    public GameEngine(GUIHandler guiHandler, String threadName) {
+    public GameEngine(GUIHandler guiHandler) {
 
         this.guiHandler = guiHandler;
-        this.THREAD_NAME = threadName;
-        
-        applicationRunning = true;        
         collisionDetector = new CollisionDetector(this);
-        thread = new Thread(this, THREAD_NAME);
-        thread.start();
+        currentLevel = new LevelTest(this, guiHandler);
     }
 
     /**
      * The main loop.
      */
-    @Override
-    public void run() {
+    public void run(double timePassed) {
 
-        timer = new Timer();
-        currentLevel = new LevelTest(this, guiHandler);
+        this.timePassed = timePassed;
 
-        while (applicationRunning) {
+        switch (simulationState) {
 
-            switch (simulationState) {
-
-                case "startScreen": {
-                    if (enter) {
-                        simulationState = "gameplay";
-                    }
-                    break;
+            case "startScreen": {
+                if (enter) {
+                    simulationState = "gameplay";
                 }
-
-                case "gameplay": {
-                    // Wait for timer for each round.
-                    if (timer.timePassed() >= simulationSpeed) {
-                        checkUserInput();
-                        actAll();
-                        collisionDetector.checkAll();
-                        timer.restart();
-                        currentLevel.getPlayer().fireLaser(fireSecondary);
-                        break;
-                    }
-                }
-
-                case "menuScreen": {
-                    if (enter) {
-                        simulationState = "gameplay";
-                    }
-                    break;
-                }
-
-                case "deathScreen": {
-                    if (timer.timePassed() >= simulationSpeed) {
-                        if (space) {
-                            currentLevel = new LevelTest(this, guiHandler);
-                            simulationState = "startScreen";
-                        }
-                        actAll();
-                        collisionDetector.checkAll();
-                        timer.restart();
-                    }
-                    break;
-                }
-             
+                break;
             }
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(GameEngine.class.getName()).log(Level.SEVERE, null, ex);
+
+            case "gameplay": {
+                checkUserInput();
+                actAll(timePassed);
+                collisionDetector.checkAll(timePassed);
+                currentLevel.getPlayer().fireLaser(fireSecondary);
+                break;
             }
+
+            case "menuScreen": {
+                if (enter) {
+                    simulationState = "gameplay";
+                }
+                break;
+            }
+
+            case "deathScreen": {
+                if (space) {
+                    currentLevel = new LevelTest(this, guiHandler);
+                    simulationState = "startScreen";
+                }
+                actAll(timePassed);
+                collisionDetector.checkAll(timePassed);
+                break;
+            }
+
         }
     }
 
     /**
      * Makes all actors act.
      */
-    private void actAll() {
-        // Make actors act.
+    private void actAll(double timePassed) {
         for (Actor actor : currentLevel.getActors()) {
-            actor.act();
+            actor.act(timePassed);
         }
     }
 
@@ -185,16 +158,16 @@ public class GameEngine implements Runnable {
      */
     private void checkUserInput() {
         if (up) {
-            currentLevel.getPlayer().accelerate("up");
+            currentLevel.getPlayer().accelerate("up", timePassed);
         }
         if (down) {
-            currentLevel.getPlayer().accelerate("down");
+            currentLevel.getPlayer().accelerate("down", timePassed);
         }
         if (left) {
-            currentLevel.getPlayer().accelerate("left");
+            currentLevel.getPlayer().accelerate("left", timePassed);
         }
         if (right) {
-            currentLevel.getPlayer().accelerate("right");
+            currentLevel.getPlayer().accelerate("right", timePassed);
         }
         if (firePrimary) {
             currentLevel.getPlayer().fireBullet();

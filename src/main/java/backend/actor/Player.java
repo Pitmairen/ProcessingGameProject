@@ -22,7 +22,7 @@ public class Player extends Actor implements Drawable {
     private int[] turretRGBA = new int[]{30, 30, 200, 255};
 
     // Environment variable.
-    private volatile boolean laserActive = false;
+    private boolean laserActive = false;
 
     private int score = 0;
     private int fireRate = 200;
@@ -35,9 +35,9 @@ public class Player extends Actor implements Drawable {
 
         super(positionX, positionY, gameEngine, guiHandler);
 
-        speedLimit = 0.45f;
-        accelerationX = 0.0013f;
-        accelerationY = 0.0013f;
+        speedLimit = 0.7f;
+        accelerationX = 0.002f;
+        accelerationY = 0.002f;
         hitBoxRadius = 15;
         drag = 0.0005f;
         bounceModifier = 1.2f;

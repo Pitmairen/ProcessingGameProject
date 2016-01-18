@@ -1,6 +1,7 @@
 package userinterface;
 
 import backend.GameEngine;
+import backend.Timer;
 import backend.actor.Actor;
 
 import java.text.DecimalFormat;
@@ -26,15 +27,17 @@ public class GUIHandler extends PApplet {
     private int[] deathScreenRGBA = new int[]{200, 50, 40, 255};
 
     private GameEngine gameEngine;
+    private Timer timer;
 
     /**
      * Processing initial setup.
      */
     @Override
     public void setup() {
+        timer = new Timer();
         frameRate(60);
         cursor(CROSS);
-        gameEngine = new GameEngine(this, "Game Engine");
+        gameEngine = new GameEngine(this);
     }
 
     /**
@@ -50,6 +53,9 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void draw() {
+
+        gameEngine.run(timer.timePassed());
+        timer.restart();
 
         switch (gameEngine.getSimulationState()) {
 
