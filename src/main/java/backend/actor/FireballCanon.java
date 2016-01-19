@@ -97,7 +97,7 @@ public class FireballCanon extends Actor {
 
         private final int backgroundColor;
         private final float radius = 8.0f;
-        private final float speed = 0.5f;
+        private final float speed = 0.8f;
         private boolean isAlive = true;
         private boolean hasExploded = false;
 
