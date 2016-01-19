@@ -12,7 +12,7 @@ import userinterface.GUIHandler;
 public class Bullet extends Actor implements Drawable {
 
     // Color.
-    private int[] missileRGBA = new int[]{80, 200, 0, 255};
+    private int[] bulletRGBA = new int[]{80, 200, 0, 255};
 
     double speed = 1.2f;
 
@@ -45,8 +45,8 @@ public class Bullet extends Actor implements Drawable {
     @Override
     public void draw() {
         guiHandler.strokeWeight(0);
-        guiHandler.stroke(missileRGBA[0], missileRGBA[1], missileRGBA[2]);
-        guiHandler.fill(missileRGBA[0], missileRGBA[1], missileRGBA[2]);
+        guiHandler.stroke(bulletRGBA[0], bulletRGBA[1], bulletRGBA[2]);
+        guiHandler.fill(bulletRGBA[0], bulletRGBA[1], bulletRGBA[2]);
         guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
     }
 

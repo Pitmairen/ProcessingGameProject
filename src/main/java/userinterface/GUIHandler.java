@@ -5,7 +5,6 @@ import backend.Timer;
 import backend.actor.Actor;
 
 import java.text.DecimalFormat;
-import java.util.concurrent.CopyOnWriteArrayList;
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -25,6 +24,14 @@ public class GUIHandler extends PApplet {
     // HUD.
     private int[] hudRGBA = new int[]{80, 150, 40, 255};
     private int[] deathScreenRGBA = new int[]{200, 50, 40, 255};
+    private int[] debugHudRGBA = new int[]{255, 255, 255, 255};
+
+    DecimalFormat format1 = new DecimalFormat("0");
+    DecimalFormat format2 = new DecimalFormat("00");
+    DecimalFormat format3 = new DecimalFormat("000");
+    DecimalFormat format4 = new DecimalFormat("0.0");
+    DecimalFormat format5 = new DecimalFormat("00.0");
+    DecimalFormat format6 = new DecimalFormat("000.0");
 
     private GameEngine gameEngine;
     private Timer timer;
@@ -45,7 +52,7 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void settings() {
-        fullScreen(P2D);
+        fullScreen();
     }
 
     /**
@@ -67,7 +74,7 @@ public class GUIHandler extends PApplet {
 
             case "gameplay": {
                 drawOuterWalls();
-                drawEntities();
+                drawActors();
                 drawHUD();
                 break;
             }
@@ -80,11 +87,12 @@ public class GUIHandler extends PApplet {
 
             case "deathScreen": {
                 drawOuterWalls();
-                drawEntities();
+                drawActors();
                 drawDeathScreen();
                 break;
             }
         }
+        drawDebugHud();
     }
 
     /**
@@ -103,17 +111,8 @@ public class GUIHandler extends PApplet {
     /**
      * Draws the HUD.
      */
-    public void drawHUD() {
+    private void drawHUD() {
 
-        DecimalFormat format1 = new DecimalFormat("0");
-        DecimalFormat format2 = new DecimalFormat("00");
-        DecimalFormat format3 = new DecimalFormat("000");
-        DecimalFormat format4 = new DecimalFormat("0.0");
-        DecimalFormat format5 = new DecimalFormat("00.0");
-        DecimalFormat format6 = new DecimalFormat("000.0");
-
-        String playerSpeed = format2.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT() * 100);
-        String playerAngle = format4.format(gameEngine.getCurrentLevel().getPlayer().getCourse());
         String playerHP = format2.format(gameEngine.getCurrentLevel().getPlayer().getHitPoints());
         PFont font = createFont("Arial", 14, true);
         textFont(font);
@@ -122,18 +121,37 @@ public class GUIHandler extends PApplet {
         stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
-        text("HP: " + playerHP, 14, 28);
-        text("Speed: " + playerSpeed + " m/s", 14, 48);
-        text("Angle: " + playerAngle + " rad", 14, 68);
-        text("Projectiles on screen: " + gameEngine.getCurrentLevel().getProjectiles().size(), 14, 108);
-        text("Score: " + gameEngine.getCurrentLevel().getPlayer().getScore(), 14, 128);
-        text("FPS: " + (int)frameRate, 14, 148);
+        text("HP: " + playerHP, 14, 38);
+        text("Score: " + gameEngine.getCurrentLevel().getPlayer().getScore(), 14, 58);
+    }
+
+    /**
+     * Draws the debugging HUD.
+     */
+    private void drawDebugHud() {
+
+        String playerSpeed = format2.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT() * 100);
+        String playerHeading = format4.format(gameEngine.getCurrentLevel().getPlayer().getHeading());
+        String playerCourse = format4.format(gameEngine.getCurrentLevel().getPlayer().getCourse());
+        PFont font = createFont("Arial", 14, true);
+        textFont(font);
+
+        strokeWeight(1);
+        stroke(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
+        fill(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
+
+        text("Debug info:"
+                + "\n" + "Player speed: " + playerSpeed + " m/s"
+                + "\n" + "Heading: " + playerHeading + " rad"
+                + "\n" + "Course: " + playerCourse + " rad"
+                + "\n" + "Projectiles on screen: " + gameEngine.getCurrentLevel().getProjectiles().size() + "\n"
+                + "FPS: " + (int) frameRate, width - 500, 100);
     }
 
     /**
      * Draws the start screen.
      */
-    public void drawStartScreen() {
+    private void drawStartScreen() {
 
         PFont font = createFont("Arial", 20, true);
         textFont(font);
@@ -155,7 +173,7 @@ public class GUIHandler extends PApplet {
     /**
      * Draws the menu screen.
      */
-    public void drawMenuScreen() {
+    private void drawMenuScreen() {
 
         PFont font = createFont("Arial", 20, true);
         textFont(font);
@@ -173,7 +191,7 @@ public class GUIHandler extends PApplet {
     /**
      * Draws the death screen.
      */
-    public void drawDeathScreen() {
+    private void drawDeathScreen() {
 
         PFont font = createFont("Arial", 20, true);
         textFont(font);
@@ -192,9 +210,8 @@ public class GUIHandler extends PApplet {
     /**
      * Draw all actors.
      */
-    private void drawEntities() {
-        // Draw entities.
-        for (Actor actor : (CopyOnWriteArrayList<Actor>) gameEngine.getCurrentLevel().getActors().clone()) {
+    private void drawActors() {
+        for (Actor actor : gameEngine.getCurrentLevel().getActors()) {
             if (actor != null) {
                 actor.draw();
             }

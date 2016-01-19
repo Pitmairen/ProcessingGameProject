@@ -19,7 +19,6 @@ public class GameEngine {
     private Level currentLevel;
 
     private String simulationState = "startScreen";
-    private double timePassed;
 
     // Key states.
     private boolean up = false;
@@ -51,8 +50,6 @@ public class GameEngine {
      */
     public void run(double timePassed) {
 
-        this.timePassed = timePassed;
-
         switch (simulationState) {
 
             case "startScreen": {
@@ -63,10 +60,9 @@ public class GameEngine {
             }
 
             case "gameplay": {
-                checkUserInput();
+                checkUserInput(timePassed);
                 actAll(timePassed);
                 collisionDetector.checkAll(timePassed);
-                currentLevel.getPlayer().fireLaser(fireSecondary);
                 break;
             }
 
@@ -156,7 +152,7 @@ public class GameEngine {
     /**
      * Checks the user inputs.
      */
-    private void checkUserInput() {
+    private void checkUserInput(double timePassed) {
         if (up) {
             currentLevel.getPlayer().accelerate("up", timePassed);
         }

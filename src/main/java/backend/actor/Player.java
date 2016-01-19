@@ -14,7 +14,7 @@ import userinterface.GUIHandler;
 public class Player extends Actor implements Drawable {
 
     // Shape.
-    private int turretLength = 20;
+    private int turretLength = 23;
     private int turretWidth = 3;
 
     // Color.
@@ -35,11 +35,11 @@ public class Player extends Actor implements Drawable {
 
         super(positionX, positionY, gameEngine, guiHandler);
 
-        speedLimit = 0.7f;
+        speedLimit = 0.6f;
         accelerationX = 0.002f;
         accelerationY = 0.002f;
-        hitBoxRadius = 15;
-        drag = 0.0005f;
+        drag = 0.001f;
+        hitBoxRadius = 20;
         bounceModifier = 1.2f;
         hitPoints = 30;
 
@@ -79,6 +79,7 @@ public class Player extends Actor implements Drawable {
             guiHandler.line((float) positionX, (float) positionY,
                     (float) positionX + (float) (screenDiagonalLength * Math.cos(targetAngle)),
                     (float) positionY + (float) (screenDiagonalLength * Math.sin(targetAngle)));
+            laserActive = false;
         }
     }
 
@@ -89,11 +90,10 @@ public class Player extends Actor implements Drawable {
      */
     public void fireLaser(boolean laserActive) {
         this.laserActive = laserActive;
-        double yVector = guiHandler.mouseY - positionY;
     }
 
     /**
-     * Fires a bullet from the player to the mouse cursor.
+     * Fires a bullet from the actor to the mouse cursor.
      */
     public void fireBullet() {
 

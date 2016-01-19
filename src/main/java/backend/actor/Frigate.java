@@ -27,11 +27,11 @@ public class Frigate extends Actor implements Drawable {
 
         super(positionX, positionY, gameEngine, guiHandler);
 
-        speedLimit = 0.7f;
-        accelerationX = 0.003f;
-        accelerationY = 0.003f;
-        hitBoxRadius = 10;
-        drag = 0.0005f;
+        speedLimit = 0.6f;
+        accelerationX = 0.002f;
+        accelerationY = 0.002f;
+        drag = 0.001f;
+        hitBoxRadius = 15;
         bounceModifier = 1.2f;
         hitPoints = 5;
     }
