@@ -22,17 +22,16 @@ public class LevelTest extends Level {
         super(gameEngine, guiHandler);
 
         levelName = "Test level";
-        
+
         FireballCanon canon = new FireballCanon(gameEngine, guiHandler);
-        allEntities.add(canon);
-        
+        actors.add(canon);
+
         player = new Player(300, 250, gameEngine, guiHandler, canon);
-        allEntities.add(player);
+        actors.add(player);
 
         Actor enemy = new Frigate(1100, 600, gameEngine, guiHandler);
         enemies.add(enemy);
-        allEntities.add(enemy);
-        
+        actors.add(enemy);
 
     }
 

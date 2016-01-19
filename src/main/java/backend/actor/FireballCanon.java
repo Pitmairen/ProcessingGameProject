@@ -24,9 +24,6 @@ public class FireballCanon extends Actor {
     private final PImage ballImage;
     private final ParticleEmitter particles; // Used for explosions
 
-    // Used to calculate timeDelta for the particle emitter.
-    private float timer = 0.0f;
-
     public FireballCanon(GameEngine gameEngine, GUIHandler guiHandler) {
         super(guiHandler.getWidth() / 2, guiHandler.getHeight() / 2,
                 gameEngine, guiHandler);
@@ -60,9 +57,8 @@ public class FireballCanon extends Actor {
     }
 
     @Override
-    public void act() {
-
-        // Do nothing
+    public void act(double timePassed) {
+        particles.update((float) timePassed / 25.0f);
     }
 
     @Override
@@ -78,18 +74,13 @@ public class FireballCanon extends Actor {
         this.canvas.blendMode(PGraphics.ADD);
         this.canvas.noStroke();
 
-        float timeDelta = this.guiHandler.millis() - this.timer;
-        particles.update(timeDelta / 25.0f);
         particles.draw(this.canvas);
 
-        timer = this.guiHandler.millis();
-        
         Iterator<Fireball> it = this.balls.iterator();
         while (it.hasNext()) {
             
             Fireball ball = it.next();
             
-            ball.updatePosition();
             ball.draw(this.canvas);
             
             if (!ball.isAlive) {
@@ -106,7 +97,7 @@ public class FireballCanon extends Actor {
 
         private final int backgroundColor;
         private final float radius = 8.0f;
-        private final float speed = 15.2f;
+        private final float speed = 0.5f;
         private boolean isAlive = true;
         private boolean hasExploded = false;
 
@@ -128,10 +119,6 @@ public class FireballCanon extends Actor {
             //Do nothing
         }
 
-        @Override
-        public void act() {
-
-        }
 
         @Override
         public void collide(boolean isObject) {
@@ -145,10 +132,6 @@ public class FireballCanon extends Actor {
             isAlive = false;
         }
 
-        public void updatePosition() {
-            positionX = positionX + speedX;
-            positionY = positionY + speedY;
-        }
 
         public void draw(PGraphics canvas) {
             if (!isAlive) {

@@ -27,19 +27,19 @@ public class Frigate extends Actor implements Drawable {
 
         super(positionX, positionY, gameEngine, guiHandler);
 
-        speedLimit = 0.7f;
-        accelerationX = 0.0017f;
-        accelerationY = 0.0017f;
-        hitBoxRadius = 10;
-        drag = 0.0005f;
+        speedLimit = 0.6f;
+        accelerationX = 0.002f;
+        accelerationY = 0.002f;
+        drag = 0.001f;
+        hitBoxRadius = 15;
         bounceModifier = 1.2f;
         hitPoints = 5;
     }
 
     @Override
-    public void act() {
-        approachTarget();
-        super.act();
+    public void act(double timePassed) {
+        approachTarget(timePassed);
+        super.act(timePassed);
     }
 
     @Override
@@ -63,15 +63,15 @@ public class Frigate extends Actor implements Drawable {
     /**
      * Accelerate towards the target.
      */
-    private void approachTarget() {
+    private void approachTarget(double timePassed) {
 
         double xVector = gameEngine.getCurrentLevel().getPlayer().getPositionX() - this.positionX;
         double yVector = gameEngine.getCurrentLevel().getPlayer().getPositionY() - this.positionY;
         double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
 
         if (speedT < speedLimit) {
-            speedX = speedX + (accelerationX * Math.cos(targetAngle));
-            speedY = speedY + (accelerationY * Math.sin(targetAngle));
+            speedX = speedX + (accelerationX * Math.cos(targetAngle) * timePassed);
+            speedY = speedY + (accelerationY * Math.sin(targetAngle) * timePassed);
         }
     }
 

@@ -29,10 +29,10 @@ public abstract class Actor implements Drawable {
     // Acceleration.
     protected double accelerationX;   // pixels/ms^2
     protected double accelerationY;   // pixels/ms^2
+    protected double drag;            // pixels/ms^2
 
     // Attributes.
     protected double hitBoxRadius;    // pixels
-    protected double drag;            // pixels/ms^2
     protected double bounceModifier;
     protected double hitPoints;
 
@@ -49,29 +49,27 @@ public abstract class Actor implements Drawable {
      */
     protected Actor(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler) {
 
-        // Common for all interactable entitys
         this.positionX = positionX;
         this.positionY = positionY;
         this.gameEngine = gameEngine;
         this.guiHandler = guiHandler;
-
-        // Default values. Overwrite as necessary.
-        heading = 0;
-        speedX = 0;
-        speedY = 0;
-        speedLimit = 0.5f;
-        accelerationX = 0.001f;
-        accelerationY = 0.001f;
-        hitBoxRadius = 20;
-        drag = 0.0008f;
-        bounceModifier = 1.2f;
-        hitPoints = 10;
-
-        updateVectors();
     }
 
     @Override
     public abstract void draw();
+
+    /**
+     * Updates the actors state. Should be called once each cycle of the
+     * simulation.
+     *
+     * @param timePassed Time passed since last simulation cycle in
+     * milliseconds. Used in calculations.
+     */
+    public void act(double timePassed) {
+        addFriction(timePassed);
+        updatePosition(timePassed);
+        updateVectors();
+    }
 
     /**
      * Updates the actors total speed and direction of the current movement.
@@ -79,16 +77,6 @@ public abstract class Actor implements Drawable {
     protected void updateVectors() {
         speedT = Math.sqrt(Math.pow(speedX, 2) + Math.pow(speedY, 2));
         course = NumberCruncher.calculateAngle(speedX, speedY);
-    }
-
-    /**
-     * Updates the actors state. Should be called once each cycle of the
-     * simulation.
-     */
-    public void act() {
-        addFriction();
-        updatePosition();
-        updateVectors();
     }
     
     /**
@@ -103,45 +91,45 @@ public abstract class Actor implements Drawable {
     /**
      * Updates the actors position.
      */
-    private void updatePosition() {
-        positionX = positionX + speedX;   // s = s0 + v*t, t=1
-        positionY = positionY + speedY;
+    private void updatePosition(double timePassed) {
+        positionX = positionX + speedX * timePassed;   // s = s0 + v*dt
+        positionY = positionY + speedY * timePassed;
     }
 
     /**
      * Makes the actor gradually come to a halt if no acceleration is applied.
      */
-    private void addFriction() {
-
+    private void addFriction(double timePassed) {
+        
         if (speedX > 0) {
-            if (Math.abs(speedX) < drag) {
+            if (Math.abs(speedX) < drag * Math.cos(course) * timePassed) {
                 speedX = 0;
             } else {
-                speedX = speedX - drag;
+                speedX = speedX - drag * Math.cos(course) * timePassed;
             }
         }
-
+        
         if (speedX < 0) {
-            if (Math.abs(speedX) < drag) {
+            if (Math.abs(speedX) < drag * Math.cos(course) * timePassed) {
                 speedX = 0;
             } else {
-                speedX = speedX + drag;
+                speedX = speedX - drag * Math.cos(course) * timePassed;
             }
         }
 
         if (speedY > 0) {
-            if (Math.abs(speedY) < drag) {
+            if (Math.abs(speedY) < drag * Math.sin(course) * timePassed) {
                 speedY = 0;
             } else {
-                speedY = speedY - drag;
+                speedY = speedY - drag * Math.sin(course) * timePassed;
             }
         }
 
         if (speedY < 0) {
-            if (Math.abs(speedY) < drag) {
+            if (Math.abs(speedY) < drag * Math.sin(course) * timePassed) {
                 speedY = 0;
             } else {
-                speedY = speedY + drag;
+                speedY = speedY - drag * Math.sin(course) * timePassed;
             }
         }
     }
@@ -151,28 +139,30 @@ public abstract class Actor implements Drawable {
      *
      * @param direction The direction of the acceleration.
      */
-    public void accelerate(String direction) {
+    public void accelerate(String direction, double timePassed) {
+
+        // Accelerate upwards.
         if (direction.equalsIgnoreCase("up")) {
             if (speedY > (-speedLimit)) {
-                speedY = speedY - accelerationY;
+                speedY = speedY - accelerationY * timePassed;
             }
         }
         // Accelerate downwards.
         if (direction.equalsIgnoreCase("down")) {
             if (speedY < (speedLimit)) {
-                speedY = speedY + accelerationY;
+                speedY = speedY + accelerationY * timePassed;
             }
         }
         // Accelerate left.
         if (direction.equalsIgnoreCase("left")) {
             if (speedX > (-speedLimit)) {
-                speedX = speedX - accelerationX;
+                speedX = speedX - accelerationX * timePassed;
             }
         }
         // Accelerate right.
         if (direction.equalsIgnoreCase("right")) {
             if (speedX < (speedLimit)) {
-                speedX = speedX + accelerationX;
+                speedX = speedX + accelerationX * timePassed;
             }
         }
     }
@@ -182,7 +172,7 @@ public abstract class Actor implements Drawable {
      *
      * @param wall The wall that was hit.
      */
-    public void wallBounce(String wall) {
+    public void wallBounce(String wall, double timePassed) {
 
         switch (wall) {
             // Right wall was hit.
@@ -190,7 +180,7 @@ public abstract class Actor implements Drawable {
                 if (speedX > 0) {
                     speedX = speedX * (-bounceModifier);
 //                    speedY = speedY * (bounceAmplifier);
-                    act();
+                    act(timePassed);
                     break;
                 }
             // Lower wall was hit.
@@ -198,7 +188,7 @@ public abstract class Actor implements Drawable {
                 if (speedY > 0) {
 //                    speedX = speedX * (bounceAmplifier);
                     speedY = speedY * (-bounceModifier);
-                    act();
+                    act(timePassed);
                     break;
                 }
             // Left wall was hit.
@@ -206,7 +196,7 @@ public abstract class Actor implements Drawable {
                 if (speedX < 0) {
                     speedX = speedX * (-bounceModifier);
 //                    speedY = speedY * (bounceAmplifier);
-                    act();
+                    act(timePassed);
                     break;
                 }
             // Upper wall was hit.
@@ -214,7 +204,7 @@ public abstract class Actor implements Drawable {
                 if (speedY < 0) {
 //                    speedX = speedX * (bounceAmplifier);
                     speedY = speedY * (-bounceModifier);
-                    act();
+                    act(timePassed);
                     break;
                 }
         }

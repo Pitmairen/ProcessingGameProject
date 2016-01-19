@@ -4,7 +4,6 @@ import backend.GameEngine;
 import backend.actor.Actor;
 import backend.actor.Player;
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 import userinterface.GUIHandler;
 
 /**
@@ -25,7 +24,7 @@ public abstract class Level {
     protected ArrayList<Actor> enemies = new ArrayList<Actor>();
     protected ArrayList<Actor> projectiles = new ArrayList<Actor>();
     protected ArrayList<Actor> items = new ArrayList<Actor>();
-    protected CopyOnWriteArrayList<Actor> allEntities = new CopyOnWriteArrayList<Actor>();
+    protected ArrayList<Actor> actors = new ArrayList<Actor>();
 
     /**
      * Constructor.
@@ -68,8 +67,8 @@ public abstract class Level {
         return items;
     }
 
-    public CopyOnWriteArrayList<Actor> getActors() {
-        return allEntities;
+    public ArrayList<Actor> getActors() {
+        return actors;
     }
 
 }
