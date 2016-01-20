@@ -25,13 +25,21 @@ public class GUIHandler extends PApplet {
     private int[] hudRGBA = new int[]{80, 150, 40, 255};
     private int[] deathScreenRGBA = new int[]{200, 50, 40, 255};
     private int[] debugHudRGBA = new int[]{255, 255, 255, 255};
+    private PFont hudFont;
+    private String playerHP;
 
-    DecimalFormat format1 = new DecimalFormat("0");
-    DecimalFormat format2 = new DecimalFormat("00");
-    DecimalFormat format3 = new DecimalFormat("000");
-    DecimalFormat format4 = new DecimalFormat("0.0");
-    DecimalFormat format5 = new DecimalFormat("00.0");
-    DecimalFormat format6 = new DecimalFormat("000.0");
+    // Debugging HUD.
+    private String playerSpeed;
+    private String playerHeading;
+    private String playerCourse;
+
+    // Decimal formats.
+    private DecimalFormat format1 = new DecimalFormat("0");
+    private DecimalFormat format2 = new DecimalFormat("00");
+    private DecimalFormat format3 = new DecimalFormat("000");
+    private DecimalFormat format4 = new DecimalFormat("0.0");
+    private DecimalFormat format5 = new DecimalFormat("00.0");
+    private DecimalFormat format6 = new DecimalFormat("000.0");
 
     private GameEngine gameEngine;
     private Timer timer;
@@ -42,8 +50,10 @@ public class GUIHandler extends PApplet {
     @Override
     public void setup() {
         timer = new Timer();
+        hudFont = createFont("Arial", 14, true);
         frameRate(60);
         cursor(CROSS);
+        keyRepeatEnabled = true;
         gameEngine = new GameEngine(this);
     }
 
@@ -113,14 +123,13 @@ public class GUIHandler extends PApplet {
      */
     private void drawHUD() {
 
-        String playerHP = format2.format(gameEngine.getCurrentLevel().getPlayer().getHitPoints());
-        PFont font = createFont("Arial", 14, true);
-        textFont(font);
+        playerHP = format2.format(gameEngine.getCurrentLevel().getPlayer().getHitPoints());
 
         strokeWeight(1);
         stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
+        textFont(hudFont);
         text("HP: " + playerHP, 14, 38);
         text("Score: " + gameEngine.getCurrentLevel().getPlayer().getScore(), 14, 58);
     }
@@ -130,16 +139,15 @@ public class GUIHandler extends PApplet {
      */
     private void drawDebugHud() {
 
-        String playerSpeed = format2.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT() * 100);
-        String playerHeading = format4.format(gameEngine.getCurrentLevel().getPlayer().getHeading());
-        String playerCourse = format4.format(gameEngine.getCurrentLevel().getPlayer().getCourse());
-        PFont font = createFont("Arial", 14, true);
-        textFont(font);
+        playerSpeed = format2.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT() * 100);
+        playerHeading = format4.format(gameEngine.getCurrentLevel().getPlayer().getHeading());
+        playerCourse = format4.format(gameEngine.getCurrentLevel().getPlayer().getCourse());
 
         strokeWeight(1);
         stroke(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
         fill(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
 
+        textFont(hudFont);
         text("Debug info:"
                 + "\n" + "Player speed: " + playerSpeed + " m/s"
                 + "\n" + "Heading: " + playerHeading + " rad"
@@ -153,13 +161,11 @@ public class GUIHandler extends PApplet {
      */
     private void drawStartScreen() {
 
-        PFont font = createFont("Arial", 20, true);
-        textFont(font);
-
         strokeWeight(1);
         stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
+        textFont(hudFont);
         text("Press \"Enter\" to start."
                 + "\n" + "Press  \"Escape\" to quit."
                 + "\n"
@@ -175,13 +181,11 @@ public class GUIHandler extends PApplet {
      */
     private void drawMenuScreen() {
 
-        PFont font = createFont("Arial", 20, true);
-        textFont(font);
-
         strokeWeight(1);
         stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
+        textFont(hudFont);
         text("PAUSED"
                 + "\n"
                 + "\n" + "Press \"Enter\" to unpause."
@@ -193,13 +197,11 @@ public class GUIHandler extends PApplet {
      */
     private void drawDeathScreen() {
 
-        PFont font = createFont("Arial", 20, true);
-        textFont(font);
-
         strokeWeight(1);
         stroke(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
         fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
 
+        textFont(hudFont);
         text("You Were Defeated"
                 + "\n" + "Your score where " + gameEngine.getCurrentLevel().getPlayer().getScore()
                 + "\n"
