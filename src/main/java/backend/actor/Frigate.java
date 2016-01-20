@@ -3,7 +3,6 @@ package backend.actor;
 import backend.GameEngine;
 import backend.NumberCruncher;
 import userinterface.Drawable;
-import userinterface.GUIHandler;
 
 /**
  * A frigate. Small and fast.
@@ -23,16 +22,16 @@ public class Frigate extends Actor implements Drawable {
     /**
      * Constructor.
      */
-    public Frigate(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler) {
+    public Frigate(double positionX, double positionY, GameEngine gameEngine) {
 
-        super(positionX, positionY, gameEngine, guiHandler);
+        super(positionX, positionY, gameEngine);
 
         speedLimit = 0.6f;
         accelerationX = 0.002f;
         accelerationY = 0.002f;
         drag = 0.001f;
         hitBoxRadius = 15;
-        bounceModifier = 1.2f;
+        bounceModifier = 0.6f;
         hitPoints = 5;
     }
 
@@ -58,6 +57,10 @@ public class Frigate extends Actor implements Drawable {
         guiHandler.line((float) this.getPositionX(), (float) this.getPositionY(),
                 (float) this.getPositionX() + (float) (turretLength * Math.cos(course)),
                 (float) this.getPositionY() + (float) (turretLength * Math.sin(course)));
+    }
+
+    @Override
+    protected void checkActorCollisions() {
     }
 
     /**

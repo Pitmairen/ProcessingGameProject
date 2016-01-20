@@ -53,7 +53,7 @@ public class GUIHandler extends PApplet {
         hudFont = createFont("Arial", 14, true);
         frameRate(60);
         cursor(CROSS);
-        keyRepeatEnabled = true;
+        keyRepeatEnabled = true;   // Needed for enhanced keyboard input reading.
         gameEngine = new GameEngine(this);
     }
 
@@ -139,7 +139,7 @@ public class GUIHandler extends PApplet {
      */
     private void drawDebugHud() {
 
-        playerSpeed = format2.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT() * 100);
+        playerSpeed = format3.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT() * 1000);
         playerHeading = format4.format(gameEngine.getCurrentLevel().getPlayer().getHeading());
         playerCourse = format4.format(gameEngine.getCurrentLevel().getPlayer().getCourse());
 
@@ -149,7 +149,7 @@ public class GUIHandler extends PApplet {
 
         textFont(hudFont);
         text("Debug info:"
-                + "\n" + "Player speed: " + playerSpeed + " m/s"
+                + "\n" + "Player speed: " + playerSpeed + " pixel/s"
                 + "\n" + "Heading: " + playerHeading + " rad"
                 + "\n" + "Course: " + playerCourse + " rad"
                 + "\n" + "Projectiles on screen: " + gameEngine.getCurrentLevel().getProjectiles().size() + "\n"

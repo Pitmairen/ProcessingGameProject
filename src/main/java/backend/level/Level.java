@@ -4,7 +4,6 @@ import backend.GameEngine;
 import backend.actor.Actor;
 import backend.actor.Player;
 import java.util.ArrayList;
-import userinterface.GUIHandler;
 
 /**
  * Super class for all levels in the game.
@@ -18,7 +17,6 @@ public abstract class Level {
     protected String levelName;
 
     protected GameEngine gameEngine;
-    protected GUIHandler guiHandler;
 
     protected Player player;
     protected ArrayList<Actor> enemies = new ArrayList<Actor>();
@@ -30,12 +28,10 @@ public abstract class Level {
      * Constructor.
      *
      * @param gameEngine
-     * @param guiHandler
      */
-    protected Level(GameEngine gameEngine, GUIHandler guiHandler) {
+    protected Level(GameEngine gameEngine) {
 
         this.gameEngine = gameEngine;
-        this.guiHandler = guiHandler;
     }
 
     // Getters.
@@ -45,10 +41,6 @@ public abstract class Level {
 
     public GameEngine getGameEngine() {
         return gameEngine;
-    }
-
-    public GUIHandler getGuiHandler() {
-        return guiHandler;
     }
 
     public Player getPlayer() {
