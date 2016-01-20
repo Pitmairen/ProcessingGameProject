@@ -26,6 +26,7 @@ public class GUIHandler extends PApplet {
     private int[] deathScreenRGBA = new int[]{200, 50, 40, 255};
     private int[] debugHudRGBA = new int[]{255, 255, 255, 255};
     private PFont hudFont;
+    private PFont menuFont;
     private String playerHP;
 
     // Debugging HUD.
@@ -50,7 +51,9 @@ public class GUIHandler extends PApplet {
     @Override
     public void setup() {
         timer = new Timer();
-        hudFont = createFont("Arial", 14, true);
+        // Font sizes.
+        hudFont = createFont("Arial", 16, true);
+        menuFont = createFont("Arial", 20, true);
         frameRate(60);
         cursor(CROSS);
         keyRepeatEnabled = true;   // Needed for enhanced keyboard input reading.
@@ -165,7 +168,7 @@ public class GUIHandler extends PApplet {
         stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
-        textFont(hudFont);
+        textFont(menuFont);
         text("Press \"Enter\" to start."
                 + "\n" + "Press  \"Escape\" to quit."
                 + "\n"
@@ -185,7 +188,7 @@ public class GUIHandler extends PApplet {
         stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
-        textFont(hudFont);
+        textFont(menuFont);
         text("PAUSED"
                 + "\n"
                 + "\n" + "Press \"Enter\" to unpause."
@@ -201,7 +204,7 @@ public class GUIHandler extends PApplet {
         stroke(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
         fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
 
-        textFont(hudFont);
+        textFont(menuFont);
         text("You Were Defeated"
                 + "\n" + "Your score where " + gameEngine.getCurrentLevel().getPlayer().getScore()
                 + "\n"
