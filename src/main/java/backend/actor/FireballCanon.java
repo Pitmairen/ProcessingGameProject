@@ -11,8 +11,11 @@ import processing.core.PVector;
 /**
  * The fire ball canon manages all the active fire balls.
  *
- * It uses a PGraphics objects for the drawing to be able to create a fading
- * effect for the balls and the particles when the ball explodes.
+ * It uses a offscreen PGraphics objects for the drawing to be able to 
+ * create a fading effect for the balls and the particles when the ball explodes.
+ * 
+ * It uses the particle emitter object to draw the particles when a 
+ * ball is exploding. 
  *
  * @author pitmairen
  */
@@ -76,16 +79,22 @@ public class FireballCanon extends Actor {
 
         this.canvas.beginDraw();
 
-        // Creates the trail effect
+        // Creates the fading tail effect. The second number (40) creates the 
+        // tail effect, a lower number means a longer tail. This affects both
+        // particles and the fireballs.
         this.canvas.fill(0, 40);
         this.canvas.rect(0, 0,
                 this.guiHandler.getWidth(), this.guiHandler.getHeight());
 
+        // Add causes the colors of objects that are drawn on top of eachother
+        // to be added together which creates a nice visual effect.
         this.canvas.blendMode(PGraphics.ADD);
         this.canvas.noStroke();
 
+        // Draw the particles 
         particles.draw(this.canvas);
 
+        // Draw the balls
         Iterator<Fireball> it = this.balls.iterator();
         while (it.hasNext()) {
             
@@ -94,7 +103,7 @@ public class FireballCanon extends Actor {
             ball.draw(this.canvas);
             
             if (!ball.isAlive) {
-                it.remove();
+                it.remove(); // Remove the balls after it has exploded
             }
         }
 
@@ -103,6 +112,17 @@ public class FireballCanon extends Actor {
         this.guiHandler.image(this.canvas, 0, 0);
     }
 
+    
+    /**
+     * The fireballs us implemented as a internal class because 
+     * they need to be drawn on a offscreen graphics object to create
+     * the trail/fading effect.
+     * 
+     * It does not implement the normal draw method, but instead it 
+     * uses a special draw method that is called from the FireballCanon class.
+     * which passes in the graphics object that the balls are drawn onto.
+     * 
+     */
     public class Fireball extends Actor {
 
         private final int backgroundColor;
