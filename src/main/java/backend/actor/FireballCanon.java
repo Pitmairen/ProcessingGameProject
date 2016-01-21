@@ -177,6 +177,7 @@ public class FireballCanon extends Actor {
                 for (Actor actorInList : collisions) {
                     if (!(actorInList instanceof Player)) {
                         setHitPoints(0);
+                        isAlive = false;
                     }
                     if ((actorInList instanceof Frigate)) {
                         gameEngine.getCurrentLevel().getPlayer().increaseScore(1);
