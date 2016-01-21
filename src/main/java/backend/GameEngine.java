@@ -1,11 +1,15 @@
 package backend;
 
 import backend.actor.Actor;
+import backend.actor.Bullet;
+import backend.actor.FireballCanon;
+import backend.actor.Player;
 import backend.level.Level;
 import backend.level.LevelTest;
 import userinterface.GUIHandler;
 
 import java.awt.event.KeyEvent;
+import java.util.Iterator;
 
 /**
  * Handles the simulation.
@@ -42,44 +46,35 @@ public class GameEngine {
 
         this.guiHandler = guiHandler;
         collisionDetector = new CollisionDetector(this);
-        currentLevel = new LevelTest(this, guiHandler);
+        currentLevel = new LevelTest(this);
     }
 
     /**
-     * The main loop.
+     * The main loop of the simulation.
      */
     public void run(double timePassed) {
 
         switch (simulationState) {
 
             case "startScreen": {
-                if (enter) {
-                    simulationState = "gameplay";
-                }
+                checkUserInput(timePassed);
                 break;
             }
 
             case "gameplay": {
                 checkUserInput(timePassed);
                 actAll(timePassed);
-                collisionDetector.checkAll(timePassed);
                 break;
             }
 
             case "menuScreen": {
-                if (enter) {
-                    simulationState = "gameplay";
-                }
+                checkUserInput(timePassed);
                 break;
             }
 
             case "deathScreen": {
-                if (space) {
-                    currentLevel = new LevelTest(this, guiHandler);
-                    simulationState = "startScreen";
-                }
+                checkUserInput(timePassed);
                 actAll(timePassed);
-                collisionDetector.checkAll(timePassed);
                 break;
             }
 
@@ -87,9 +82,32 @@ public class GameEngine {
     }
 
     /**
-     * Makes all actors act.
+     * Remove dead actors and make all remaining actors act.
      */
     private void actAll(double timePassed) {
+
+        // Remove dead actors.
+        Iterator<Actor> it = currentLevel.getActors().iterator();
+        while (it.hasNext()) {
+
+            Actor actorInList = it.next();
+            if (actorInList.getHitPoints() <= 0) {
+
+                if ((actorInList instanceof Player)) {
+                    simulationState = "deathScreen";
+                }
+                if ((actorInList instanceof Bullet)) {
+                    currentLevel.getProjectiles().remove(actorInList);
+                    it.remove();
+                }
+                if ((actorInList instanceof FireballCanon.Fireball)) {
+                    currentLevel.getProjectiles().remove(actorInList);
+                    it.remove();
+                }
+            }
+        }
+
+        // Make all actors act.
         for (Actor actor : currentLevel.getActors()) {
             actor.act(timePassed);
         }
@@ -150,30 +168,60 @@ public class GameEngine {
     }
 
     /**
-     * Checks the user inputs.
+     * Checks the user inputs and acts accordingly.
      */
     private void checkUserInput(double timePassed) {
-        if (up) {
-            currentLevel.getPlayer().accelerate("up", timePassed);
-        }
-        if (down) {
-            currentLevel.getPlayer().accelerate("down", timePassed);
-        }
-        if (left) {
-            currentLevel.getPlayer().accelerate("left", timePassed);
-        }
-        if (right) {
-            currentLevel.getPlayer().accelerate("right", timePassed);
-        }
-        if (firePrimary) {
-            //currentLevel.getPlayer().fireBullet();
-            currentLevel.getPlayer().fireFireball();
-        }
-        if (fireSecondary) {
-            currentLevel.getPlayer().fireLaser(fireSecondary);
-        }
-        if (space) {
-            simulationState = "menuScreen";
+
+        switch (simulationState) {
+
+            case "startScreen": {
+                if (enter) {
+                    simulationState = "gameplay";
+                }
+                break;
+            }
+
+            case "gameplay": {
+                if (up) {
+                    currentLevel.getPlayer().accelerate("up", timePassed);
+                }
+                if (down) {
+                    currentLevel.getPlayer().accelerate("down", timePassed);
+                }
+                if (left) {
+                    currentLevel.getPlayer().accelerate("left", timePassed);
+                }
+                if (right) {
+                    currentLevel.getPlayer().accelerate("right", timePassed);
+                }
+                if (firePrimary) {
+                    //currentLevel.getPlayer().fireBullet();
+                    currentLevel.getPlayer().fireFireball();
+                }
+                if (fireSecondary) {
+                    currentLevel.getPlayer().fireLaser(fireSecondary);
+                }
+                if (space) {
+                    simulationState = "menuScreen";
+                }
+                break;
+            }
+
+            case "menuScreen": {
+                if (enter) {
+                    simulationState = "gameplay";
+                }
+                break;
+            }
+
+            case "deathScreen": {
+                if (space) {
+                    currentLevel = new LevelTest(this);
+                    simulationState = "startScreen";
+                }
+                break;
+            }
+
         }
     }
 
@@ -188,6 +236,10 @@ public class GameEngine {
 
     public Level getCurrentLevel() {
         return currentLevel;
+    }
+
+    public CollisionDetector getCollisionDetector() {
+        return collisionDetector;
     }
 
     // Setters.

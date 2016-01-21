@@ -5,7 +5,6 @@ import backend.actor.Actor;
 import backend.actor.FireballCanon;
 import backend.actor.Frigate;
 import backend.actor.Player;
-import userinterface.GUIHandler;
 
 /**
  * A level for testing purposes.
@@ -17,19 +16,20 @@ public class LevelTest extends Level {
     /**
      * Constructor.
      */
-    public LevelTest(GameEngine gameEngine, GUIHandler guiHandler) {
+    public LevelTest(GameEngine gameEngine) {
 
-        super(gameEngine, guiHandler);
+        super(gameEngine);
 
         levelName = "Test level";
 
-        FireballCanon canon = new FireballCanon(gameEngine, guiHandler);
+        FireballCanon canon = new FireballCanon(gameEngine);
         actors.add(canon);
 
-        player = new Player(300, 250, gameEngine, guiHandler, canon);
+        player = new Player(300, 250, gameEngine, canon);
+
         actors.add(player);
 
-        Actor enemy = new Frigate(1100, 600, gameEngine, guiHandler);
+        Actor enemy = new Frigate(1100, 600, gameEngine);
         enemies.add(enemy);
         actors.add(enemy);
 

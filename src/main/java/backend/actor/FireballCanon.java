@@ -7,7 +7,6 @@ import java.util.Iterator;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
-import userinterface.GUIHandler;
 
 /**
  * The fire ball canon manages all the active fire balls.
@@ -24,9 +23,8 @@ public class FireballCanon extends Actor {
     private final PImage ballImage;
     private final ParticleEmitter particles; // Used for explosions
 
-    public FireballCanon(GameEngine gameEngine, GUIHandler guiHandler) {
-        super(guiHandler.getWidth() / 2, guiHandler.getHeight() / 2,
-                gameEngine, guiHandler);
+    public FireballCanon(GameEngine gameEngine) {
+        super(100, 100, gameEngine);
 
         this.canvas = guiHandler.createGraphics(guiHandler.getWidth(),
                 guiHandler.getHeight(), PGraphics.P2D);
@@ -47,8 +45,7 @@ public class FireballCanon extends Actor {
      */
     public void fire(double posX, double posY, double targetAngle) {
 
-        Fireball ball = new Fireball(posX, posY, this.gameEngine,
-                this.guiHandler, targetAngle);
+        Fireball ball = new Fireball(posX, posY, this.gameEngine, targetAngle);
 
         this.gameEngine.getCurrentLevel().getProjectiles().add(ball);
         this.gameEngine.getCurrentLevel().getActors().add(ball);
@@ -60,7 +57,20 @@ public class FireballCanon extends Actor {
     public void act(double timePassed) {
         particles.update((float) timePassed / 25.0f);
     }
+    
+    
+    @Override
+    protected void checkActorCollisions() {
+        // THis object does not interract with the other actors.
+    }
+    
 
+    @Override
+    protected void checkWallCollisions(double timePassed) {
+        // THis object does not interract with the walls
+    }
+    
+    
     @Override
     public void draw() {
 
@@ -93,7 +103,7 @@ public class FireballCanon extends Actor {
         this.guiHandler.image(this.canvas, 0, 0);
     }
 
-    private class Fireball extends Actor {
+    public class Fireball extends Actor {
 
         private final int backgroundColor;
         private final float radius = 8.0f;
@@ -101,8 +111,8 @@ public class FireballCanon extends Actor {
         private boolean isAlive = true;
         private boolean hasExploded = false;
 
-        public Fireball(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler, double targetAngle) {
-            super(positionX, positionY, gameEngine, guiHandler);
+        public Fireball(double positionX, double positionY, GameEngine gameEngine, double targetAngle) {
+            super(positionX, positionY, gameEngine);
             accelerationX = 0;
             accelerationY = 0;
             hitBoxRadius = 8;
@@ -119,19 +129,41 @@ public class FireballCanon extends Actor {
             //Do nothing
         }
 
-
+ 
         @Override
-        public void collide(boolean isObject) {
-            if (hasExploded) {
+        protected void checkWallCollisions(double timePassed) {
+            if(hasExploded){
                 return;
             }
-            //if(isObject){
-            hasExploded = true;
-            FireballCanon.this.particles.emitParticles(50, new PVector((float) positionX, (float) positionY), backgroundColor);
-            //}
-            isAlive = false;
-        }
+            
+            String wallCollision = gameEngine.getCollisionDetector().detectWallCollision(this);
 
+            if (wallCollision != null) {
+                setHitPoints(0);
+                explode();
+            }
+        }
+    
+        @Override
+        protected void checkActorCollisions() {
+
+            if(hasExploded){
+                return;
+            }
+            
+            ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
+
+            if (collisions.size() > 0) {
+                for (Actor actorInList : collisions) {
+                    if ((actorInList instanceof Frigate)) {
+                        setHitPoints(0);
+                        explode();
+                        return;
+                    }
+                }
+            }
+        }
+        
 
         public void draw(PGraphics canvas) {
             if (!isAlive) {
@@ -151,6 +183,14 @@ public class FireballCanon extends Actor {
         private void setSpeed(double targetAngle) {
             speedX = speed * Math.cos(targetAngle);
             speedY = speed * Math.sin(targetAngle);
+        }
+        
+        private void explode(){
+            hasExploded = true;
+            FireballCanon.this.particles.emitParticles(50,
+                    new PVector((float) positionX, (float) positionY),
+                    backgroundColor);
+            isAlive = false;
         }
 
     }

@@ -3,8 +3,8 @@ package backend.actor;
 import backend.GameEngine;
 import backend.NumberCruncher;
 import backend.Timer;
+import java.util.ArrayList;
 import userinterface.Drawable;
-import userinterface.GUIHandler;
 
 /**
  * The player.
@@ -32,9 +32,9 @@ public class Player extends Actor implements Drawable {
     /**
      * Constructor.
      */
-    public Player(double positionX, double positionY, GameEngine gameEngine, GUIHandler guiHandler, FireballCanon canon) {
+    public Player(double positionX, double positionY, GameEngine gameEngine, FireballCanon canon) {
 
-        super(positionX, positionY, gameEngine, guiHandler);
+        super(positionX, positionY, gameEngine);
 
         this.canon = canon;
 
@@ -44,7 +44,8 @@ public class Player extends Actor implements Drawable {
         drag = 0.001f;
         hitBoxRadius = 20;
 
-        bounceModifier = 1.2f;
+        bounceModifier = 0.6f;
+
         hitPoints = 30;
 
         timer = new Timer();
@@ -87,6 +88,20 @@ public class Player extends Actor implements Drawable {
         }
     }
 
+    @Override
+    protected void checkActorCollisions() {
+
+        ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
+
+        if (collisions.size() > 0) {
+            for (Actor actorInList : collisions) {
+                if ((actorInList instanceof Frigate)) {
+                    setHitPoints(0);
+                }
+            }
+        }
+    }
+
     /**
      * Fires the laser from the player to the mouse cursor.
      *
@@ -107,7 +122,7 @@ public class Player extends Actor implements Drawable {
             double yVector = guiHandler.mouseY - positionY;
             double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
 
-            Actor bullet = new Bullet(positionX, positionY, gameEngine, guiHandler, targetAngle);
+            Actor bullet = new Bullet(positionX, positionY, gameEngine, targetAngle);
 
             gameEngine.getCurrentLevel().getProjectiles().add(bullet);
             gameEngine.getCurrentLevel().getActors().add(bullet);
