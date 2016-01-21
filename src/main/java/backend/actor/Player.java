@@ -47,6 +47,7 @@ public class Player extends Actor implements Drawable {
         bounceModifier = 0.6f;
 
         hitPoints = 30;
+        mass = 40;
 
         timer = new Timer();
     }

@@ -3,6 +3,7 @@ package backend.actor;
 import backend.CollisionDetector;
 import backend.GameEngine;
 import backend.NumberCruncher;
+import java.util.ArrayList;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
 
@@ -36,6 +37,8 @@ public abstract class Actor implements Drawable {
     protected double hitBoxRadius;    // pixels
     protected double bounceModifier;
     protected double hitPoints;
+    protected double mass;
+    protected double momentum;        // (derived value)
 
     protected GameEngine gameEngine;
     protected GUIHandler guiHandler;
@@ -98,6 +101,7 @@ public abstract class Actor implements Drawable {
     protected void updateVectors() {
         speedT = Math.sqrt(Math.pow(speedX, 2) + Math.pow(speedY, 2));
         course = NumberCruncher.calculateAngle(speedX, speedY);
+        momentum = mass * speedT;
     }
 
     /**
@@ -153,7 +157,27 @@ public abstract class Actor implements Drawable {
     /**
      * Check for actor collisions and react to them.
      */
-    abstract void checkActorCollisions();
+    protected void checkActorCollisions() {
+//        ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
+//
+//        if (collisions.size() > 0) {
+//            for (Actor actorInList : collisions) {
+//                if ((actorInList instanceof Frigate)) {
+//                    elasticColision(this, actorInList);
+//                }
+//            }
+//        }
+    }
+
+    /**
+     * Calculates the new position and speed of to colliding actors.
+     *
+     * @param a First actor.
+     * @param b Second actor.
+     */
+    protected void elasticColision(Actor a, Actor b) {
+        
+    }
 
     /**
      * Accelerates the actor in the given direction.

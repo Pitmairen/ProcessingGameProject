@@ -30,6 +30,7 @@ public class Bullet extends Actor implements Drawable {
         hitBoxRadius = 5;
         bounceModifier = 0.6f;
         hitPoints = 1;
+        mass = 3;
         
         setLaunchVelocity(targetAngle);
     }

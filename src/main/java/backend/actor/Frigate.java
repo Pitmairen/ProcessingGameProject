@@ -33,6 +33,7 @@ public class Frigate extends Actor implements Drawable {
         hitBoxRadius = 15;
         bounceModifier = 0.6f;
         hitPoints = 5;
+        mass = 100;
     }
 
     @Override
