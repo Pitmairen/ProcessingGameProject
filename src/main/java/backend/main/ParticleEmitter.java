@@ -1,4 +1,4 @@
-package backend;
+package backend.main;
 
 import java.util.Random;
 import processing.core.PGraphics;

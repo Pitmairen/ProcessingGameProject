@@ -1,7 +1,7 @@
 package backend.actor;
 
-import backend.GameEngine;
-import backend.NumberCruncher;
+import backend.main.GameEngine;
+import backend.main.NumberCruncher;
 import userinterface.Drawable;
 
 /**
@@ -32,8 +32,8 @@ public class Frigate extends Actor implements Drawable {
         drag = 0.001f;
         hitBoxRadius = 15;
         bounceModifier = 0.6f;
-        hitPoints = 5;
-        mass = 100;
+        hitPoints = 20;
+        mass = 30;
     }
 
     @Override
@@ -58,10 +58,6 @@ public class Frigate extends Actor implements Drawable {
         guiHandler.line((float) this.getPositionX(), (float) this.getPositionY(),
                 (float) this.getPositionX() + (float) (turretLength * Math.cos(course)),
                 (float) this.getPositionY() + (float) (turretLength * Math.sin(course)));
-    }
-
-    @Override
-    protected void checkActorCollisions() {
     }
 
     /**

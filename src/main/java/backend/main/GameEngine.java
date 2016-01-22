@@ -1,8 +1,9 @@
-package backend;
+package backend.main;
 
 import backend.actor.Actor;
 import backend.actor.Bullet;
 import backend.actor.FireballCanon;
+import backend.actor.Frigate;
 import backend.actor.Player;
 import backend.level.Level;
 import backend.level.LevelTest;
@@ -95,6 +96,10 @@ public class GameEngine {
 
                 if ((actorInList instanceof Player)) {
                     simulationState = "deathScreen";
+                }
+                if ((actorInList instanceof Frigate)) {
+                    currentLevel.getEnemies().remove(actorInList);
+                    it.remove();
                 }
                 if ((actorInList instanceof Bullet)) {
                     currentLevel.getProjectiles().remove(actorInList);
@@ -195,14 +200,17 @@ public class GameEngine {
                     currentLevel.getPlayer().accelerate("right", timePassed);
                 }
                 if (firePrimary) {
-                    //currentLevel.getPlayer().fireBullet();
-                    currentLevel.getPlayer().fireFireball();
+                    currentLevel.getPlayer().firePrimary();
                 }
                 if (fireSecondary) {
-                    currentLevel.getPlayer().fireLaser(fireSecondary);
+                    currentLevel.getPlayer().fireSecondary();
                 }
                 if (space) {
                     simulationState = "menuScreen";
+                }
+                if (tab) {
+                    currentLevel.getActorSpawner().spawnFrigate();
+
                 }
                 break;
             }

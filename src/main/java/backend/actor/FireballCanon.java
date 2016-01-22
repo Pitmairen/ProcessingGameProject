@@ -1,7 +1,7 @@
 package backend.actor;
 
-import backend.GameEngine;
-import backend.ParticleEmitter;
+import backend.main.GameEngine;
+import backend.main.ParticleEmitter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import processing.core.PGraphics;
@@ -53,27 +53,13 @@ public class FireballCanon extends Actor {
         this.gameEngine.getCurrentLevel().getProjectiles().add(ball);
         this.gameEngine.getCurrentLevel().getActors().add(ball);
         this.balls.add(ball);
-
     }
 
     @Override
     public void act(double timePassed) {
         particles.update((float) timePassed / 25.0f);
     }
-    
-    
-    @Override
-    protected void checkActorCollisions() {
-        // THis object does not interract with the other actors.
-    }
-    
 
-    @Override
-    protected void checkWallCollisions(double timePassed) {
-        // THis object does not interract with the walls
-    }
-    
-    
     @Override
     public void draw() {
 
@@ -138,6 +124,7 @@ public class FireballCanon extends Actor {
             hitBoxRadius = 8;
             drag = 0;
             hitPoints = 1;
+            mass = 3;
             setSpeed(targetAngle);
             backgroundColor = guiHandler.color(guiHandler.random(10, 255),
                     guiHandler.random(10, 255), guiHandler.random(10, 255), 255);
@@ -149,13 +136,20 @@ public class FireballCanon extends Actor {
             //Do nothing
         }
 
- 
+        @Override
+        public void act(double timePassed) {
+            super.addFriction(timePassed);
+            super.updatePosition(timePassed);
+            checkWallCollisions(timePassed);
+            checkActorCollisions(timePassed);
+        }
+
         @Override
         protected void checkWallCollisions(double timePassed) {
-            if(hasExploded){
+            if (hasExploded) {
                 return;
             }
-            
+
             String wallCollision = gameEngine.getCollisionDetector().detectWallCollision(this);
 
             if (wallCollision != null) {
@@ -165,25 +159,24 @@ public class FireballCanon extends Actor {
         }
     
         @Override
-        protected void checkActorCollisions() {
+        protected void checkActorCollisions(double timePassed) {
 
             if(hasExploded){
                 return;
             }
-            
+
             ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
 
             if (collisions.size() > 0) {
                 for (Actor actorInList : collisions) {
-                    if (!(actorInList instanceof Player)) {
-                        setHitPoints(0);
-                        isAlive = false;
-                    }
-                    if ((actorInList instanceof Frigate)) {
-                        gameEngine.getCurrentLevel().getPlayer().increaseScore(1);
+                    if ((!(actorInList instanceof Player)) && !(actorInList instanceof Fireball)) {
+                        elasticColision(this, actorInList, timePassed);
                         setHitPoints(0);
                         explode();
-                        return;
+                        if ((actorInList instanceof Frigate)) {
+                            actorInList.modifyHitPoints(-3);
+                            gameEngine.getCurrentLevel().getPlayer().increaseScore(1);
+                        }
                     }
                 }
             }
@@ -210,7 +203,7 @@ public class FireballCanon extends Actor {
             speedY = speed * Math.sin(targetAngle);
         }
         
-        private void explode(){
+        public void explode(){
             hasExploded = true;
             FireballCanon.this.particles.emitParticles(50,
                     new PVector((float) positionX, (float) positionY),

@@ -1,4 +1,4 @@
-package backend;
+package backend.main;
 
 import backend.actor.Actor;
 import java.util.ArrayList;

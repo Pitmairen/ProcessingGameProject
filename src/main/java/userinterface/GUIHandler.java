@@ -1,8 +1,9 @@
 package userinterface;
 
-import backend.GameEngine;
-import backend.Timer;
+import backend.main.GameEngine;
+import backend.main.Timer;
 import backend.actor.Actor;
+import backend.shipmodule.ShipModule;
 
 import java.text.DecimalFormat;
 import processing.core.PApplet;
@@ -29,11 +30,6 @@ public class GUIHandler extends PApplet {
     private PFont menuFont;
     private String playerHP;
 
-    // Debugging HUD.
-    private String playerSpeed;
-    private String playerHeading;
-    private String playerCourse;
-
     // Decimal formats.
     private DecimalFormat format1 = new DecimalFormat("0");
     private DecimalFormat format2 = new DecimalFormat("00");
@@ -41,6 +37,7 @@ public class GUIHandler extends PApplet {
     private DecimalFormat format4 = new DecimalFormat("0.0");
     private DecimalFormat format5 = new DecimalFormat("00.0");
     private DecimalFormat format6 = new DecimalFormat("000.0");
+    private DecimalFormat format7 = new DecimalFormat("00.0000");
 
     private GameEngine gameEngine;
     private Timer timer;
@@ -142,21 +139,24 @@ public class GUIHandler extends PApplet {
      */
     private void drawDebugHud() {
 
-        playerSpeed = format3.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT() * 1000);
-        playerHeading = format4.format(gameEngine.getCurrentLevel().getPlayer().getHeading());
-        playerCourse = format4.format(gameEngine.getCurrentLevel().getPlayer().getCourse());
-
         strokeWeight(1);
         stroke(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
         fill(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
 
         textFont(hudFont);
-        text("Debug info:"
-                + "\n" + "Player speed: " + playerSpeed + " pixel/s"
-                + "\n" + "Heading: " + playerHeading + " rad"
-                + "\n" + "Course: " + playerCourse + " rad"
-                + "\n" + "Projectiles on screen: " + gameEngine.getCurrentLevel().getProjectiles().size() + "\n"
-                + "FPS: " + (int) frameRate, width - 500, 100);
+        text("DEBUG INFO"
+                + "\n"
+                + "\n" + "FPS: " + format3.format((int) frameRate)
+                + "\n"
+                + "\n" + "Active actors: " + format3.format(gameEngine.getCurrentLevel().getActors().size())
+                + "\n" + "Active enemies: " + format3.format(gameEngine.getCurrentLevel().getEnemies().size())
+                + "\n" + "Active projectiles: " + format3.format(gameEngine.getCurrentLevel().getProjectiles().size())
+                + "\n"
+                + "\n" + "Player posX: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getPositionX()) + " pixel"
+                + "\n" + "Player posY: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getPositionY()) + " pixel"
+                + "\n" + "Player speedT: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT()) + " pixel/ms"
+                + "\n" + "Player heading: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getHeading()) + " rad"
+                + "\n" + "Player course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getCourse()) + " rad", width - 500, 100);
     }
 
     /**
@@ -213,12 +213,20 @@ public class GUIHandler extends PApplet {
     }
 
     /**
-     * Draw all actors.
+     * Draw all actors and modules.
      */
     private void drawActors() {
+
         for (Actor actor : gameEngine.getCurrentLevel().getActors()) {
             if (actor != null) {
                 actor.draw();
+
+                for (ShipModule shipModule : actor.getShipModules()) {
+                    if (shipModule != null) {
+                        shipModule.draw();
+
+                    }
+                }
             }
         }
     }

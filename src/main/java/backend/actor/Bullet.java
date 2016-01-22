@@ -1,6 +1,5 @@
 package backend.actor;
 
-import backend.GameEngine;
 import java.util.ArrayList;
 import userinterface.Drawable;
 
@@ -9,20 +8,18 @@ import userinterface.Drawable;
  *
  * @author Kristian Honningsvag.
  */
-public class Bullet extends Actor implements Drawable {
+public class Bullet extends Projectile implements Drawable {
 
     // Color.
     private int[] bulletRGBA = new int[]{80, 200, 0, 255};
-    
-    double launchVelocity = 1.2f;
 
     /**
      * Constructor.
      */
-    public Bullet(double positionX, double positionY, GameEngine gameEngine, double targetAngle) {
-        
-        super(positionX, positionY, gameEngine);
-        
+    public Bullet(double positionX, double positionY, double targetAngle, Actor owner) {
+
+        super(positionX, positionY, owner);
+
         speedLimit = 0.6f;
         accelerationX = 0;
         accelerationY = 0;
@@ -31,34 +28,46 @@ public class Bullet extends Actor implements Drawable {
         bounceModifier = 0.6f;
         hitPoints = 1;
         mass = 3;
-        
+        collisionDamageToOthers = 3;
+
         setLaunchVelocity(targetAngle);
     }
 
-    /**
-     * Check for wall collisions and react to them.
-     */
+    @Override
+    public void act(double timePassed) {
+        super.addFriction(timePassed);
+        super.updatePosition(timePassed);
+        checkWallCollisions(timePassed);
+        checkActorCollisions(timePassed);
+    }
+
+    @Override
     protected void checkWallCollisions(double timePassed) {
-        
+
         String wallCollision = gameEngine.getCollisionDetector().detectWallCollision(this);
-        
+
         if (wallCollision != null) {
             setHitPoints(0);
         }
     }
-    
+
     @Override
-    protected void checkActorCollisions() {
-        
+    protected void checkActorCollisions(double timePassed) {
+
         ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
-        
+
         if (collisions.size() > 0) {
+
             for (Actor actorInList : collisions) {
-                if (!(actorInList instanceof Player)) {
-                    setHitPoints(0);
-                }
-                if ((actorInList instanceof Frigate)) {
-                    gameEngine.getCurrentLevel().getPlayer().increaseScore(1);
+                if (actorInList != owner) {
+
+                    elasticColision(this, actorInList, timePassed);
+                    this.modifyHitPoints(-actorInList.getCollisionDamageToOthers());
+                    actorInList.modifyHitPoints(-collisionDamageToOthers);
+
+                    if ((actorInList instanceof Frigate)) {
+                        owner.increaseScore(1);
+                    }
                 }
             }
         }
@@ -73,7 +82,7 @@ public class Bullet extends Actor implements Drawable {
         speedX = launchVelocity * Math.cos(targetAngle);
         speedY = launchVelocity * Math.sin(targetAngle);
     }
-    
+
     @Override
     public void draw() {
         guiHandler.strokeWeight(0);
@@ -81,5 +90,5 @@ public class Bullet extends Actor implements Drawable {
         guiHandler.fill(bulletRGBA[0], bulletRGBA[1], bulletRGBA[2]);
         guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
     }
-    
+
 }

@@ -1,4 +1,4 @@
-package backend;
+package backend.main;
 
 /**
  * Calculates vectors, angles, and other values to be used in the simulation.

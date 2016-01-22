@@ -1,6 +1,6 @@
 package backend.level;
 
-import backend.GameEngine;
+import backend.main.GameEngine;
 import backend.actor.Actor;
 import backend.actor.FireballCanon;
 import backend.actor.Frigate;

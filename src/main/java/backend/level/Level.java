@@ -1,6 +1,6 @@
 package backend.level;
 
-import backend.GameEngine;
+import backend.main.GameEngine;
 import backend.actor.Actor;
 import backend.actor.Player;
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ public abstract class Level {
     public static java.util.logging.Level SEVERE;
 
     protected String levelName;
-
     protected GameEngine gameEngine;
+    protected ActorSpawner actorSpawner;
 
     protected Player player;
     protected ArrayList<Actor> enemies = new ArrayList<Actor>();
@@ -32,6 +32,7 @@ public abstract class Level {
     protected Level(GameEngine gameEngine) {
 
         this.gameEngine = gameEngine;
+        this.actorSpawner = new ActorSpawner(this);
     }
 
     // Getters.
@@ -61,6 +62,10 @@ public abstract class Level {
 
     public ArrayList<Actor> getActors() {
         return actors;
+    }
+
+    public ActorSpawner getActorSpawner() {
+        return actorSpawner;
     }
 
 }
