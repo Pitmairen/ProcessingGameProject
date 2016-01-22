@@ -88,7 +88,7 @@ public class FireballCanon extends Actor {
             
             ball.draw(this.canvas);
             
-            if (!ball.isAlive || ball.getHitPoints() <= 0) {
+            if (ball.hasExploded || ball.getHitPoints() <= 0) {
                 it.remove(); // Remove the balls after it has exploded
             }
         }
@@ -114,7 +114,6 @@ public class FireballCanon extends Actor {
         private final int backgroundColor;
         private final float radius = 8.0f;
         private final float speed = 0.8f;
-        private boolean isAlive = true;
         private boolean hasExploded = false;
 
         public Fireball(double positionX, double positionY, GameEngine gameEngine, double targetAngle) {
@@ -184,7 +183,7 @@ public class FireballCanon extends Actor {
         
 
         public void draw(PGraphics canvas) {
-            if (!isAlive) {
+            if (hasExploded) {
                 return;
             }
 
@@ -208,7 +207,6 @@ public class FireballCanon extends Actor {
             FireballCanon.this.particles.emitParticles(50,
                     new PVector((float) positionX, (float) positionY),
                     backgroundColor);
-            isAlive = false;
         }
 
     }
