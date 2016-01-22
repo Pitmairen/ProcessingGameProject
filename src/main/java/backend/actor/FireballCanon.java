@@ -88,7 +88,7 @@ public class FireballCanon extends Actor {
             
             ball.draw(this.canvas);
             
-            if (!ball.isAlive) {
+            if (!ball.isAlive || ball.getHitPoints() <= 0) {
                 it.remove(); // Remove the balls after it has exploded
             }
         }
