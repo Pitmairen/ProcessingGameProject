@@ -2,7 +2,6 @@ package backend.level;
 
 import backend.main.GameEngine;
 import backend.actor.Actor;
-import backend.actor.FireballCanon;
 import backend.actor.Frigate;
 import backend.actor.Player;
 
@@ -22,10 +21,7 @@ public class LevelTest extends Level {
 
         levelName = "Test level";
 
-        FireballCanon canon = new FireballCanon(gameEngine);
-        actors.add(canon);
-
-        player = new Player(300, 250, gameEngine, canon);
+        player = new Player(300, 250, gameEngine);
 
         actors.add(player);
 

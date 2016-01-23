@@ -2,7 +2,8 @@ package backend.main;
 
 import backend.actor.Actor;
 import backend.actor.Bullet;
-import backend.actor.FireballCanon;
+import backend.actor.Fireball;
+import backend.shipmodule.FireballCanon;
 import backend.actor.Frigate;
 import backend.actor.Player;
 import backend.level.Level;
@@ -105,7 +106,7 @@ public class GameEngine {
                     currentLevel.getProjectiles().remove(actorInList);
                     it.remove();
                 }
-                if ((actorInList instanceof FireballCanon.Fireball)) {
+                if ((actorInList instanceof Fireball)) {
                     currentLevel.getProjectiles().remove(actorInList);
                     it.remove();
                 }

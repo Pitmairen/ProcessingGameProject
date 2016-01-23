@@ -1,5 +1,6 @@
 package backend.actor;
 
+import backend.shipmodule.FireballCanon;
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
 import backend.main.Timer;
@@ -25,10 +26,10 @@ public class Player extends Actor implements Drawable {
     // Weapons.
     private AutoCannon autoCannon = new AutoCannon(this);
     private Laser laser = new Laser(this);
-    private FireballCanon canon;
+    private FireballCanon fireballCannon = new FireballCanon(this);
 
     private String selectedPrimaryWeapon = "autoCannon";
-    private String selectedSecondaryWeapon = "fireBall";
+    private String selectedSecondaryWeapon = "fireballCannon";
 
     private Timer timer = new Timer();
     private int fireRate = 200;
@@ -36,11 +37,9 @@ public class Player extends Actor implements Drawable {
     /**
      * Constructor.
      */
-    public Player(double positionX, double positionY, GameEngine gameEngine, FireballCanon canon) {
+    public Player(double positionX, double positionY, GameEngine gameEngine) {
 
         super(positionX, positionY, gameEngine);
-
-        this.canon = canon;
 
         speedLimit = 0.6f;
         accelerationX = 0.002f;
@@ -53,6 +52,13 @@ public class Player extends Actor implements Drawable {
 
         shipModules.add(autoCannon);
         shipModules.add(laser);
+        shipModules.add(fireballCannon);
+    }
+
+    @Override
+    public void act(double timePassed) {
+        super.act(timePassed);
+        fireballCannon.act(timePassed);
     }
 
     @Override
@@ -95,7 +101,7 @@ public class Player extends Actor implements Drawable {
                 break;
             }
 
-            case "fireBall": {
+            case "fireballCannon": {
                 fireFireball();
                 break;
             }
@@ -120,7 +126,7 @@ public class Player extends Actor implements Drawable {
                 break;
             }
 
-            case "fireBall": {
+            case "fireballCannon": {
                 fireFireball();
                 break;
             }
@@ -139,9 +145,14 @@ public class Player extends Actor implements Drawable {
             double yVector = guiHandler.mouseY - positionY;
             double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
 
-            this.canon.fire(positionX, positionY, targetAngle);
+            this.fireballCannon.activate(positionX, positionY, targetAngle, this);
 
             timer.restart();
         }
     }
+
+    public FireballCanon getFireballCannon() {
+        return fireballCannon;
+    }
+
 }

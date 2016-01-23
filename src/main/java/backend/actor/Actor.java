@@ -1,6 +1,5 @@
 package backend.actor;
 
-import backend.actor.FireballCanon.Fireball;
 import backend.shipmodule.ShipModule;
 import backend.main.CollisionDetector;
 import backend.main.GameEngine;

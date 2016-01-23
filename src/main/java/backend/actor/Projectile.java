@@ -7,7 +7,7 @@ import userinterface.Drawable;
  *
  * @author Kristian Honningsvag.
  */
-abstract class Projectile extends Actor implements Drawable {
+public abstract class Projectile extends Actor implements Drawable {
 
     protected double launchVelocity = 1.2f;
     protected Actor owner; // From constructor.

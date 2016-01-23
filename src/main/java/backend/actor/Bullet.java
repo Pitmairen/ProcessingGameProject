@@ -59,6 +59,8 @@ public class Bullet extends Projectile implements Drawable {
         if (collisions.size() > 0) {
 
             for (Actor actorInList : collisions) {
+                
+                
                 if (actorInList != owner) {
 
                     elasticColision(this, actorInList, timePassed);

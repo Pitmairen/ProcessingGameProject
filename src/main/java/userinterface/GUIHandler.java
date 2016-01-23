@@ -3,6 +3,7 @@ package userinterface;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.actor.Actor;
+import backend.shipmodule.FireballCanon;
 import backend.shipmodule.ShipModule;
 
 import java.text.DecimalFormat;
@@ -224,7 +225,9 @@ public class GUIHandler extends PApplet {
                 for (ShipModule shipModule : actor.getShipModules()) {
                     if (shipModule != null) {
                         shipModule.draw();
-
+                        if (shipModule instanceof FireballCanon) {
+                            actor.draw();  // Temporary fix for stopping FireballCanon to draw over the actor.
+                        }
                     }
                 }
             }
