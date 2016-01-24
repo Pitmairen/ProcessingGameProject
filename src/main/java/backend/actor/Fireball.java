@@ -1,9 +1,9 @@
 package backend.actor;
 
+import backend.main.FadingCanvas;
 import java.util.ArrayList;
+import processing.core.PConstants;
 import processing.core.PGraphics;
-import processing.core.PVector;
-import userinterface.Drawable;
 
 /**
  * The fireballs us implemented as a internal class because they need to be
@@ -14,13 +14,12 @@ import userinterface.Drawable;
  * graphics object that the balls are drawn onto.
  *
  */
-public class Fireball extends Projectile implements Drawable {
+public class Fireball extends Projectile {
 
     private final int backgroundColor;
     private final float radius = 8.0f;
     private final float speed = 0.8f;
     private boolean hasExploded = false;
-
     Player playerOwner;
 
     public Fireball(double positionX, double positionY, double targetAngle, Actor owner) {
@@ -44,7 +43,8 @@ public class Fireball extends Projectile implements Drawable {
 
     @Override
     public void draw() {
-        //Do nothing
+        // Do nothing. The fireballs are managed by the fireball cannon
+        // and are drawn to the fading canvas. 
     }
 
     @Override
@@ -97,11 +97,18 @@ public class Fireball extends Projectile implements Drawable {
         }
     }
 
+    /**
+     * Draws the ball
+     * 
+     * @param canvas the graphics object to draw to
+     */
     public void draw(PGraphics canvas) {
         if (hasExploded) {
             return;
         }
 
+        canvas.imageMode(PConstants.CENTER);
+        canvas.ellipseMode(PConstants.CENTER);
         canvas.tint(this.backgroundColor, 255);
         canvas.fill(this.backgroundColor, 200);
 
@@ -119,15 +126,16 @@ public class Fireball extends Projectile implements Drawable {
 
     public void explode() {
         hasExploded = true;
-
-        playerOwner.getFireballCannon().getParticles().emitParticles(50,
-                new PVector((float) positionX, (float) positionY),
-                backgroundColor);
     }
 
     // Getters.
     public boolean isHasExploded() {
         return hasExploded;
     }
+    
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+    
 
 }

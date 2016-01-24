@@ -60,20 +60,37 @@ public class ParticleEmitter {
      * @param particleColor the color of the particles
      */
     public void emitParticles(int count, PVector position, int particleColor) {
+        emitParticles(count, position, particleColor, 15.0f, 10.0f);
+    }
+
+    
+    /**
+     * Emits a burst of particles that explodes out from @position in random
+     * directions.
+     *
+     * @param count the number of particles
+     * @param position the position to emit the particles from
+     * @param particleColor the color of the particles
+     * @param sizeLimit the maximum size of the particles
+     * @param speedLimit the maximum speed of the particles
+     */
+    public void emitParticles(int count, PVector position, int particleColor, float sizeLimit, float speedLimit) {
 
         int start = (this.firstPosition + this.particleCount) % PARTICLE_LIMIT;
 
         for (int i = 0; i < count; i++) {
             this.particles[(start + i) % PARTICLE_LIMIT].reset(
                     position.copy(),
-                    PVector.random2D().mult(this.randomRange(0.2f, 10.0f)), // Velocity
+                    PVector.random2D().mult(this.randomRange(0.2f, speedLimit)), // Velocity
                     particleColor,
-                    this.randomRange(2.0f, 15.0f) // Particle size
+                    this.randomRange(2.0f, sizeLimit) // Particle size
             );
         }
         this.particleCount = Math.min(PARTICLE_LIMIT, this.particleCount + count);
     }
-
+    
+    
+    
     /**
      * Updates the position of the particles
      *
@@ -143,7 +160,7 @@ public class ParticleEmitter {
         }
 
         public void draw(PGraphics canvas) {
-
+            
             canvas.fill(this.particleColor, this.opacity);
             canvas.ellipse(this.position.x, this.position.y, 3, 3);
             canvas.tint(this.particleColor, this.opacity);

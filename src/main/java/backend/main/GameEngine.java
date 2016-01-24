@@ -39,6 +39,9 @@ public class GameEngine {
     private boolean tab = false;
     private boolean enter = false;
 
+    private ExplosionManager explosions;
+    private FadingCanvas fadingCanvas;
+    
     /**
      * Constructor.
      *
@@ -48,7 +51,11 @@ public class GameEngine {
 
         this.guiHandler = guiHandler;
         collisionDetector = new CollisionDetector(this);
-        currentLevel = new LevelTest(this);
+     
+        explosions = new ExplosionManager(new ParticleEmitter(guiHandler));
+        
+        resetLevel();
+
     }
 
     /**
@@ -82,12 +89,14 @@ public class GameEngine {
 
         }
     }
-
+    
     /**
      * Remove dead actors and make all remaining actors act.
      */
     private void actAll(double timePassed) {
 
+        this.explosions.update(timePassed);
+        
         // Remove dead actors.
         Iterator<Actor> it = currentLevel.getActors().iterator();
         while (it.hasNext()) {
@@ -100,6 +109,7 @@ public class GameEngine {
                 }
                 if ((actorInList instanceof Frigate)) {
                     currentLevel.getEnemies().remove(actorInList);
+                    this.explosions.explodeEnemy((Frigate)actorInList);
                     it.remove();
                 }
                 if ((actorInList instanceof Bullet)) {
@@ -108,6 +118,7 @@ public class GameEngine {
                 }
                 if ((actorInList instanceof Fireball)) {
                     currentLevel.getProjectiles().remove(actorInList);
+                    explosions.explodeFireball((Fireball)actorInList);
                     it.remove();
                 }
             }
@@ -225,7 +236,7 @@ public class GameEngine {
 
             case "deathScreen": {
                 if (space) {
-                    currentLevel = new LevelTest(this);
+                    resetLevel();
                     simulationState = "startScreen";
                 }
                 break;
@@ -234,6 +245,18 @@ public class GameEngine {
         }
     }
 
+    // Creates the currentLevel
+    private void resetLevel(){
+        
+        currentLevel = new LevelTest(this);
+        // The fading canvas must be reset because a new player object
+        // is created and thus there fireball cannon is also new and 
+        // must be added to the fading canvas.
+        fadingCanvas = new FadingCanvas(guiHandler);
+        fadingCanvas.add(explosions);
+        fadingCanvas.add(currentLevel.getPlayer().getFireballCannon());
+    }
+    
     // Getters.
     public GUIHandler getGuiHandler() {
         return guiHandler;
@@ -250,7 +273,11 @@ public class GameEngine {
     public CollisionDetector getCollisionDetector() {
         return collisionDetector;
     }
-
+    
+    public FadingCanvas getFadingCanvas() {
+        return fadingCanvas;
+    }
+    
     // Setters.
     public void setSimulationState(String simulationState) {
         this.simulationState = simulationState;

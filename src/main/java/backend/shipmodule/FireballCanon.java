@@ -2,14 +2,13 @@ package backend.shipmodule;
 
 import backend.actor.Actor;
 import backend.actor.Player;
-import backend.main.ParticleEmitter;
 import backend.actor.Fireball;
+import backend.main.FadingCanvas;
 import backend.main.Timer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import processing.core.PGraphics;
 import processing.core.PImage;
-import userinterface.Drawable;
 
 /**
  * The fire ball canon manages all the active fire balls.
@@ -22,12 +21,10 @@ import userinterface.Drawable;
  *
  * @author pitmairen
  */
-public class FireballCanon extends ShipModule implements Drawable {
+public class FireballCanon extends ShipModule implements FadingCanvas.Drawable {
 
     private final ArrayList<Fireball> balls;
-    private final PGraphics canvas;
     private final PImage ballImage;
-    private final ParticleEmitter particles; // Used for explosions
 
     private double timeBetweenShots = 400;
     private int damage = 10;
@@ -36,15 +33,8 @@ public class FireballCanon extends ShipModule implements Drawable {
 
     public FireballCanon(Player actor) {
         this.actor = actor;
-
-        this.canvas = actor.getGuiHandler().createGraphics(actor.getGuiHandler().getWidth(),
-                actor.getGuiHandler().getHeight(), PGraphics.P2D);
-
         this.ballImage = actor.getGuiHandler().loadImage("particle.png");
         this.balls = new ArrayList<>();
-        this.canvas.ellipseMode(PGraphics.CENTER);
-        this.canvas.imageMode(PGraphics.CENTER);
-        this.particles = new ParticleEmitter(actor.getGuiHandler());
     }
 
     /**
@@ -62,33 +52,20 @@ public class FireballCanon extends ShipModule implements Drawable {
         actor.getGameEngine().getCurrentLevel().getActors().add(ball);
         this.balls.add(ball);
     }
-
-    /**
-     * Animates the particles.
-     */
-    public void act(double timePassed) {
-        particles.update((float) timePassed / 25.0f);
-    }
-
+    
     @Override
     public void draw() {
+        // The balls are drawn to the fading canvas.
+    }
 
-        this.canvas.beginDraw();
+    
+    @Override
+    public void draw(PGraphics canvas) {
 
-        // Creates the fading tail effect. The second number (40) creates the 
-        // tail effect, a lower number means a longer tail. This affects both
-        // particles and the fireballs.
-        this.canvas.fill(0, 40);
-        this.canvas.rect(0, 0,
-                actor.getGuiHandler().getWidth(), actor.getGuiHandler().getHeight());
-
-        // Add causes the colors of objects that are drawn on top of eachother
+        // ADD causes the colors of objects that are drawn on top of eachother
         // to be added together which creates a nice visual effect.
-        this.canvas.blendMode(PGraphics.ADD);
-        this.canvas.noStroke();
-
-        // Draw the particles 
-        particles.draw(this.canvas);
+        canvas.blendMode(PGraphics.ADD);
+        canvas.noStroke();
 
         // Draw the balls
         Iterator<Fireball> it = this.balls.iterator();
@@ -96,16 +73,15 @@ public class FireballCanon extends ShipModule implements Drawable {
 
             Fireball ball = it.next();
 
-            ball.draw(this.canvas);
+            ball.draw(canvas);
 
             if (ball.isHasExploded() || ball.getHitPoints() <= 0) {
                 it.remove(); // Remove the balls after it has exploded
             }
         }
 
-        this.canvas.blendMode(PGraphics.BLEND);
-        this.canvas.endDraw();
-        actor.getGuiHandler().image(this.canvas, 0, 0);
+        canvas.blendMode(PGraphics.BLEND); // Reset blendMode
+
     }
 
     // Getters.
@@ -113,20 +89,9 @@ public class FireballCanon extends ShipModule implements Drawable {
         return balls;
     }
 
-    public PGraphics getCanvas() {
-        return canvas;
-    }
 
     public PImage getBallImage() {
         return ballImage;
-    }
-
-    public ParticleEmitter getParticles() {
-        return particles;
-    }
-
-    public Actor getActor() {
-        return actor;
     }
 
 }

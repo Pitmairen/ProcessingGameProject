@@ -218,6 +218,8 @@ public class GUIHandler extends PApplet {
      */
     private void drawActors() {
 
+        gameEngine.getFadingCanvas().draw();
+        
         for (Actor actor : gameEngine.getCurrentLevel().getActors()) {
             if (actor != null) {
                 actor.draw();
@@ -225,13 +227,11 @@ public class GUIHandler extends PApplet {
                 for (ShipModule shipModule : actor.getShipModules()) {
                     if (shipModule != null) {
                         shipModule.draw();
-                        if (shipModule instanceof FireballCanon) {
-                            actor.draw();  // Temporary fix for stopping FireballCanon to draw over the actor.
-                        }
                     }
                 }
             }
         }
+
     }
 
     /**

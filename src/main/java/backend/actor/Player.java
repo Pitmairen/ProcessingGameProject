@@ -49,17 +49,12 @@ public class Player extends Actor implements Drawable {
         bounceModifier = 0.6f;
         hitPoints = 30;
         mass = 100;
-
+        
         shipModules.add(autoCannon);
         shipModules.add(laser);
         shipModules.add(fireballCannon);
     }
-
-    @Override
-    public void act(double timePassed) {
-        super.act(timePassed);
-        fireballCannon.act(timePassed);
-    }
+    
 
     @Override
     public void draw() {
