@@ -41,7 +41,7 @@ public class RocketLauncher extends ShipModule implements Drawable, FadingCanvas
         this.rockets = new ArrayList<>();
 
         launchVelocity = 0.8;
-        projectileDamage = 9;
+        projectileDamage = 12;
     }
 
     @Override

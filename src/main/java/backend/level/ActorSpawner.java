@@ -23,17 +23,23 @@ public class ActorSpawner {
     }
 
     /**
-     * Spawns a frigate at a random location.
+     * Spawns a given number of frigates at random locations.
+     *
+     * @param amount Number of frigates to spawn.
      */
-    public void spawnFrigate() {
+    public void spawnFrigate(int amount) {
 
         Random random = new Random();
-        int randX = random.nextInt(currentLevel.getGameEngine().getGuiHandler().getWidth() - 200) + 100;
-        int randY = random.nextInt(currentLevel.getGameEngine().getGuiHandler().getHeight() - 200) + 100;
 
-        Actor enemy = new Frigate(randX, randY, currentLevel.getGameEngine());
-        currentLevel.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
-        currentLevel.getGameEngine().getCurrentLevel().getActors().add(enemy);
+        for (int i = 0; i < amount; i++) {
+
+            int randX = random.nextInt(currentLevel.getGameEngine().getGuiHandler().getWidth() - 200) + 100;
+            int randY = random.nextInt(currentLevel.getGameEngine().getGuiHandler().getHeight() - 200) + 100;
+
+            Actor enemy = new Frigate(randX, randY, currentLevel.getGameEngine());
+            currentLevel.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
+            currentLevel.getGameEngine().getCurrentLevel().getActors().add(enemy);
+        }
     }
 
 }

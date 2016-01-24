@@ -110,6 +110,7 @@ public class GameEngine {
                 if ((actorInList instanceof Frigate)) {
                     currentLevel.getEnemies().remove(actorInList);
                     this.explosions.explodeEnemy((Frigate) actorInList);
+                    currentLevel.getPlayer().increaseScore(1);
                     it.remove();
                 }
                 if ((actorInList instanceof Bullet)) {
@@ -127,6 +128,11 @@ public class GameEngine {
         // Make all actors act.
         for (Actor actor : currentLevel.getActors()) {
             actor.act(timePassed);
+        }
+
+        // Spawn new wave if current wave have been defeated.
+        if (currentLevel.getEnemies().isEmpty()) {
+            currentLevel.nextWave();
         }
     }
 
@@ -223,8 +229,7 @@ public class GameEngine {
                     simulationState = "menuScreen";
                 }
                 if (tab) {
-                    currentLevel.getActorSpawner().spawnFrigate();
-
+                    currentLevel.getActorSpawner().spawnFrigate(1);
                 }
                 break;
             }

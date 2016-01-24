@@ -12,7 +12,7 @@ import userinterface.Drawable;
  */
 public class AutoCannon extends ShipModule implements Drawable {
 
-    private double timeBetweenShots = 150;
+    private double timeBetweenShots = 130;
     private Timer timer = new Timer();
 
     /**
@@ -22,7 +22,7 @@ public class AutoCannon extends ShipModule implements Drawable {
         super("Auto Cannon", owner);
 
         launchVelocity = 1.8;
-        projectileDamage = 1.4;
+        projectileDamage = 1.6;
     }
 
     @Override

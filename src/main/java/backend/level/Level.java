@@ -14,9 +14,10 @@ public abstract class Level {
 
     public static java.util.logging.Level SEVERE;
 
-    protected String levelName;
-    protected GameEngine gameEngine;
-    protected ActorSpawner actorSpawner;
+    protected String levelName = "NAME NOT SET";
+    protected int currentWave = 0;
+    protected GameEngine gameEngine;     // From constructor.
+    protected ActorSpawner actorSpawner; // From constructor.
 
     protected ArrayList<Actor> actors = new ArrayList<Actor>();
     protected ArrayList<Actor> enemies = new ArrayList<Actor>();
@@ -34,6 +35,11 @@ public abstract class Level {
         this.gameEngine = gameEngine;
         this.actorSpawner = new ActorSpawner(this);
     }
+
+    /**
+     * Spawns the next wave.
+     */
+    public abstract void nextWave();
 
     // Getters.
     public String getLevelName() {
@@ -66,6 +72,10 @@ public abstract class Level {
 
     public ActorSpawner getActorSpawner() {
         return actorSpawner;
+    }
+
+    public int getCurrentWave() {
+        return currentWave;
     }
 
 }

@@ -41,8 +41,8 @@ public class GUIHandler extends PApplet {
     private int[] deathScreenRGBA = new int[]{200, 50, 40, 255};
 
     private PFont hudFont;
+    private PFont debugHUDFont;
     private PFont menuFont;
-    private String playerHP;
 
     // Decimal formats.
     private DecimalFormat format1 = new DecimalFormat("0");
@@ -71,8 +71,9 @@ public class GUIHandler extends PApplet {
     public void setup() {
         timer = new Timer();
         // Font sizes.
-        hudFont = createFont("Arial", 16, true);
-        menuFont = createFont("Arial", 20, true);
+        hudFont = createFont("Arial", 22, true);
+        debugHUDFont = createFont("Arial", 16, true);
+        menuFont = createFont("Arial", 28, true);
         frameRate(60);
         cursor(CROSS);
         keyRepeatEnabled = true;   // Needed for enhanced keyboard input reading.
@@ -84,7 +85,7 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void settings() {
-        fullScreen(P2D);
+        fullScreen(P3D);
     }
 
     /**
@@ -145,15 +146,15 @@ public class GUIHandler extends PApplet {
      */
     private void drawHUD() {
 
-        playerHP = format2.format(gameEngine.getCurrentLevel().getPlayer().getHitPoints());
-
         strokeWeight(1);
         stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
         textFont(hudFont);
-        text("HP: " + playerHP, 14, 38);
-        text("Score: " + gameEngine.getCurrentLevel().getPlayer().getScore(), 14, 58);
+        text("HP: " + format2.format(gameEngine.getCurrentLevel().getPlayer().getHitPoints())
+                + "\n" + "Level: " + gameEngine.getCurrentLevel().getLevelName()
+                + "\n" + "Wave: " + gameEngine.getCurrentLevel().getCurrentWave()
+                + "\n" + "Score: " + format1.format(gameEngine.getCurrentLevel().getPlayer().getScore()), 14, 40);
     }
 
     /**
@@ -165,7 +166,7 @@ public class GUIHandler extends PApplet {
         stroke(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
         fill(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
 
-        textFont(hudFont);
+        textFont(debugHUDFont);
         text("FPS: " + format2.format((int) frameRate)
                 + "\n"
                 + "\n" + "Active actors: " + format1.format(gameEngine.getCurrentLevel().getActors().size())
