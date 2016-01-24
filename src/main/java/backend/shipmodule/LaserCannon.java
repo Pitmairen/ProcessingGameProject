@@ -10,14 +10,11 @@ import userinterface.Drawable;
  */
 public class LaserCannon extends ShipModule implements Drawable {
 
-    private double timeBetweenShots = 0;
-    private Actor actor;
-
     /**
      * Constructor.
      */
     public LaserCannon(Actor owner) {
-        super("Laser", owner);
+        super("Laser Cannon", owner);
 
         projectileDamage = 1;
     }
@@ -25,25 +22,27 @@ public class LaserCannon extends ShipModule implements Drawable {
     @Override
     public void draw() {
         // If the laser is being fired.
-        if (actor.isSecondaryWeaponState()) {
+        if (this.moduleActive) {
 
-            double screenDiagonalLength = Math.sqrt(Math.pow(actor.getGameEngine().getGuiHandler().getWidth(), 2) + Math.pow(actor.getGameEngine().getGuiHandler().getHeight(), 2));
-            double targetAngle = actor.getHeading();
+            double screenWidth = owner.getGameEngine().getGuiHandler().getWidth();
+            double screenHeight = owner.getGameEngine().getGuiHandler().getHeight();
+            double screenDiagonalLength = Math.sqrt(Math.pow(screenWidth, 2) + Math.pow(screenHeight, 2));
 
-            actor.getGameEngine().getGuiHandler().strokeWeight(2);
-            actor.getGameEngine().getGuiHandler().stroke(255, 0, 0);
-            actor.getGameEngine().getGuiHandler().line((float) actor.getPositionX(), (float) actor.getPositionY(),
-                    (float) actor.getPositionX() + (float) (screenDiagonalLength * Math.cos(targetAngle)),
-                    (float) actor.getPositionY() + (float) (screenDiagonalLength * Math.sin(targetAngle)));
-            actor.setSecondaryWeaponState(false);
+            owner.getGameEngine().getGuiHandler().strokeWeight(2);
+            owner.getGameEngine().getGuiHandler().stroke(255, 0, 0);
+            owner.getGameEngine().getGuiHandler().line((float) owner.getPositionX(), (float) owner.getPositionY(),
+                    (float) owner.getPositionX() + (float) (screenDiagonalLength * Math.cos(owner.getHeading())),
+                    (float) owner.getPositionY() + (float) (screenDiagonalLength * Math.sin(owner.getHeading())));
+            this.setModuleActive(false);
         }
     }
 
     /**
      * Fires the laser from the actor towards the current heading.
      */
+    @Override
     public void activate() {
-        actor.setSecondaryWeaponState(true);
+        this.setModuleActive(true);
     }
 
 }

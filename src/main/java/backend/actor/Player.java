@@ -3,6 +3,7 @@ package backend.actor;
 import backend.shipmodule.RocketLauncher;
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
+import backend.main.Timer;
 import backend.shipmodule.AutoCannon;
 import backend.shipmodule.LaserCannon;
 import backend.shipmodule.ShipModule;
@@ -16,20 +17,25 @@ import userinterface.Drawable;
 public class Player extends Actor implements Drawable {
 
     // Shape.
-    private int turretLength = 23;
-    private int turretWidth = 3;
+    private int turretLength = 27;
+    private int turretWidth = 4;
 
     // Color.
     private int[] bodyRGBA = new int[]{0, 70, 200, 255};
     private int[] turretRGBA = new int[]{30, 30, 200, 255};
+    private final int backgroundColor; // Set in constructor.
 
-    // Weapons.
+    // Modules.
     private AutoCannon autoCannon = new AutoCannon(this);
     private LaserCannon laserCannon = new LaserCannon(this);
     private RocketLauncher rocketLauncher = new RocketLauncher(this);
 
-    private ShipModule selectedPrimaryModule = autoCannon;
-    private ShipModule selectedSecondaryModule = rocketLauncher;
+    private ShipModule currentOffensiveModule = autoCannon;
+    private ShipModule currentDefensiveModule = null;
+    private Timer offensiveModuleTimer = new Timer();
+    private Timer defensiveModuleTimer = new Timer();
+    private double offensiveModuleSwapSpeed = 800;
+    private double defensiveModuleSwapSpeed = 800;
 
     /**
      * Constructor.
@@ -46,12 +52,12 @@ public class Player extends Actor implements Drawable {
         bounceModifier = 0.6f;
         hitPoints = 30;
         mass = 100;
-
+        backgroundColor = guiHandler.color(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2], 255);
         collisionDamageToOthers = 4;
 
-        shipModules.add(autoCannon);
-        shipModules.add(rocketLauncher);
-        //  shipModules.add(laser);
+        offensiveModules.add(autoCannon);
+        offensiveModules.add(rocketLauncher);
+        offensiveModules.add(laserCannon);
     }
 
     @Override
@@ -78,21 +84,37 @@ public class Player extends Actor implements Drawable {
     }
 
     /**
-     * Activates the selected primary ship module.
+     * Activates the selected offensive ship module.
      */
-    public void activatePrimaryModule() {
-        selectedPrimaryModule.activate();
+    public void activateOffensiveModule() {
+        currentOffensiveModule.activate();
     }
 
     /**
-     * Activates the selected secondary ship module.
+     * Activates the selected defensive ship module.
      */
-    public void activateSecondaryModule() {
-        selectedSecondaryModule.activate();
+    public void activateDefensiveModule() {
+        currentDefensiveModule.activate();
     }
 
+    /**
+     * Changes to the next offensive module.
+     */
+    public void swapPrimaryModule() {
+        // Wait for timer for each swap.
+        if (offensiveModuleTimer.timePassed() >= offensiveModuleSwapSpeed) {
+            currentOffensiveModule = offensiveModules.get((offensiveModules.indexOf(currentOffensiveModule) + 1) % offensiveModules.size());
+            offensiveModuleTimer.restart();
+        }
+    }
+
+    // Getters.
     public RocketLauncher getRocketLauncher() {
         return rocketLauncher;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
     }
 
 }

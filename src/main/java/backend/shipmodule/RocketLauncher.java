@@ -49,6 +49,7 @@ public class RocketLauncher extends ShipModule implements Drawable, FadingCanvas
         // The balls are drawn to the fading canvas.
     }
 
+    @Override
     public void draw(PGraphics canvas) {
 
         // Add causes the colors of objects that are drawn on top of eachother

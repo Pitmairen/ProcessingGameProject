@@ -22,13 +22,11 @@ public class LevelTest extends Level {
         levelName = "Test level";
 
         player = new Player(300, 250, gameEngine);
-
         actors.add(player);
 
         Actor enemy = new Frigate(1100, 600, gameEngine);
         enemies.add(enemy);
         actors.add(enemy);
-
     }
 
 }

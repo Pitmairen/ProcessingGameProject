@@ -14,6 +14,7 @@ public abstract class ShipModule implements Drawable {
     protected Actor owner; // From constructor.
     protected double launchVelocity = 0;
     protected double projectileDamage = 0;
+    protected boolean moduleActive = false;
 
     /**
      * Constructor.
@@ -46,6 +47,15 @@ public abstract class ShipModule implements Drawable {
 
     public double getProjectileDamage() {
         return projectileDamage;
+    }
+
+    public boolean isModuleActive() {
+        return moduleActive;
+    }
+
+    // Setter.
+    public void setModuleActive(boolean moduleActive) {
+        this.moduleActive = moduleActive;
     }
 
 }

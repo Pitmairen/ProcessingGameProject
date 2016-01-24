@@ -3,7 +3,6 @@ package backend.main;
 import backend.actor.Actor;
 import backend.actor.Bullet;
 import backend.actor.Rocket;
-import backend.shipmodule.RocketLauncher;
 import backend.actor.Frigate;
 import backend.actor.Player;
 import backend.level.Level;
@@ -41,7 +40,7 @@ public class GameEngine {
 
     private ExplosionManager explosions;
     private FadingCanvas fadingCanvas;
-    
+
     /**
      * Constructor.
      *
@@ -51,11 +50,10 @@ public class GameEngine {
 
         this.guiHandler = guiHandler;
         collisionDetector = new CollisionDetector(this);
-     
-        explosions = new ExplosionManager(new ParticleEmitter(guiHandler));
-        
-        resetLevel();
 
+        explosions = new ExplosionManager(new ParticleEmitter(guiHandler));
+
+        resetLevel();
     }
 
     /**
@@ -89,14 +87,14 @@ public class GameEngine {
 
         }
     }
-    
+
     /**
      * Remove dead actors and make all remaining actors act.
      */
     private void actAll(double timePassed) {
 
         this.explosions.update(timePassed);
-        
+
         // Remove dead actors.
         Iterator<Actor> it = currentLevel.getActors().iterator();
         while (it.hasNext()) {
@@ -105,11 +103,13 @@ public class GameEngine {
             if (actorInList.getHitPoints() <= 0) {
 
                 if ((actorInList instanceof Player)) {
+                    this.explosions.explodePlayer((Player) actorInList);
                     simulationState = "deathScreen";
+                    it.remove();
                 }
                 if ((actorInList instanceof Frigate)) {
                     currentLevel.getEnemies().remove(actorInList);
-                    this.explosions.explodeEnemy((Frigate)actorInList);
+                    this.explosions.explodeEnemy((Frigate) actorInList);
                     it.remove();
                 }
                 if ((actorInList instanceof Bullet)) {
@@ -118,7 +118,7 @@ public class GameEngine {
                 }
                 if ((actorInList instanceof Rocket)) {
                     currentLevel.getProjectiles().remove(actorInList);
-                    explosions.explodeFireball((Rocket)actorInList);
+                    this.explosions.explodeRocket((Rocket) actorInList);
                     it.remove();
                 }
             }
@@ -212,10 +212,12 @@ public class GameEngine {
                     currentLevel.getPlayer().accelerate("right", timePassed);
                 }
                 if (firePrimary) {
-                    currentLevel.getPlayer().activatePrimaryModule();
+                    currentLevel.getPlayer().activateOffensiveModule();
                 }
                 if (fireSecondary) {
-                    currentLevel.getPlayer().activateSecondaryModule();
+                }
+                if (swapPrimary) {
+                    currentLevel.getPlayer().swapPrimaryModule();
                 }
                 if (space) {
                     simulationState = "menuScreen";
@@ -245,9 +247,11 @@ public class GameEngine {
         }
     }
 
-    // Creates the currentLevel
-    private void resetLevel(){
-        
+    /**
+     * Creates the currentLevel.
+     */
+    private void resetLevel() {
+
         currentLevel = new LevelTest(this);
         // The fading canvas must be reset because a new player object
         // is created and thus there fireball cannon is also new and 
@@ -256,7 +260,7 @@ public class GameEngine {
         fadingCanvas.add(explosions);
         fadingCanvas.add(currentLevel.getPlayer().getRocketLauncher());
     }
-    
+
     // Getters.
     public GUIHandler getGuiHandler() {
         return guiHandler;
@@ -273,11 +277,11 @@ public class GameEngine {
     public CollisionDetector getCollisionDetector() {
         return collisionDetector;
     }
-    
+
     public FadingCanvas getFadingCanvas() {
         return fadingCanvas;
     }
-    
+
     // Setters.
     public void setSimulationState(String simulationState) {
         this.simulationState = simulationState;

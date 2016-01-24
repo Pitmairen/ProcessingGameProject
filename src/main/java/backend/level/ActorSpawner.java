@@ -23,7 +23,7 @@ public class ActorSpawner {
     }
 
     /**
-     * Spawns a frigate at a fixed position.
+     * Spawns a frigate at a random location.
      */
     public void spawnFrigate() {
 

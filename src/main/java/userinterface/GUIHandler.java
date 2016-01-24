@@ -3,7 +3,6 @@ package userinterface;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.actor.Actor;
-import backend.shipmodule.RocketLauncher;
 import backend.shipmodule.ShipModule;
 
 import java.text.DecimalFormat;
@@ -230,18 +229,13 @@ public class GUIHandler extends PApplet {
             if (actor != null) {
                 actor.draw();
 
-                for (ShipModule shipModule : actor.getShipModules()) {
+                for (ShipModule shipModule : actor.getOffensiveModules()) {
                     if (shipModule != null) {
                         shipModule.draw();
-
-                        if (shipModule instanceof RocketLauncher) {
-                            actor.draw();  // Temporary fix for stopping FireballCanon to draw over the actor.
-                        }
                     }
                 }
             }
         }
-
     }
 
     /**

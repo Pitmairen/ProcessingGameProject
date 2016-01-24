@@ -30,6 +30,9 @@ public class FadingCanvas {
     private final GUIHandler gui;
     private final ArrayList<Drawable> items;
 
+    /**
+     * Constructor.
+     */
     public FadingCanvas(GUIHandler gui) {
         this.gui = gui;
         this.canvas = gui.createGraphics(gui.getWidth(),
@@ -61,7 +64,7 @@ public class FadingCanvas {
 
         // Creates the fading tail effect. The second number (40) creates the 
         // tail effect, a lower number means a longer tail. This affects both
-        // particles and the fireballs.
+        // particles and the rockets.
         this.canvas.fill(0, 40);
         this.canvas.rect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -72,4 +75,5 @@ public class FadingCanvas {
         this.canvas.endDraw();
         gui.image(this.canvas, 0, 0);
     }
+
 }

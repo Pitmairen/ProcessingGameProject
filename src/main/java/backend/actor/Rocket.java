@@ -2,9 +2,7 @@ package backend.actor;
 
 import backend.shipmodule.ShipModule;
 import processing.core.PGraphics;
-import processing.core.PVector;
 import userinterface.Drawable;
-import backend.main.FadingCanvas;
 import processing.core.PConstants;
 
 /**
@@ -54,8 +52,8 @@ public class Rocket extends Projectile implements Drawable {
 
     @Override
     public void draw() {
-        // Do nothing. The rockets are managed by the rocket launcher
-        // and are drawn to the fading canvas. 
+        // Do nothing. The rockets are managed by the rocket launcher and are
+        // drawn to the fading canvas. 
     }
 
     @Override
@@ -87,6 +85,9 @@ public class Rocket extends Projectile implements Drawable {
                 (float) this.radius / 2, (float) this.radius / 2);
     }
 
+    /**
+     *
+     */
     public void explode() {
         hasExploded = true;
     }

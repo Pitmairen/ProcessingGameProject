@@ -39,6 +39,9 @@ public class ParticleEmitter {
     // Background image used for the particles
     private final PImage particleImage;
 
+    /**
+     * Constructor.
+     */
     public ParticleEmitter(GUIHandler gui) {
 
         particleImage = gui.loadImage("particle.png");
@@ -63,7 +66,6 @@ public class ParticleEmitter {
         emitParticles(count, position, particleColor, 15.0f, 10.0f);
     }
 
-    
     /**
      * Emits a burst of particles that explodes out from @position in random
      * directions.
@@ -88,9 +90,7 @@ public class ParticleEmitter {
         }
         this.particleCount = Math.min(PARTICLE_LIMIT, this.particleCount + count);
     }
-    
-    
-    
+
     /**
      * Updates the position of the particles
      *
@@ -131,6 +131,9 @@ public class ParticleEmitter {
         }
     }
 
+    /**
+     *
+     */
     private float randomRange(float min, float max) {
         return min + this.random.nextFloat() * ((max - min) + 1);
     }
@@ -149,18 +152,26 @@ public class ParticleEmitter {
         private float size;
         private float opacity = 255; // 0-255;
 
+        /**
+         * Constructor.
+         */
         public Particle() {
             this.size = ParticleEmitter.this.randomRange(4, 20);
         }
 
+        /**
+         *
+         */
         public void update(float timeDelta) {
             this.position.add(this.velocity.copy().mult(timeDelta));
             this.life -= (timeDelta * 5);
             this.opacity -= (5 + this.velocity.mag());
         }
 
+        /**
+         *
+         */
         public void draw(PGraphics canvas) {
-            
             canvas.fill(this.particleColor, this.opacity);
             canvas.ellipse(this.position.x, this.position.y, 3, 3);
             canvas.tint(this.particleColor, this.opacity);
@@ -179,9 +190,13 @@ public class ParticleEmitter {
             this.opacity = 255;
         }
 
+        /**
+         *
+         */
         public boolean isAlive() {
             return this.life > 0;
         }
 
     }
+    
 }

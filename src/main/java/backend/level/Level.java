@@ -18,11 +18,11 @@ public abstract class Level {
     protected GameEngine gameEngine;
     protected ActorSpawner actorSpawner;
 
-    protected Player player;
+    protected ArrayList<Actor> actors = new ArrayList<Actor>();
     protected ArrayList<Actor> enemies = new ArrayList<Actor>();
     protected ArrayList<Actor> projectiles = new ArrayList<Actor>();
     protected ArrayList<Actor> items = new ArrayList<Actor>();
-    protected ArrayList<Actor> actors = new ArrayList<Actor>();
+    protected Player player;
 
     /**
      * Constructor.

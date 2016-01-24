@@ -42,11 +42,8 @@ public abstract class Actor implements Drawable {
     protected double momentum; // Derived value.
     protected double collisionDamageToOthers = 0;
     protected int score = 0;
-    protected ArrayList<ShipModule> shipModules = new ArrayList<>();
-
-    // Environment variables.
-    protected boolean primaryWeaponState = false;
-    protected boolean secondaryWeaponState = false;
+    protected ArrayList<ShipModule> offensiveModules = new ArrayList<>();
+    protected ArrayList<ShipModule> defensiveModules = new ArrayList<>();
 
     // Simulation.
     protected GameEngine gameEngine;               // From constructor.
@@ -427,14 +424,6 @@ public abstract class Actor implements Drawable {
         return momentum;
     }
 
-    public boolean isPrimaryWeaponState() {
-        return primaryWeaponState;
-    }
-
-    public boolean isSecondaryWeaponState() {
-        return secondaryWeaponState;
-    }
-
     public GameEngine getGameEngine() {
         return gameEngine;
     }
@@ -455,8 +444,8 @@ public abstract class Actor implements Drawable {
         return score;
     }
 
-    public ArrayList<ShipModule> getShipModules() {
-        return shipModules;
+    public ArrayList<ShipModule> getOffensiveModules() {
+        return offensiveModules;
     }
 
     // Setters.
@@ -510,14 +499,6 @@ public abstract class Actor implements Drawable {
 
     public void setMass(double mass) {
         this.mass = mass;
-    }
-
-    public void setPrimaryWeaponState(boolean primaryWeaponState) {
-        this.primaryWeaponState = primaryWeaponState;
-    }
-
-    public void setSecondaryWeaponState(boolean secondaryWeaponState) {
-        this.secondaryWeaponState = secondaryWeaponState;
     }
 
     public void setGameEngine(GameEngine gameEngine) {
