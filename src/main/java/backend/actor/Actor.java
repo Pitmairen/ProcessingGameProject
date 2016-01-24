@@ -27,20 +27,20 @@ public abstract class Actor implements Drawable {
     protected double speedX = 0;
     protected double speedY = 0;
     protected double speedT; // Derived value.
-    protected double speedLimit = 0.6f;
+    protected double speedLimit = 0;
 
     // Acceleration. (pixels/ms^2)
-    protected double accelerationX = 0.002f;
-    protected double accelerationY = 0.002f;
-    protected double drag = 0.001f;
+    protected double accelerationX = 0;
+    protected double accelerationY = 0;
+    protected double drag = 0;
 
     // Attributes.
-    protected double hitBoxRadius = 20;
-    protected double bounceModifier = 0.6f;
-    protected double hitPoints = 10;
-    protected double mass = 10;
+    protected double hitBoxRadius = 0;
+    protected double bounceModifier = 0;
+    protected double hitPoints = 0;
+    protected double mass = 0;
     protected double momentum; // Derived value.
-    protected double collisionDamageToOthers = 1;
+    protected double collisionDamageToOthers = 0;
     protected int score = 0;
     protected ArrayList<ShipModule> shipModules = new ArrayList<>();
 
@@ -237,27 +237,24 @@ public abstract class Actor implements Drawable {
 
             for (Actor actorInList : collisions) {
 
-                if ((actorInList instanceof Fireball)) {
-                    // Do nohing.
-                    break;
-                }
-                if ((actorInList instanceof Bullet)) {
-                    if (((Bullet) actorInList).getOwner() == this) {
-                        // You pass right through your own projectiles.
-                        break;
+                if ((actorInList instanceof Projectile)) {
+                    if (((Projectile) actorInList).getShipModule().getOwner() == this) {
+                        // Actors can't collide with their own projectiles.
                     } else {
                         // You got hit by an unfriendly projectile.
                         elasticColision(this, actorInList, timePassed);
-                        this.modifyHitPoints(-actorInList.getCollisionDamageToOthers());
-                        actorInList.modifyHitPoints(-collisionDamageToOthers);
-                        break;
+                        this.removeHitPoints(actorInList.getCollisionDamageToOthers());
+                        actorInList.removeHitPoints(this.collisionDamageToOthers);
+                        ((Projectile) actorInList).targetHit();
                     }
+                } else if (actorInList.getClass() == this.getClass()) {
+                    // No collision damage when hitting an actor of the same type.
+                    elasticColision(this, actorInList, timePassed);
                 } else {
                     // You collided with an actor.
                     elasticColision(this, actorInList, timePassed);
-                    this.modifyHitPoints(-actorInList.getCollisionDamageToOthers());
-                    actorInList.modifyHitPoints(-collisionDamageToOthers);
-                    break;
+                    this.removeHitPoints(actorInList.getCollisionDamageToOthers());
+                    actorInList.removeHitPoints(this.collisionDamageToOthers);
                 }
             }
         }
@@ -339,13 +336,21 @@ public abstract class Actor implements Drawable {
     }
 
     /**
-     * Increases or decreases an actors hit points by an set amount.
+     * Increases an actors hit points by an set amount.
      *
-     * @param adjustment Number of hit points to add or subtract. Negative
-     * values subtracts.
+     * @param healing Number of hit points to add.
      */
-    public void modifyHitPoints(double adjustment) {
-        this.hitPoints = this.hitPoints + adjustment;
+    public void addHitPoints(double healing) {
+        this.hitPoints = this.hitPoints + healing;
+    }
+
+    /**
+     * Decreases an actors hit points by an set amount.
+     *
+     * @param damage Number of hit points to subtract.
+     */
+    public void removeHitPoints(double damage) {
+        this.hitPoints = this.hitPoints - damage;
     }
 
     /**

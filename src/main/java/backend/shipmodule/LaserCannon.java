@@ -8,19 +8,18 @@ import userinterface.Drawable;
  *
  * @author Kristian Honningsvag.
  */
-public class Laser extends ShipModule implements Drawable {
+public class LaserCannon extends ShipModule implements Drawable {
 
     private double timeBetweenShots = 0;
-    private int damage = 1;
     private Actor actor;
 
     /**
      * Constructor.
-     *
-     * @param actor The actor who owns this weapon.
      */
-    public Laser(Actor actor) {
-        this.actor = actor;
+    public LaserCannon(Actor owner) {
+        super("Laser", owner);
+
+        projectileDamage = 1;
     }
 
     @Override

@@ -5,8 +5,8 @@
  */
 package backend.main;
 
-import backend.actor.Fireball;
 import backend.actor.Frigate;
+import backend.actor.Rocket;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
@@ -75,7 +75,7 @@ public class ExplosionManager implements FadingCanvas.Drawable {
      * 
      * @param ball the fireball that should explode
      */
-    public void explodeFireball(Fireball ball){
+    public void explodeFireball(Rocket ball){
         this.particles.emitParticles(50,
                 new PVector((float)ball.getPositionX(), (float)ball.getPositionY()), ball.getBackgroundColor());
     }

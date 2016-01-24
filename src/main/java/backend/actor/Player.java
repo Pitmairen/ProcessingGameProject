@@ -1,11 +1,11 @@
 package backend.actor;
 
-import backend.shipmodule.FireballCanon;
+import backend.shipmodule.RocketLauncher;
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
-import backend.main.Timer;
 import backend.shipmodule.AutoCannon;
-import backend.shipmodule.Laser;
+import backend.shipmodule.LaserCannon;
+import backend.shipmodule.ShipModule;
 import userinterface.Drawable;
 
 /**
@@ -25,14 +25,11 @@ public class Player extends Actor implements Drawable {
 
     // Weapons.
     private AutoCannon autoCannon = new AutoCannon(this);
-    private Laser laser = new Laser(this);
-    private FireballCanon fireballCannon = new FireballCanon(this);
+    private LaserCannon laserCannon = new LaserCannon(this);
+    private RocketLauncher rocketLauncher = new RocketLauncher(this);
 
-    private String selectedPrimaryWeapon = "autoCannon";
-    private String selectedSecondaryWeapon = "fireballCannon";
-
-    private Timer timer = new Timer();
-    private int fireRate = 200;
+    private ShipModule selectedPrimaryModule = autoCannon;
+    private ShipModule selectedSecondaryModule = rocketLauncher;
 
     /**
      * Constructor.
@@ -49,12 +46,13 @@ public class Player extends Actor implements Drawable {
         bounceModifier = 0.6f;
         hitPoints = 30;
         mass = 100;
-        
+
+        collisionDamageToOthers = 4;
+
         shipModules.add(autoCannon);
-        shipModules.add(laser);
-        shipModules.add(fireballCannon);
+        shipModules.add(rocketLauncher);
+        //  shipModules.add(laser);
     }
-    
 
     @Override
     public void draw() {
@@ -80,74 +78,21 @@ public class Player extends Actor implements Drawable {
     }
 
     /**
-     * Fires the currently selected primary weapon.
+     * Activates the selected primary ship module.
      */
-    public void firePrimary() {
-
-        switch (selectedPrimaryWeapon) {
-
-            case "autoCannon": {
-                autoCannon.activate();
-                break;
-            }
-
-            case "laser": {
-                laser.activate();
-                break;
-            }
-
-            case "fireballCannon": {
-                fireFireball();
-                break;
-            }
-
-        }
+    public void activatePrimaryModule() {
+        selectedPrimaryModule.activate();
     }
 
     /**
-     * Fires the currently selected secondary weapon.
+     * Activates the selected secondary ship module.
      */
-    public void fireSecondary() {
-
-        switch (selectedSecondaryWeapon) {
-
-            case "autoCannon": {
-                autoCannon.activate();
-                break;
-            }
-
-            case "laser": {
-                laser.activate();
-                break;
-            }
-
-            case "fireballCannon": {
-                fireFireball();
-                break;
-            }
-
-        }
+    public void activateSecondaryModule() {
+        selectedSecondaryModule.activate();
     }
 
-    /**
-     * Fires a new fireball
-     */
-    public void fireFireball() {
-
-        // Wait for timer for each shot.
-        if (timer.timePassed() >= fireRate) {
-            double xVector = guiHandler.mouseX - positionX;
-            double yVector = guiHandler.mouseY - positionY;
-            double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
-
-            this.fireballCannon.activate(positionX, positionY, targetAngle, this);
-
-            timer.restart();
-        }
-    }
-
-    public FireballCanon getFireballCannon() {
-        return fireballCannon;
+    public RocketLauncher getRocketLauncher() {
+        return rocketLauncher;
     }
 
 }

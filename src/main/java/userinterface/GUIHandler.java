@@ -3,7 +3,7 @@ package userinterface;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.actor.Actor;
-import backend.shipmodule.FireballCanon;
+import backend.shipmodule.RocketLauncher;
 import backend.shipmodule.ShipModule;
 
 import java.text.DecimalFormat;
@@ -38,7 +38,15 @@ public class GUIHandler extends PApplet {
     private DecimalFormat format4 = new DecimalFormat("0.0");
     private DecimalFormat format5 = new DecimalFormat("00.0");
     private DecimalFormat format6 = new DecimalFormat("000.0");
-    private DecimalFormat format7 = new DecimalFormat("00.0000");
+    private DecimalFormat format7 = new DecimalFormat("0.00");
+    private DecimalFormat format8 = new DecimalFormat("00.00");
+    private DecimalFormat format9 = new DecimalFormat("000.00");
+    private DecimalFormat format10 = new DecimalFormat("0.000");
+    private DecimalFormat format11 = new DecimalFormat("00.000");
+    private DecimalFormat format12 = new DecimalFormat("000.000");
+    private DecimalFormat format13 = new DecimalFormat("0.0000");
+    private DecimalFormat format14 = new DecimalFormat("00.0000");
+    private DecimalFormat format15 = new DecimalFormat("000.0000");
 
     private GameEngine gameEngine;
     private Timer timer;
@@ -145,17 +153,15 @@ public class GUIHandler extends PApplet {
         fill(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
 
         textFont(hudFont);
-        text("DEBUG INFO"
+        text("FPS: " + format2.format((int) frameRate)
                 + "\n"
-                + "\n" + "FPS: " + format3.format((int) frameRate)
+                + "\n" + "Active actors: " + format1.format(gameEngine.getCurrentLevel().getActors().size())
+                + "\n" + "Active enemies: " + format1.format(gameEngine.getCurrentLevel().getEnemies().size())
+                + "\n" + "Active projectiles: " + format1.format(gameEngine.getCurrentLevel().getProjectiles().size())
                 + "\n"
-                + "\n" + "Active actors: " + format3.format(gameEngine.getCurrentLevel().getActors().size())
-                + "\n" + "Active enemies: " + format3.format(gameEngine.getCurrentLevel().getEnemies().size())
-                + "\n" + "Active projectiles: " + format3.format(gameEngine.getCurrentLevel().getProjectiles().size())
-                + "\n"
-                + "\n" + "Player posX: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getPositionX()) + " pixel"
-                + "\n" + "Player posY: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getPositionY()) + " pixel"
-                + "\n" + "Player speedT: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT()) + " pixel/ms"
+                + "\n" + "Player posX: " + format5.format(gameEngine.getCurrentLevel().getPlayer().getPositionX()) + " pixel"
+                + "\n" + "Player posY: " + format5.format(gameEngine.getCurrentLevel().getPlayer().getPositionY()) + " pixel"
+                + "\n" + "Player speedT: " + format10.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT()) + " pixel/ms"
                 + "\n" + "Player heading: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getHeading()) + " rad"
                 + "\n" + "Player course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getCourse()) + " rad", width - 500, 100);
     }
@@ -219,7 +225,7 @@ public class GUIHandler extends PApplet {
     private void drawActors() {
 
         gameEngine.getFadingCanvas().draw();
-        
+
         for (Actor actor : gameEngine.getCurrentLevel().getActors()) {
             if (actor != null) {
                 actor.draw();
@@ -227,6 +233,10 @@ public class GUIHandler extends PApplet {
                 for (ShipModule shipModule : actor.getShipModules()) {
                     if (shipModule != null) {
                         shipModule.draw();
+
+                        if (shipModule instanceof RocketLauncher) {
+                            actor.draw();  // Temporary fix for stopping FireballCanon to draw over the actor.
+                        }
                     }
                 }
             }

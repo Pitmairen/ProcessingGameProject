@@ -2,8 +2,8 @@ package backend.main;
 
 import backend.actor.Actor;
 import backend.actor.Bullet;
-import backend.actor.Fireball;
-import backend.shipmodule.FireballCanon;
+import backend.actor.Rocket;
+import backend.shipmodule.RocketLauncher;
 import backend.actor.Frigate;
 import backend.actor.Player;
 import backend.level.Level;
@@ -116,9 +116,9 @@ public class GameEngine {
                     currentLevel.getProjectiles().remove(actorInList);
                     it.remove();
                 }
-                if ((actorInList instanceof Fireball)) {
+                if ((actorInList instanceof Rocket)) {
                     currentLevel.getProjectiles().remove(actorInList);
-                    explosions.explodeFireball((Fireball)actorInList);
+                    explosions.explodeFireball((Rocket)actorInList);
                     it.remove();
                 }
             }
@@ -212,10 +212,10 @@ public class GameEngine {
                     currentLevel.getPlayer().accelerate("right", timePassed);
                 }
                 if (firePrimary) {
-                    currentLevel.getPlayer().firePrimary();
+                    currentLevel.getPlayer().activatePrimaryModule();
                 }
                 if (fireSecondary) {
-                    currentLevel.getPlayer().fireSecondary();
+                    currentLevel.getPlayer().activateSecondaryModule();
                 }
                 if (space) {
                     simulationState = "menuScreen";
@@ -254,7 +254,7 @@ public class GameEngine {
         // must be added to the fading canvas.
         fadingCanvas = new FadingCanvas(guiHandler);
         fadingCanvas.add(explosions);
-        fadingCanvas.add(currentLevel.getPlayer().getFireballCannon());
+        fadingCanvas.add(currentLevel.getPlayer().getRocketLauncher());
     }
     
     // Getters.
