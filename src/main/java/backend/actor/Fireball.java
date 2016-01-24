@@ -48,14 +48,6 @@ public class Fireball extends Projectile {
     }
 
     @Override
-    public void act(double timePassed) {
-        super.addFriction(timePassed);
-        super.updatePosition(timePassed);
-        checkWallCollisions(timePassed);
-        checkActorCollisions(timePassed);
-    }
-
-    @Override
     protected void checkWallCollisions(double timePassed) {
         if (hasExploded) {
             return;
