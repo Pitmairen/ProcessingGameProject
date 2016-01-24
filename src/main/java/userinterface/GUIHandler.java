@@ -111,6 +111,8 @@ public class GUIHandler extends PApplet {
             }
 
             case "menuScreen": {
+                drawOuterWalls();
+                drawActors();
                 drawPauseScreen();
                 break;
             }
