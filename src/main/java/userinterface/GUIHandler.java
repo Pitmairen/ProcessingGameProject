@@ -17,15 +17,29 @@ import processing.core.PFont;
  */
 public class GUIHandler extends PApplet {
 
-    // Main GUI.
-    private int outerWallThickness = 4;
+    // Game field.
+    private int outerWallThickness = 0;
     private int[] outerWallsRGBA = new int[]{153, 153, 253, 255};
     private int[] backgroundRGBA = new int[]{0, 0, 0, 255};
 
-    // HUD.
+    // Player HUD.
     private int[] hudRGBA = new int[]{80, 150, 40, 255};
-    private int[] deathScreenRGBA = new int[]{200, 50, 40, 255};
+
+    // Debug HUD.
     private int[] debugHudRGBA = new int[]{255, 255, 255, 255};
+
+    // Main menu.
+    private int mainMenuOuterBoxThickness = 5;
+    private int[] mainMenuOuterBoxRGBA = new int[]{153, 153, 253, 255};
+    private int[] mainMenuBackgroundRGBA = new int[]{0, 0, 0, 255};
+    private int[] mainMenuRGBA = new int[]{153, 153, 253, 255};
+
+    // Pause screen.
+    private int[] pauseScreenRGBA = new int[]{40, 160, 30, 255};
+
+    // Death screen.
+    private int[] deathScreenRGBA = new int[]{200, 50, 40, 255};
+
     private PFont hudFont;
     private PFont menuFont;
     private String playerHP;
@@ -85,7 +99,6 @@ public class GUIHandler extends PApplet {
         switch (gameEngine.getSimulationState()) {
 
             case "startScreen": {
-                drawOuterWalls();
                 drawStartScreen();
                 break;
             }
@@ -98,8 +111,7 @@ public class GUIHandler extends PApplet {
             }
 
             case "menuScreen": {
-                drawOuterWalls();
-                drawMenuScreen();
+                drawPauseScreen();
                 break;
             }
 
@@ -170,35 +182,43 @@ public class GUIHandler extends PApplet {
      */
     private void drawStartScreen() {
 
-        strokeWeight(1);
-        stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
-        fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
+        // Background.
+        strokeWeight(mainMenuOuterBoxThickness);
+        stroke(mainMenuOuterBoxRGBA[0], mainMenuOuterBoxRGBA[1], mainMenuOuterBoxRGBA[2]);
+        fill(mainMenuBackgroundRGBA[0], mainMenuBackgroundRGBA[1], mainMenuBackgroundRGBA[2]);
+        rect(0 + mainMenuOuterBoxThickness / 2,
+                0 + mainMenuOuterBoxThickness / 2,
+                width - mainMenuOuterBoxThickness,
+                height - mainMenuOuterBoxThickness);
 
+        // Text.
+        strokeWeight(1);
+        stroke(mainMenuRGBA[0], mainMenuRGBA[1], mainMenuRGBA[2]);
+        fill(mainMenuRGBA[0], mainMenuRGBA[1], mainMenuRGBA[2]);
         textFont(menuFont);
-        text("Press \"Enter\" to start."
-                + "\n" + "Press  \"Escape\" to quit."
+        text("Title Screen"
+                + "\n" + "Press \"Enter\" to start."
                 + "\n"
-                + "\n" + "Keybindings:"
+                + "\n"
                 + "\n" + "Acceleration: E, S, D, F"
-                + "\n" + "Fire primary: Left mouse button"
-                + "\n" + "Fire Secondary: Right mouse button"
-                + "\n" + "Pause: Space", 500, 300);
+                + "\n" + "Offensive module: Left mouse button"
+                + "\n" + "Cycle between offensive modules: W"
+                + "\n" + "Spawn enemies: TAB"
+                + "\n" + "Pause: Space"
+                + "\n" + "Quit: ESC", width / 2 - 300, 300);
     }
 
     /**
-     * Draws the menu screen.
+     * Draws the pause screen.
      */
-    private void drawMenuScreen() {
+    private void drawPauseScreen() {
 
         strokeWeight(1);
-        stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
-        fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
-
+        stroke(pauseScreenRGBA[0], pauseScreenRGBA[1], pauseScreenRGBA[2]);
+        fill(pauseScreenRGBA[0], pauseScreenRGBA[1], pauseScreenRGBA[2]);
         textFont(menuFont);
         text("PAUSED"
-                + "\n"
-                + "\n" + "Press \"Enter\" to unpause."
-                + "\n" + "Press  \"Escape\" to quit.", 500, 300);
+                + "\n" + "Press \"Enter\" to unpause.", width / 2 - 300, 300);
     }
 
     /**
@@ -209,13 +229,12 @@ public class GUIHandler extends PApplet {
         strokeWeight(1);
         stroke(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
         fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
-
         textFont(menuFont);
         text("You Were Defeated"
-                + "\n" + "Your score where " + gameEngine.getCurrentLevel().getPlayer().getScore()
-                + "\n"
                 + "\n" + "Press \"Space\" to return to Start Menu."
-                + "\n" + "Press  \"Escape\" to quit.", 500, 300);
+                + "\n"
+                + "\n"
+                + "\n" + "Your score where " + gameEngine.getCurrentLevel().getPlayer().getScore(), width / 2 - 300, 300);
     }
 
     /**
