@@ -4,6 +4,7 @@ import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.actor.Actor;
 import backend.shipmodule.ShipModule;
+import static java.awt.event.KeyEvent.*;
 
 import java.text.DecimalFormat;
 import processing.core.PApplet;
@@ -24,25 +25,24 @@ public class GUIHandler extends PApplet {
 
     // Player HUD.
     private int[] hudRGBA = new int[]{80, 150, 40, 255};
+    private PFont hudFont;
 
     // Debug HUD.
     private int[] debugHudRGBA = new int[]{255, 255, 255, 255};
+    private PFont debugHUDFont;
 
     // Main menu.
     private int mainMenuOuterBoxThickness = 5;
     private int[] mainMenuOuterBoxRGBA = new int[]{153, 153, 253, 255};
     private int[] mainMenuBackgroundRGBA = new int[]{0, 0, 0, 255};
     private int[] mainMenuRGBA = new int[]{153, 153, 253, 255};
+    private PFont menuFont;
 
     // Pause screen.
     private int[] pauseScreenRGBA = new int[]{40, 160, 30, 255};
 
     // Death screen.
     private int[] deathScreenRGBA = new int[]{200, 50, 40, 255};
-
-    private PFont hudFont;
-    private PFont debugHUDFont;
-    private PFont menuFont;
 
     // Decimal formats.
     private DecimalFormat format1 = new DecimalFormat("0");
@@ -63,6 +63,8 @@ public class GUIHandler extends PApplet {
 
     private GameEngine gameEngine;
     private Timer timer;
+
+    private boolean debugMode = true;
 
     /**
      * Processing initial setup.
@@ -125,7 +127,9 @@ public class GUIHandler extends PApplet {
                 break;
             }
         }
-        drawDebugHud();
+        if (debugMode) {
+            drawDebugHud();
+        }
     }
 
     /**
@@ -266,6 +270,9 @@ public class GUIHandler extends PApplet {
     @Override
     public void keyPressed() {
         gameEngine.userInput(keyCode, true);
+        if (keyCode == VK_Q) {
+            this.toggleDebugMode();
+        }
     }
 
     /**
@@ -290,6 +297,18 @@ public class GUIHandler extends PApplet {
     @Override
     public void mouseReleased() {
         gameEngine.userInput(mouseButton, false);
+    }
+
+    /**
+     * Toggles debug mode.
+     */
+    private void toggleDebugMode() {
+        if (debugMode == false) {
+            debugMode = true;
+        } else {
+            debugMode = false;
+        }
+        timer.restart();
     }
 
     // Getters.
