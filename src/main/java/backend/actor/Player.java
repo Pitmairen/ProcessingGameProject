@@ -44,9 +44,9 @@ public class Player extends Actor implements Drawable {
 
         super(positionX, positionY, gameEngine);
 
+        name = "Player";
         speedLimit = 0.6f;
-        accelerationX = 0.002f;
-        accelerationY = 0.002f;
+        acceleration = 0.002f;
         drag = 0.001f;
         hitBoxRadius = 20;
         bounceModifier = 0.6f;

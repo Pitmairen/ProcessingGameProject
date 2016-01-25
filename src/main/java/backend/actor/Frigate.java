@@ -26,9 +26,9 @@ public class Frigate extends Actor implements Drawable {
 
         super(positionX, positionY, gameEngine);
 
+        name = "Frigate";
         speedLimit = 0.4f;
-        accelerationX = 0.0015f;
-        accelerationY = 0.0015f;
+        acceleration = 0.0015f;
         drag = 0.001f;
         hitBoxRadius = 15;
         bounceModifier = 0.6f;
@@ -71,8 +71,8 @@ public class Frigate extends Actor implements Drawable {
         double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
 
         if (speedT < speedLimit) {
-            speedX = speedX + (accelerationX * Math.cos(targetAngle) * timePassed);
-            speedY = speedY + (accelerationY * Math.sin(targetAngle) * timePassed);
+            speedX = speedX + (acceleration * Math.cos(targetAngle) * timePassed);
+            speedY = speedY + (acceleration * Math.sin(targetAngle) * timePassed);
         }
     }
 

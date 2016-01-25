@@ -34,6 +34,7 @@ public class Rocket extends Projectile implements Drawable {
         backgroundColor = guiHandler.color(guiHandler.random(10, 255),
                 guiHandler.random(10, 255), guiHandler.random(10, 255), 255);
 
+        name = "Rocket";
         hitBoxRadius = 8;
         hitPoints = 1;
         mass = 3;

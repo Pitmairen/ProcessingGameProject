@@ -20,6 +20,7 @@ public class Bullet extends Projectile implements Drawable {
 
         super(positionX, positionY, shipModule);
 
+        name = "Bullet";
         hitBoxRadius = 4;
         hitPoints = 1;
         mass = 2;

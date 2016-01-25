@@ -158,6 +158,7 @@ public class GUIHandler extends PApplet {
         text("HP: " + format2.format(gameEngine.getCurrentLevel().getPlayer().getHitPoints())
                 + "\n" + "Level: " + gameEngine.getCurrentLevel().getLevelName()
                 + "\n" + "Wave: " + gameEngine.getCurrentLevel().getCurrentWave()
+                + "\n" + "Kill chain: " + gameEngine.getCurrentLevel().getPlayer().getKillChain()
                 + "\n" + "Score: " + format1.format(gameEngine.getCurrentLevel().getPlayer().getScore()), 14, 40);
     }
 
@@ -237,7 +238,7 @@ public class GUIHandler extends PApplet {
         stroke(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
         fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
         textFont(menuFont);
-        text("You Were Defeated"
+        text("You Were Defeated By " + gameEngine.getCurrentLevel().getPlayer().getWhoHitMeLast().getName()
                 + "\n" + "Press \"Space\" to return to Start Menu."
                 + "\n"
                 + "\n"
@@ -308,7 +309,6 @@ public class GUIHandler extends PApplet {
         } else {
             debugMode = false;
         }
-        timer.restart();
     }
 
     // Getters.

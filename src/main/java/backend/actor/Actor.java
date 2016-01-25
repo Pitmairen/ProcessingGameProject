@@ -18,37 +18,37 @@ public abstract class Actor implements Drawable {
     // Position. (pixels)
     protected double positionX; // From constructor.
     protected double positionY; // From constructor.
-
     // Direction. (radians)
     protected double heading = 0;
     protected double course; // Derived value.
-
     // Speed. (pixels/ms)
     protected double speedX = 0;
     protected double speedY = 0;
     protected double speedT; // Derived value.
     protected double speedLimit = 0;
-
     // Acceleration. (pixels/ms^2)
-    protected double accelerationX = 0;
-    protected double accelerationY = 0;
+    protected double acceleration = 0;
     protected double drag = 0;
-
     // Attributes.
+    protected String name = "NAME NOT SET";
     protected double hitBoxRadius = 0;
-    protected double bounceModifier = 0;
-    protected double hitPoints = 0;
     protected double mass = 0;
     protected double momentum; // Derived value.
+    protected double bounceModifier = 0;
+    protected double hitPoints = 0;
     protected double collisionDamageToOthers = 0;
+    // Score system.
+    protected int killValue = 0;
+    protected int killChain = 0;
     protected int score = 0;
+    // Modules.
     protected ArrayList<ShipModule> offensiveModules = new ArrayList<>();
     protected ArrayList<ShipModule> defensiveModules = new ArrayList<>();
-
     // Simulation.
     protected GameEngine gameEngine;               // From constructor.
     protected GUIHandler guiHandler;               // Set in constructor.
     protected CollisionDetector collisionDetector; // Set in constructor.
+    protected Actor whoHitMeLast = this;
 
     /**
      * Constructor.
@@ -236,22 +236,23 @@ public abstract class Actor implements Drawable {
 
                 if ((actorInList instanceof Projectile)) {
                     if (((Projectile) actorInList).getShipModule().getOwner() == this) {
-                        // Actors can't collide with their own projectiles.
+                        // This actor crashed into a projectile fired by itself.
+                        // No damage. Actors can't collide with their own projectiles.
                     } else {
-                        // You got hit by an unfriendly projectile.
+                        // This actor crashed into an unfriendly projectile.
                         elasticColision(this, actorInList, timePassed);
-                        this.removeHitPoints(actorInList.getCollisionDamageToOthers());
-                        actorInList.removeHitPoints(this.collisionDamageToOthers);
+                        this.collision(actorInList);
+                        actorInList.collision(this);
                         ((Projectile) actorInList).targetHit();
                     }
                 } else if (actorInList.getClass() == this.getClass()) {
                     // No collision damage when hitting an actor of the same type.
                     elasticColision(this, actorInList, timePassed);
                 } else {
-                    // You collided with an actor.
+                    // This actor collided with an other actor.
                     elasticColision(this, actorInList, timePassed);
-                    this.removeHitPoints(actorInList.getCollisionDamageToOthers());
-                    actorInList.removeHitPoints(this.collisionDamageToOthers);
+                    this.collision(actorInList);
+                    actorInList.collision(this);
                 }
             }
         }
@@ -308,25 +309,25 @@ public abstract class Actor implements Drawable {
         // Accelerate upwards.
         if (direction.equalsIgnoreCase("up")) {
             if (speedY > (-speedLimit)) {
-                speedY = speedY - accelerationY * timePassed;
+                speedY = speedY - acceleration * timePassed;
             }
         }
         // Accelerate downwards.
         if (direction.equalsIgnoreCase("down")) {
             if (speedY < (speedLimit)) {
-                speedY = speedY + accelerationY * timePassed;
+                speedY = speedY + acceleration * timePassed;
             }
         }
         // Accelerate left.
         if (direction.equalsIgnoreCase("left")) {
             if (speedX > (-speedLimit)) {
-                speedX = speedX - accelerationX * timePassed;
+                speedX = speedX - acceleration * timePassed;
             }
         }
         // Accelerate right.
         if (direction.equalsIgnoreCase("right")) {
             if (speedX < (speedLimit)) {
-                speedX = speedX + accelerationX * timePassed;
+                speedX = speedX + acceleration * timePassed;
             }
         }
         updateVectors();
@@ -342,12 +343,27 @@ public abstract class Actor implements Drawable {
     }
 
     /**
-     * Decreases an actors hit points by an set amount.
+     * Decreases an actors hit points by an set amount. Taking damage also
+     * resets the kill chain.
      *
      * @param damage Number of hit points to subtract.
      */
     public void removeHitPoints(double damage) {
         this.hitPoints = this.hitPoints - damage;
+        if (hitPoints < 0) {
+            hitPoints = 0;
+        }
+        killChain = 0;
+    }
+
+    /**
+     * Handles what will happen to this actor upon collision with other actors.
+     *
+     * @param actor The actor which this actor collided with.
+     */
+    public void collision(Actor actor) {
+        removeHitPoints(actor.getCollisionDamageToOthers());
+        whoHitMeLast = actor;
     }
 
     /**
@@ -357,6 +373,15 @@ public abstract class Actor implements Drawable {
      */
     public void increaseScore(int points) {
         this.score = score + points;
+    }
+
+    /**
+     * Increases the actors kill chain by an set amount.
+     *
+     * @param points How much to increase the kill chain by.
+     */
+    public void increaseKillChain(int points) {
+        killChain = killChain + 1;
     }
 
     // Getters.
@@ -392,12 +417,8 @@ public abstract class Actor implements Drawable {
         return speedLimit;
     }
 
-    public double getAccelerationX() {
-        return accelerationX;
-    }
-
-    public double getAccelerationY() {
-        return accelerationY;
+    public double getAcceleration() {
+        return acceleration;
     }
 
     public double getDrag() {
@@ -448,6 +469,26 @@ public abstract class Actor implements Drawable {
         return offensiveModules;
     }
 
+    public int getKillValue() {
+        return killValue;
+    }
+
+    public int getKillChain() {
+        return killChain;
+    }
+
+    public ArrayList<ShipModule> getDefensiveModules() {
+        return defensiveModules;
+    }
+
+    public Actor getWhoHitMeLast() {
+        return whoHitMeLast;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     // Setters.
     public void setPositionX(double positionX) {
         this.positionX = positionX;
@@ -473,12 +514,8 @@ public abstract class Actor implements Drawable {
         this.speedLimit = speedLimit;
     }
 
-    public void setAccelerationX(double accelerationX) {
-        this.accelerationX = accelerationX;
-    }
-
-    public void setAccelerationY(double accelerationY) {
-        this.accelerationY = accelerationY;
+    public void setAcceleration(double acceleration) {
+        this.acceleration = acceleration;
     }
 
     public void setDrag(double drag) {

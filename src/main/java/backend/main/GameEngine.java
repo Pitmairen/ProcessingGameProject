@@ -111,6 +111,7 @@ public class GameEngine {
                     currentLevel.getEnemies().remove(actorInList);
                     this.explosions.explodeEnemy((Frigate) actorInList);
                     currentLevel.getPlayer().increaseScore(1);
+                    currentLevel.getPlayer().increaseKillChain(1);
                     it.remove();
                 }
                 if ((actorInList instanceof Bullet)) {
