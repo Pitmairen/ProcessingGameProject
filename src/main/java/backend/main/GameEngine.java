@@ -23,7 +23,8 @@ public class GameEngine {
     private GUIHandler guiHandler;
     private CollisionDetector collisionDetector;
     private Level currentLevel;
-
+    private ExplosionManager explosions;
+    private FadingCanvas fadingCanvas;
     private String simulationState = "startScreen";
 
     // Key states.
@@ -31,16 +32,13 @@ public class GameEngine {
     private boolean down = false;
     private boolean left = false;
     private boolean right = false;
-    private boolean firePrimary = false;
-    private boolean fireSecondary = false;
+    private boolean activatePrimary = false;
+    private boolean activateSecondary = false;
     private boolean swapPrimary = false;
     private boolean swapSecondary = false;
     private boolean space = false;
     private boolean tab = false;
     private boolean enter = false;
-
-    private ExplosionManager explosions;
-    private FadingCanvas fadingCanvas;
 
     /**
      * Constructor.
@@ -153,47 +151,36 @@ public class GameEngine {
      */
     public void userInput(int keyCode, boolean keyState) {
 
-        // Accelerate upwards.
         if (keyCode == KeyEvent.VK_E) {
             up = keyState;
         }
-        // Accelerate downwards.
         if (keyCode == KeyEvent.VK_D) {
             down = keyState;
         }
-        // Accelerate left.
         if (keyCode == KeyEvent.VK_S) {
             left = keyState;
         }
-        // Accelerate right.
         if (keyCode == KeyEvent.VK_F) {
             right = keyState;
         }
-        // Fire primary weapon.
         if (keyCode == 37) {
-            firePrimary = keyState;
+            activatePrimary = keyState;
         }
-        // Fire secondary weapon.
         if (keyCode == 39) {
-            fireSecondary = keyState;
+            activateSecondary = keyState;
         }
-        // Swap primary weapon.
         if (keyCode == KeyEvent.VK_W) {
             swapPrimary = keyState;
         }
-        // Swap secondary weapon.
         if (keyCode == KeyEvent.VK_R) {
             swapSecondary = keyState;
         }
-        // Use auxiliary.
         if (keyCode == KeyEvent.VK_SPACE) {
             space = keyState;
         }
-        // Open menu / pause game.
         if (keyCode == KeyEvent.VK_TAB) {
             tab = keyState;
         }
-        // Confirm.
         if (keyCode == KeyEvent.VK_ENTER) {
             enter = keyState;
         }
@@ -226,10 +213,10 @@ public class GameEngine {
                 if (right) {
                     currentLevel.getPlayer().accelerate("right", timePassed);
                 }
-                if (firePrimary) {
+                if (activatePrimary) {
                     currentLevel.getPlayer().activateOffensiveModule();
                 }
-                if (fireSecondary) {
+                if (activateSecondary) {
                 }
                 if (swapPrimary) {
                     currentLevel.getPlayer().swapPrimaryModule();
@@ -265,7 +252,6 @@ public class GameEngine {
      * Creates the currentLevel.
      */
     private void resetLevel() {
-
         currentLevel = new LevelTest(this);
         // The fading canvas must be reset because a new player object
         // is created and thus there fireball cannon is also new and 

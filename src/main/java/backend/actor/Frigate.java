@@ -13,13 +13,8 @@ import userinterface.Drawable;
  */
 public class Frigate extends Actor implements Drawable {
 
-    // Shape.
-    private int turretLength = 10;
-    private int turretWidth = 3;
-
     // Color.
     private int[] bodyRGBA = new int[]{200, 30, 30, 255};
-    private int[] turretRGBA = new int[]{70, 100, 100, 255};
 
     // Modules.
     private LightCannon LightCannon = new LightCannon(this);
@@ -66,13 +61,8 @@ public class Frigate extends Actor implements Drawable {
         guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
         guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
 
-        // Draw turret.
-        guiHandler.strokeWeight(turretWidth);
-        guiHandler.stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-        guiHandler.fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-        guiHandler.line((float) this.getPositionX(), (float) this.getPositionY(),
-                (float) this.getPositionX() + (float) (turretLength * Math.cos(course)),
-                (float) this.getPositionY() + (float) (turretLength * Math.sin(course)));
+        // currentDefensiveModule.draw();
+        currentOffensiveModule.draw();
     }
 
     /**

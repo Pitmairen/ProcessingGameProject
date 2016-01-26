@@ -24,6 +24,11 @@ import userinterface.Drawable;
  */
 public class RocketLauncher extends ShipModule implements Drawable, FadingCanvas.Drawable {
 
+    // Shape and color.
+    private int turretLength = 22;
+    private int turretWidth = 7;
+    private int[] turretRGBA = new int[]{20, 20, 210, 255};
+
     private final ArrayList<Rocket> rockets;
     private final PImage rocketImage;
 
@@ -46,7 +51,12 @@ public class RocketLauncher extends ShipModule implements Drawable, FadingCanvas
 
     @Override
     public void draw() {
-        // The balls are drawn to the fading canvas.
+        owner.getGuiHandler().strokeWeight(turretWidth);
+        owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
+        owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
+        owner.getGuiHandler().line((float) owner.getPositionX(), (float) owner.getPositionY(),
+                (float) owner.getPositionX() + (float) (turretLength * Math.cos(owner.getHeading())),
+                (float) owner.getPositionY() + (float) (turretLength * Math.sin(owner.getHeading())));
     }
 
     @Override

@@ -246,21 +246,13 @@ public class GUIHandler extends PApplet {
     }
 
     /**
-     * Draw all actors and modules.
+     * Draw all actors.
      */
     private void drawActors() {
-
         gameEngine.getFadingCanvas().draw();
-
         for (Actor actor : gameEngine.getCurrentLevel().getActors()) {
             if (actor != null) {
                 actor.draw();
-
-                for (ShipModule shipModule : actor.getOffensiveModules()) {
-                    if (shipModule != null) {
-                        shipModule.draw();
-                    }
-                }
             }
         }
     }

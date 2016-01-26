@@ -15,13 +15,8 @@ import userinterface.Drawable;
  */
 public class Player extends Actor implements Drawable {
 
-    // Shape.
-    private int turretLength = 27;
-    private int turretWidth = 4;
-
     // Color.
     private int[] bodyRGBA = new int[]{0, 70, 200, 255};
-    private int[] turretRGBA = new int[]{30, 30, 200, 255};
     private final int backgroundColor; // Set in constructor.
 
     // Modules.
@@ -55,7 +50,7 @@ public class Player extends Actor implements Drawable {
         offensiveModules.add(autoCannon);
         offensiveModules.add(rocketLauncher);
         offensiveModules.add(laserCannon);
-        
+
         currentOffensiveModule = autoCannon;
     }
 
@@ -73,13 +68,8 @@ public class Player extends Actor implements Drawable {
         guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
         guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
 
-        // Draw turret.
-        guiHandler.strokeWeight(turretWidth);
-        guiHandler.stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-        guiHandler.fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-        guiHandler.line((float) this.getPositionX(), (float) this.getPositionY(),
-                (float) this.getPositionX() + (float) (turretLength * Math.cos(heading)),
-                (float) this.getPositionY() + (float) (turretLength * Math.sin(heading)));
+        // currentDefensiveModule.draw();
+        currentOffensiveModule.draw();
     }
 
     /**
