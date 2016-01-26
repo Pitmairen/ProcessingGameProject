@@ -4,6 +4,7 @@ import backend.main.GameEngine;
 import backend.actor.Actor;
 import backend.actor.Player;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Super class for all levels in the game.
@@ -19,10 +20,10 @@ public abstract class Level {
     protected GameEngine gameEngine;     // From constructor.
     protected ActorSpawner actorSpawner; // From constructor.
 
-    protected ArrayList<Actor> actors = new ArrayList<Actor>();
-    protected ArrayList<Actor> enemies = new ArrayList<Actor>();
-    protected ArrayList<Actor> projectiles = new ArrayList<Actor>();
-    protected ArrayList<Actor> items = new ArrayList<Actor>();
+    protected CopyOnWriteArrayList<Actor> actors = new CopyOnWriteArrayList<Actor>();
+    protected CopyOnWriteArrayList<Actor> enemies = new CopyOnWriteArrayList<Actor>();
+    protected CopyOnWriteArrayList<Actor> projectiles = new CopyOnWriteArrayList<Actor>();
+    protected CopyOnWriteArrayList<Actor> items = new CopyOnWriteArrayList<Actor>();
     protected Player player;
 
     /**
@@ -54,19 +55,19 @@ public abstract class Level {
         return player;
     }
 
-    public ArrayList<Actor> getEnemies() {
+    public CopyOnWriteArrayList<Actor> getEnemies() {
         return enemies;
     }
 
-    public ArrayList<Actor> getProjectiles() {
+    public CopyOnWriteArrayList<Actor> getProjectiles() {
         return projectiles;
     }
 
-    public ArrayList<Actor> getItems() {
+    public CopyOnWriteArrayList<Actor> getItems() {
         return items;
     }
 
-    public ArrayList<Actor> getActors() {
+    public CopyOnWriteArrayList<Actor> getActors() {
         return actors;
     }
 

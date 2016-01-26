@@ -10,6 +10,7 @@ import backend.level.LevelTest;
 import userinterface.GUIHandler;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -96,6 +97,8 @@ public class GameEngine {
         this.explosions.update(timePassed);
 
         // Remove dead actors.
+        ArrayList<Actor> deadActors = new ArrayList<Actor>();
+
         Iterator<Actor> it = currentLevel.getActors().iterator();
         while (it.hasNext()) {
 
@@ -105,26 +108,31 @@ public class GameEngine {
                 if ((actorInList instanceof Player)) {
                     this.explosions.explodePlayer((Player) actorInList);
                     simulationState = "deathScreen";
-                    it.remove();
+                    // it.remove();
+                    deadActors.add(actorInList);
                 }
                 if ((actorInList instanceof Frigate)) {
                     currentLevel.getEnemies().remove(actorInList);
                     this.explosions.explodeEnemy((Frigate) actorInList);
                     currentLevel.getPlayer().increaseScore(1);
                     currentLevel.getPlayer().increaseKillChain(1);
-                    it.remove();
+                    // it.remove();
+                    deadActors.add(actorInList);
                 }
                 if ((actorInList instanceof Bullet)) {
                     currentLevel.getProjectiles().remove(actorInList);
-                    it.remove();
+                    // it.remove();
+                    deadActors.add(actorInList);
                 }
                 if ((actorInList instanceof Rocket)) {
                     currentLevel.getProjectiles().remove(actorInList);
                     this.explosions.explodeRocket((Rocket) actorInList);
-                    it.remove();
+                    // it.remove();
+                    deadActors.add(actorInList);
                 }
             }
         }
+        currentLevel.getActors().removeAll(deadActors);
 
         // Make all actors act.
         for (Actor actor : currentLevel.getActors()) {

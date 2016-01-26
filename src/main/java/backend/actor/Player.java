@@ -6,7 +6,6 @@ import backend.main.NumberCruncher;
 import backend.main.Timer;
 import backend.shipmodule.AutoCannon;
 import backend.shipmodule.LaserCannon;
-import backend.shipmodule.ShipModule;
 import userinterface.Drawable;
 
 /**
@@ -30,8 +29,6 @@ public class Player extends Actor implements Drawable {
     private LaserCannon laserCannon = new LaserCannon(this);
     private RocketLauncher rocketLauncher = new RocketLauncher(this);
 
-    private ShipModule currentOffensiveModule = autoCannon;
-    private ShipModule currentDefensiveModule = null;
     private Timer offensiveModuleTimer = new Timer();
     private Timer defensiveModuleTimer = new Timer();
     private double offensiveModuleSwapSpeed = 800;
@@ -58,6 +55,8 @@ public class Player extends Actor implements Drawable {
         offensiveModules.add(autoCannon);
         offensiveModules.add(rocketLauncher);
         offensiveModules.add(laserCannon);
+        
+        currentOffensiveModule = autoCannon;
     }
 
     @Override

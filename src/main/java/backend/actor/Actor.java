@@ -4,6 +4,7 @@ import backend.shipmodule.ShipModule;
 import backend.main.CollisionDetector;
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
+import backend.main.Timer;
 import java.util.ArrayList;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
@@ -37,6 +38,7 @@ public abstract class Actor implements Drawable {
     protected double bounceModifier = 0;
     protected double hitPoints = 0;
     protected double collisionDamageToOthers = 0;
+    protected double attackDelay = 0;
     // Score system.
     protected int killValue = 0;
     protected int killChain = 0;
@@ -44,11 +46,15 @@ public abstract class Actor implements Drawable {
     // Modules.
     protected ArrayList<ShipModule> offensiveModules = new ArrayList<>();
     protected ArrayList<ShipModule> defensiveModules = new ArrayList<>();
+    protected ShipModule currentOffensiveModule = null;
+    protected ShipModule currentDefensiveModule = null;
     // Simulation.
     protected GameEngine gameEngine;               // From constructor.
     protected GUIHandler guiHandler;               // Set in constructor.
     protected CollisionDetector collisionDetector; // Set in constructor.
     protected Actor whoHitMeLast = this;
+    protected Timer timer = new Timer();
+    protected double lastTimeFired = 0;
 
     /**
      * Constructor.

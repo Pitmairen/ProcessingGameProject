@@ -2,6 +2,8 @@ package backend.actor;
 
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
+import backend.shipmodule.LightCannon;
+import java.util.Random;
 import userinterface.Drawable;
 
 /**
@@ -19,6 +21,12 @@ public class Frigate extends Actor implements Drawable {
     private int[] bodyRGBA = new int[]{200, 30, 30, 255};
     private int[] turretRGBA = new int[]{70, 100, 100, 255};
 
+    // Modules.
+    private LightCannon LightCannon = new LightCannon(this);
+
+    Random random = new Random();
+    private int attackDelayFactor = random.nextInt(100);
+
     /**
      * Constructor.
      */
@@ -35,10 +43,16 @@ public class Frigate extends Actor implements Drawable {
         hitPoints = 10;
         mass = 30;
         collisionDamageToOthers = 2;
+        attackDelay = 70;
+
+        offensiveModules.add(LightCannon);
+        currentOffensiveModule = LightCannon;
     }
 
     @Override
     public void act(double timePassed) {
+        targetPlayer();
+        fireAtPlayer();
         approachTarget(timePassed);
         super.act(timePassed);
     }
@@ -62,17 +76,35 @@ public class Frigate extends Actor implements Drawable {
     }
 
     /**
+     * Sets heading towards the player.
+     */
+    private void targetPlayer() {
+        double xVector = gameEngine.getCurrentLevel().getPlayer().getPositionX() - this.positionX;
+        double yVector = gameEngine.getCurrentLevel().getPlayer().getPositionY() - this.positionY;
+        heading = NumberCruncher.calculateAngle(xVector, yVector);
+    }
+
+    /**
+     * Fires a bullet towards the player.
+     */
+    private void fireAtPlayer() {
+
+        if (System.currentTimeMillis() - lastTimeFired > attackDelay * attackDelayFactor) {
+
+            currentOffensiveModule.activate();
+            lastTimeFired = System.currentTimeMillis();
+            attackDelayFactor = random.nextInt(100);
+        }
+    }
+
+    /**
      * Accelerate towards the target.
      */
     private void approachTarget(double timePassed) {
 
-        double xVector = gameEngine.getCurrentLevel().getPlayer().getPositionX() - this.positionX;
-        double yVector = gameEngine.getCurrentLevel().getPlayer().getPositionY() - this.positionY;
-        double targetAngle = NumberCruncher.calculateAngle(xVector, yVector);
-
         if (speedT < speedLimit) {
-            speedX = speedX + (acceleration * Math.cos(targetAngle) * timePassed);
-            speedY = speedY + (acceleration * Math.sin(targetAngle) * timePassed);
+            speedX = speedX + (acceleration * Math.cos(heading) * timePassed);
+            speedY = speedY + (acceleration * Math.sin(heading) * timePassed);
         }
     }
 
