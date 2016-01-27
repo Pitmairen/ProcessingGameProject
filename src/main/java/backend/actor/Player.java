@@ -1,11 +1,12 @@
 package backend.actor;
 
-import backend.shipmodule.RocketLauncher;
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
 import backend.main.Timer;
 import backend.shipmodule.AutoCannon;
 import backend.shipmodule.LaserCannon;
+import backend.shipmodule.ShipModule;
+import java.util.ArrayList;
 import userinterface.Drawable;
 
 /**
@@ -17,17 +18,15 @@ public class Player extends Actor implements Drawable {
 
     // Color.
     private int[] bodyRGBA = new int[]{0, 70, 200, 255};
-    private final int backgroundColor; // Set in constructor.
+    private final int backgroundColor;  // Set in constructor.
 
     // Modules.
-    private AutoCannon autoCannon = new AutoCannon(this);
-    private LaserCannon laserCannon = new LaserCannon(this);
-    private RocketLauncher rocketLauncher = new RocketLauncher(this);
-
+    private ArrayList<ShipModule> offensiveModules = new ArrayList<>();
+    private ArrayList<ShipModule> defensiveModules = new ArrayList<>();
     private Timer offensiveModuleTimer = new Timer();
     private Timer defensiveModuleTimer = new Timer();
-    private double offensiveModuleSwapSpeed = 800;
-    private double defensiveModuleSwapSpeed = 800;
+    private double offensiveModuleSwapDelay = 800;
+    private double defensiveModuleSwapDelay = 800;
 
     /**
      * Constructor.
@@ -47,11 +46,9 @@ public class Player extends Actor implements Drawable {
         backgroundColor = guiHandler.color(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2], 255);
         collisionDamageToOthers = 4;
 
-        offensiveModules.add(autoCannon);
-        offensiveModules.add(rocketLauncher);
-        offensiveModules.add(laserCannon);
-
-        currentOffensiveModule = autoCannon;
+        offensiveModules.add(new AutoCannon(this));  // Starting weapon.
+        offensiveModules.add(new LaserCannon(this));
+        currentOffensiveModule = offensiveModules.get(0);
     }
 
     @Override
@@ -68,8 +65,13 @@ public class Player extends Actor implements Drawable {
         guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
         guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
 
-        // currentDefensiveModule.draw();
-        currentOffensiveModule.draw();
+        // Draw modules.
+        if (currentOffensiveModule != null) {
+            currentOffensiveModule.draw();
+        }
+        if (currentDefensiveModule != null) {
+            currentDefensiveModule.draw();
+        }
     }
 
     /**
@@ -89,17 +91,23 @@ public class Player extends Actor implements Drawable {
     /**
      * Changes to the next offensive module.
      */
-    public void swapPrimaryModule() {
+    public void swapOffensiveModule() {
         // Wait for timer for each swap.
-        if (offensiveModuleTimer.timePassed() >= offensiveModuleSwapSpeed) {
+        if (offensiveModuleTimer.timePassed() >= offensiveModuleSwapDelay) {
             currentOffensiveModule = offensiveModules.get((offensiveModules.indexOf(currentOffensiveModule) + 1) % offensiveModules.size());
             offensiveModuleTimer.restart();
         }
     }
 
-    // Getters.
-    public RocketLauncher getRocketLauncher() {
-        return rocketLauncher;
+    /**
+     * Changes to the next defensive module.
+     */
+    public void swapDefensiveModule() {
+        // Wait for timer for each swap.
+        if (defensiveModuleTimer.timePassed() >= defensiveModuleSwapDelay) {
+            currentDefensiveModule = defensiveModules.get((defensiveModules.indexOf(currentDefensiveModule) + 1) % defensiveModules.size());
+            defensiveModuleTimer.restart();
+        }
     }
 
     public int getBackgroundColor() {

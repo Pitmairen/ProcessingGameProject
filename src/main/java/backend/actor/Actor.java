@@ -1,10 +1,13 @@
 package backend.actor;
 
+import backend.item.Item;
+import backend.item.ModulePickup;
 import backend.shipmodule.ShipModule;
 import backend.main.CollisionDetector;
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
 import backend.main.Timer;
+import backend.shipmodule.RocketLauncher;
 import java.util.ArrayList;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
@@ -263,6 +266,18 @@ public abstract class Actor implements Drawable {
                     elasticColision(this, target, timePassed);
                 }
                 
+                else if (target instanceof ModulePickup) {
+                    ModulePickup modulePickup = (ModulePickup) target;
+                    
+                    if (this instanceof Player) {
+                        // Player ran into a ship module container.
+                        ShipModule shipModule = modulePickup.take(this);
+                        offensiveModules.add(shipModule);
+                    }
+                    else {
+                        // Only the player can interact with Items.
+                    }
+                }
                 else {
                     // This actor collided with an other actor.
                     elasticColision(this, target, timePassed);

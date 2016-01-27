@@ -7,6 +7,8 @@ import backend.actor.Frigate;
 import backend.actor.Player;
 import backend.level.Level;
 import backend.level.LevelTest;
+import backend.shipmodule.RocketLauncher;
+import backend.shipmodule.ShipModule;
 import userinterface.GUIHandler;
 
 import java.awt.event.KeyEvent;
@@ -219,7 +221,7 @@ public class GameEngine {
                 if (activateSecondary) {
                 }
                 if (swapPrimary) {
-                    currentLevel.getPlayer().swapPrimaryModule();
+                    currentLevel.getPlayer().swapOffensiveModule();
                 }
                 if (space) {
                     simulationState = "menuScreen";
@@ -258,7 +260,12 @@ public class GameEngine {
         // must be added to the fading canvas.
         fadingCanvas = new FadingCanvas(guiHandler);
         fadingCanvas.add(explosions);
-        fadingCanvas.add(currentLevel.getPlayer().getRocketLauncher());
+
+        for (ShipModule module : currentLevel.getPlayer().getOffensiveModules()) {
+            if (module instanceof RocketLauncher) {
+                fadingCanvas.add((RocketLauncher) module);
+            }
+        }
     }
 
     // Getters.
