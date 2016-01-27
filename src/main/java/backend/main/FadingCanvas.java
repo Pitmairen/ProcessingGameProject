@@ -36,7 +36,7 @@ public class FadingCanvas {
     public FadingCanvas(GUIHandler gui) {
         this.gui = gui;
         this.canvas = gui.createGraphics(gui.getWidth(),
-                gui.getHeight(), PGraphics.P2D);
+                gui.getHeight(), PGraphics.P3D);
         this.items = new ArrayList<>();
     }
 

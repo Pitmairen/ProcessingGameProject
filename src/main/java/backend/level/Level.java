@@ -3,7 +3,6 @@ package backend.level;
 import backend.main.GameEngine;
 import backend.actor.Actor;
 import backend.actor.Player;
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**

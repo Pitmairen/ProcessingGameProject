@@ -3,7 +3,6 @@ package userinterface;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.actor.Actor;
-import backend.shipmodule.ShipModule;
 import static java.awt.event.KeyEvent.*;
 
 import java.text.DecimalFormat;
@@ -88,6 +87,7 @@ public class GUIHandler extends PApplet {
     @Override
     public void settings() {
         fullScreen(P3D);
+        // size(1920, 1080, P3D);
     }
 
     /**
