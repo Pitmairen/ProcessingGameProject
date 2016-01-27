@@ -1,9 +1,7 @@
 package backend.actor;
 
 import backend.main.GameEngine;
-import backend.main.NumberCruncher;
 import backend.shipmodule.LightCannon;
-import java.util.Random;
 import userinterface.Drawable;
 
 /**
@@ -11,16 +9,13 @@ import userinterface.Drawable;
  *
  * @author Kristian Honningsvag.
  */
-public class Frigate extends Actor implements Drawable {
+public class Frigate extends NPC implements Drawable {
 
     // Color.
     private int[] bodyRGBA = new int[]{200, 30, 30, 255};
 
     // Modules.
     private LightCannon LightCannon = new LightCannon(this);
-
-    Random random = new Random();
-    private int attackDelayFactor = random.nextInt(100);
 
     /**
      * Constructor.
@@ -38,7 +33,7 @@ public class Frigate extends Actor implements Drawable {
         hitPoints = 10;
         mass = 30;
         collisionDamageToOthers = 2;
-        attackDelay = 70;
+        attackDelay = 2000;
 
         offensiveModules.add(LightCannon);
         currentOffensiveModule = LightCannon;
@@ -46,7 +41,7 @@ public class Frigate extends Actor implements Drawable {
 
     @Override
     public void act(double timePassed) {
-        targetPlayer();
+        targetPlayerLocation();
         fireAtPlayer();
         approachTarget(timePassed);
         super.act(timePassed);
@@ -61,40 +56,12 @@ public class Frigate extends Actor implements Drawable {
         guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
         guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
 
-        // currentDefensiveModule.draw();
-        currentOffensiveModule.draw();
-    }
-
-    /**
-     * Sets heading towards the player.
-     */
-    private void targetPlayer() {
-        double xVector = gameEngine.getCurrentLevel().getPlayer().getPositionX() - this.positionX;
-        double yVector = gameEngine.getCurrentLevel().getPlayer().getPositionY() - this.positionY;
-        heading = NumberCruncher.calculateAngle(xVector, yVector);
-    }
-
-    /**
-     * Fires a bullet towards the player.
-     */
-    private void fireAtPlayer() {
-
-        if (System.currentTimeMillis() - lastTimeFired > attackDelay * attackDelayFactor) {
-
-            currentOffensiveModule.activate();
-            lastTimeFired = System.currentTimeMillis();
-            attackDelayFactor = random.nextInt(100);
+        // Draw modules.
+        if (currentOffensiveModule != null) {
+            currentOffensiveModule.draw();
         }
-    }
-
-    /**
-     * Accelerate towards the target.
-     */
-    private void approachTarget(double timePassed) {
-
-        if (speedT < speedLimit) {
-            speedX = speedX + (acceleration * Math.cos(heading) * timePassed);
-            speedY = speedY + (acceleration * Math.sin(heading) * timePassed);
+        if (currentDefensiveModule != null) {
+            currentDefensiveModule.draw();
         }
     }
 

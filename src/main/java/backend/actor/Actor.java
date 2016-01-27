@@ -38,7 +38,6 @@ public abstract class Actor implements Drawable {
     protected double bounceModifier = 0;
     protected double hitPoints = 0;
     protected double collisionDamageToOthers = 0;
-    protected double attackDelay = 0;
     // Score system.
     protected int killValue = 0;
     protected int killChain = 0;
@@ -54,7 +53,6 @@ public abstract class Actor implements Drawable {
     protected CollisionDetector collisionDetector; // Set in constructor.
     protected Actor whoHitMeLast = this;
     protected Timer timer = new Timer();
-    protected double lastTimeFired = 0;
 
     /**
      * Constructor.
