@@ -236,27 +236,38 @@ public abstract class Actor implements Drawable {
 
         if (collisions.size() > 0) {
 
-            for (Actor actorInList : collisions) {
+            for (Actor target : collisions) {
 
-                if ((actorInList instanceof Projectile)) {
-                    if (((Projectile) actorInList).getShipModule().getOwner() == this) {
+                if ((target instanceof Projectile)) {
+                    Projectile projectile = (Projectile) target;
+                    if (((Projectile) target).getShipModule().getOwner() == this) {
                         // This actor crashed into a projectile fired by itself.
                         // No damage. Actors can't collide with their own projectiles.
-                    } else {
-                        // This actor crashed into an unfriendly projectile.
-                        elasticColision(this, actorInList, timePassed);
-                        this.collision(actorInList);
-                        actorInList.collision(this);
-                        ((Projectile) actorInList).targetHit();
                     }
-                } else if (actorInList.getClass() == this.getClass()) {
+                    
+                    else if (this instanceof NPC && projectile.getShipModule().getOwner() instanceof NPC) {
+                        // NPC can't run into projectiles fired by other NPS's.
+                    }
+                    
+                    else {
+                        // This actor crashed into an unfriendly projectile.
+                        elasticColision(this, target, timePassed);
+                        this.collision(target);
+                        target.collision(this);
+                        ((Projectile) target).targetHit();
+                    }
+                }
+                
+                else if (target.getClass() == this.getClass()) {
                     // No collision damage when hitting an actor of the same type.
-                    elasticColision(this, actorInList, timePassed);
-                } else {
+                    elasticColision(this, target, timePassed);
+                }
+                
+                else {
                     // This actor collided with an other actor.
-                    elasticColision(this, actorInList, timePassed);
-                    this.collision(actorInList);
-                    actorInList.collision(this);
+                    elasticColision(this, target, timePassed);
+                    this.collision(target);
+                    target.collision(this);
                 }
             }
         }

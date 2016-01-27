@@ -42,23 +42,31 @@ public abstract class Projectile extends Actor implements Drawable {
 
         if (collisions.size() > 0) {
 
-            for (Actor actorInList : collisions) {
+            for (Actor target : collisions) {
 
-                if (actorInList == this.shipModule.getOwner()) {
+                if (target == this.shipModule.getOwner()) {
                     // Projectiles can't hit the actor which fired them.
-                } else if (actorInList instanceof Projectile) {
-                    if (((Projectile) actorInList).getShipModule().getOwner() == this.shipModule.getOwner()) {
+                }
+                
+                else if (target instanceof Projectile) {
+                    if (((Projectile) target).getShipModule().getOwner() == this.shipModule.getOwner()) {
                         // Projectiles can't hit other projectiles fired by the same actor.
-                    } else {
-                        elasticColision(this, actorInList, timePassed);
-                        this.removeHitPoints(actorInList.getCollisionDamageToOthers());
-                        actorInList.removeHitPoints(this.collisionDamageToOthers);
-                        this.targetHit();
                     }
-                } else {
-                    elasticColision(this, actorInList, timePassed);
-                    this.removeHitPoints(actorInList.getCollisionDamageToOthers());
-                    actorInList.removeHitPoints(this.collisionDamageToOthers);
+                    else {
+                        // Projectiles can't hit other projectiles.
+                    }
+                }
+                
+                else if (target instanceof NPC){
+                    if (this.getShipModule().getOwner() instanceof NPC) {
+                        // NPC's cant shoot other NPC's.
+                    }
+                }
+                
+                else {
+                    elasticColision(this, target, timePassed);
+                    this.removeHitPoints(target.getCollisionDamageToOthers());
+                    target.removeHitPoints(this.collisionDamageToOthers);
                     this.targetHit();
                 }
             }
