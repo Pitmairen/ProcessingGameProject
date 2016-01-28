@@ -31,8 +31,56 @@ public abstract class NPC extends Actor implements Drawable {
      * Sets heading towards the players location.
      */
     protected void targetPlayerLocation() {
+
         double xVector = gameEngine.getCurrentLevel().getPlayer().getPositionX() - this.positionX;
         double yVector = gameEngine.getCurrentLevel().getPlayer().getPositionY() - this.positionY;
+        heading = NumberCruncher.calculateAngle(xVector, yVector);
+    }
+
+    /**
+     * Moves away from the players location.
+     */
+    protected void avoidPlayerLocation() {
+
+        String playerPosition = "";
+        int displayWidth = gameEngine.getGuiHandler().displayWidth;
+        double xVector = gameEngine.getCurrentLevel().getPlayer().getPositionX();
+        if ( xVector < displayWidth/3){
+            
+        }
+        double yVector = gameEngine.getCurrentLevel().getPlayer().getPositionY() - this.positionY;
+        
+        switch ("") {
+            case "TopLeft": {
+                break;
+            }
+            case "TopMid": {
+                break;
+            }
+            case "TopRight": {
+                break;
+            }
+            case "MidLeft": {
+                break;
+            }
+            case "MidMid": {
+                break;
+            }
+            case "MidRight": {
+                break;
+            }
+            case "BottomLeft": {
+                break;
+            }
+            case "BottomMid": {
+                break;
+            }
+            case "BottomRight": {
+                break;
+            }
+        }
+
+        
         heading = NumberCruncher.calculateAngle(xVector, yVector);
     }
 
