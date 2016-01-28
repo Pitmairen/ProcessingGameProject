@@ -1,5 +1,6 @@
 package backend.actor;
 
+import backend.item.Item;
 import backend.shipmodule.ShipModule;
 import java.util.ArrayList;
 import userinterface.Drawable;
@@ -41,13 +42,11 @@ public abstract class Projectile extends Actor implements Drawable {
         ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
 
         if (collisions.size() > 0) {
-
             for (Actor target : collisions) {
 
                 if (target == this.shipModule.getOwner()) {
                     // Projectiles can't hit the actor which fired them.
                 }
-                
                 else if (target instanceof Projectile) {
                     if (((Projectile) target).getShipModule().getOwner() == this.shipModule.getOwner()) {
                         // Projectiles can't hit other projectiles fired by the same actor.
@@ -56,13 +55,14 @@ public abstract class Projectile extends Actor implements Drawable {
                         // Projectiles can't hit other projectiles.
                     }
                 }
-                
-                else if (target instanceof NPC){
-                    if (this.getShipModule().getOwner() instanceof NPC) {
+                else if (target instanceof Enemy){
+                    if (this.getShipModule().getOwner() instanceof Enemy) {
                         // NPC's cant shoot other NPC's.
                     }
                 }
-                
+                else if (target instanceof Item) {
+                        // Projectiles don't interact with items.
+                }
                 else {
                     elasticColision(this, target, timePassed);
                     this.removeHitPoints(target.getCollisionDamageToOthers());

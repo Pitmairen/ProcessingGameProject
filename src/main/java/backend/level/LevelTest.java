@@ -3,7 +3,8 @@ package backend.level;
 import backend.main.GameEngine;
 import backend.actor.Player;
 import backend.item.Item;
-import backend.item.ModulePickup;
+import backend.item.ModuleContainer;
+import backend.shipmodule.RocketLauncher;
 
 /**
  * A level for testing purposes.
@@ -32,8 +33,8 @@ public class LevelTest extends Level {
 
         switch (currentWave) {
             case 1: {
-                Item module = new ModulePickup(200, 300, gameEngine);
-                actors.add(module);
+                Item modulePickup = new ModuleContainer(200, 300, gameEngine, new RocketLauncher(player));
+                actors.add(modulePickup);
                 actorSpawner.spawnFrigate(1);
                 break;
             }

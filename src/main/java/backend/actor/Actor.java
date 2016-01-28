@@ -1,19 +1,18 @@
 package backend.actor;
 
-import backend.item.Item;
-import backend.item.ModulePickup;
+import backend.item.ModuleContainer;
 import backend.shipmodule.ShipModule;
 import backend.main.CollisionDetector;
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
 import backend.main.Timer;
-import backend.shipmodule.RocketLauncher;
 import java.util.ArrayList;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
 
 /**
- * Super class for all actors.
+ * Super class for all actors. An actor is an entity that can actively interact
+ * with the player in a way.
  *
  * @author Kristian Honningsvag.
  */
@@ -228,62 +227,21 @@ public abstract class Actor implements Drawable {
     }
 
     /**
-     * Check for actor collisions and react to them.
+     * Check for collisions with other actors and react to them.
      *
      * @param timePassed Number of milliseconds since the previous simulation
      * cycle.
      */
     protected void checkActorCollisions(double timePassed) {
-
         ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
 
         if (collisions.size() > 0) {
 
             for (Actor target : collisions) {
-
-                if ((target instanceof Projectile)) {
-                    Projectile projectile = (Projectile) target;
-                    if (((Projectile) target).getShipModule().getOwner() == this) {
-                        // This actor crashed into a projectile fired by itself.
-                        // No damage. Actors can't collide with their own projectiles.
-                    }
-                    
-                    else if (this instanceof NPC && projectile.getShipModule().getOwner() instanceof NPC) {
-                        // NPC can't run into projectiles fired by other NPS's.
-                    }
-                    
-                    else {
-                        // This actor crashed into an unfriendly projectile.
-                        elasticColision(this, target, timePassed);
-                        this.collision(target);
-                        target.collision(this);
-                        ((Projectile) target).targetHit();
-                    }
-                }
-                
-                else if (target.getClass() == this.getClass()) {
-                    // No collision damage when hitting an actor of the same type.
-                    elasticColision(this, target, timePassed);
-                }
-                
-                else if (target instanceof ModulePickup) {
-                    ModulePickup modulePickup = (ModulePickup) target;
-                    
-                    if (this instanceof Player) {
-                        // Player ran into a ship module container.
-                        ShipModule shipModule = modulePickup.take(this);
-                        offensiveModules.add(shipModule);
-                    }
-                    else {
-                        // Only the player can interact with Items.
-                    }
-                }
-                else {
-                    // This actor collided with an other actor.
-                    elasticColision(this, target, timePassed);
-                    this.collision(target);
-                    target.collision(this);
-                }
+                // This actor ran into another actor.
+                elasticColision(this, target, timePassed);
+                this.collision(target);
+                target.collision(this);
             }
         }
     }

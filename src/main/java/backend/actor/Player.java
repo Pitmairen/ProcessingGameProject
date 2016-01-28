@@ -1,5 +1,7 @@
 package backend.actor;
 
+import backend.item.Item;
+import backend.item.ModuleContainer;
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
 import backend.main.Timer;
@@ -21,8 +23,6 @@ public class Player extends Actor implements Drawable {
     private final int backgroundColor;  // Set in constructor.
 
     // Modules.
-    private ArrayList<ShipModule> offensiveModules = new ArrayList<>();
-    private ArrayList<ShipModule> defensiveModules = new ArrayList<>();
     private Timer offensiveModuleTimer = new Timer();
     private Timer defensiveModuleTimer = new Timer();
     private double offensiveModuleSwapDelay = 800;
@@ -71,6 +71,44 @@ public class Player extends Actor implements Drawable {
         }
         if (currentDefensiveModule != null) {
             currentDefensiveModule.draw();
+        }
+    }
+
+    @Override
+    protected void checkActorCollisions(double timePassed) {
+
+        ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
+
+        if (collisions.size() > 0) {
+
+            for (Actor target : collisions) {
+
+                if ((target instanceof Projectile)) {
+                    Projectile projectile = (Projectile) target;
+
+                    if (((Projectile) target).getShipModule().getOwner() == this) {
+                        // This player crashed into a projectile fired by itself.
+                        // No damage. Players can't collide with their own projectiles.
+                    } else {
+                        // This actor crashed into an unfriendly projectile.
+                        elasticColision(this, target, timePassed);
+                        this.collision(target);
+                        target.collision(this);
+                        ((Projectile) target).targetHit();
+                    }
+
+                } else if (target instanceof Item) {
+                    // This actor crashed into an item.
+                    ModuleContainer modulePickup = (ModuleContainer) target;
+                    ShipModule shipModule = modulePickup.pickup(this);
+                    offensiveModules.add(shipModule);
+                } else {
+                    // This player crashed into an actor.
+                    elasticColision(this, target, timePassed);
+                    this.collision(target);
+                    target.collision(this);
+                }
+            }
         }
     }
 
