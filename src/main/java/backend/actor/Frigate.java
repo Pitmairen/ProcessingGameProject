@@ -1,10 +1,9 @@
 package backend.actor;
 
 import backend.item.Item;
-import backend.item.ModuleContainer;
+import backend.item.Parts;
 import backend.main.GameEngine;
 import backend.shipmodule.LightCannon;
-import backend.shipmodule.ShipModule;
 import java.util.ArrayList;
 import userinterface.Drawable;
 
@@ -38,6 +37,7 @@ public class Frigate extends Enemy implements Drawable {
         mass = 30;
         collisionDamageToOthers = 2;
         attackDelay = 2000;
+        killValue = 1;
 
         offensiveModules.add(LightCannon);
         currentOffensiveModule = LightCannon;
@@ -67,6 +67,19 @@ public class Frigate extends Enemy implements Drawable {
         if (currentDefensiveModule != null) {
             currentDefensiveModule.draw();
         }
+    }
+
+    @Override
+    public void die() {
+        gameEngine.getExplosionManager().explodeEnemy(this);
+        gameEngine.getCurrentLevel().getPlayer().increaseScore(this.killValue);
+        gameEngine.getCurrentLevel().getPlayer().increaseKillChain(1);
+        gameEngine.getCurrentLevel().getEnemies().remove(this);
+
+        // Spawn parts.
+        Parts parts = new Parts(positionX, positionY, gameEngine);
+        gameEngine.getCurrentLevel().getItems().add(parts);
+        gameEngine.getCurrentLevel().getActors().add(parts);
     }
 
     @Override

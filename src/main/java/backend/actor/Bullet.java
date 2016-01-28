@@ -45,6 +45,11 @@ public class Bullet extends Projectile implements Drawable {
         guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
     }
 
+    @Override
+    public void die() {
+        gameEngine.getCurrentLevel().getProjectiles().remove(this);
+    }
+
     /**
      * Sets the projectiles speed vectors.
      *

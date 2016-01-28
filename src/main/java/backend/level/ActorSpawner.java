@@ -1,6 +1,6 @@
 package backend.level;
 
-import backend.actor.Actor;
+import backend.actor.Enemy;
 import backend.actor.Frigate;
 import java.util.Random;
 
@@ -36,7 +36,7 @@ public class ActorSpawner {
             int randX = random.nextInt(currentLevel.getGameEngine().getGuiHandler().getWidth() - 200) + 100;
             int randY = random.nextInt(currentLevel.getGameEngine().getGuiHandler().getHeight() - 200) + 100;
 
-            Actor enemy = new Frigate(randX, randY, currentLevel.getGameEngine());
+            Enemy enemy = new Frigate(randX, randY, currentLevel.getGameEngine());
             currentLevel.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
             currentLevel.getGameEngine().getCurrentLevel().getActors().add(enemy);
         }

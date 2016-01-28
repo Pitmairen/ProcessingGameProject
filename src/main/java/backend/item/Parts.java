@@ -2,32 +2,26 @@ package backend.item;
 
 import backend.actor.Actor;
 import backend.main.GameEngine;
-import backend.shipmodule.ShipModule;
 import userinterface.Drawable;
 
 /**
- * Container for a power up or ship module that the player can pick up and
- * equip.
+ * Parts dropped by defeated enemies. Used to upgrade weapon modules.
  *
  * @author Kristian Honningsvag.
  */
-public class ModuleContainer extends Item implements Drawable {
+public class Parts extends Item implements Drawable {
 
     // Color.
-    private int[] bodyRGBA = new int[]{200, 200, 20, 255};
-
-    private ShipModule shipModule;  // Set in construntor.
+    private int[] bodyRGBA = new int[]{240, 240, 10, 255};
 
     /**
      * Constructor.
      */
-    public ModuleContainer(double positionX, double positionY, GameEngine gameEngine, ShipModule shipModule) {
+    public Parts(double positionX, double positionY, GameEngine gameEngine) {
 
         super(positionX, positionY, gameEngine);
 
-        this.shipModule = shipModule;
-
-        hitBoxRadius = 20;
+        hitBoxRadius = 5;
     }
 
     @Override
@@ -42,7 +36,7 @@ public class ModuleContainer extends Item implements Drawable {
     @Override
     public Object pickup(Actor looter) {
         hitPoints = 0;
-        return shipModule;
+        return this;
     }
 
     @Override

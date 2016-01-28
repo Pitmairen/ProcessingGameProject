@@ -2,7 +2,11 @@ package backend.level;
 
 import backend.main.GameEngine;
 import backend.actor.Actor;
+import backend.actor.Enemy;
 import backend.actor.Player;
+import backend.actor.Projectile;
+import backend.item.Item;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -12,23 +16,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public abstract class Level {
 
-    public static java.util.logging.Level SEVERE;
-
     protected String levelName = "NAME NOT SET";
     protected int currentWave = 0;
-    protected GameEngine gameEngine;     // From constructor.
-    protected ActorSpawner actorSpawner; // From constructor.
+    protected GameEngine gameEngine;     // From constructor parameter.
+    protected ActorSpawner actorSpawner; // From constructor parameter.
 
+    protected Player player;             // Set in eah levels constructor.
     protected CopyOnWriteArrayList<Actor> actors = new CopyOnWriteArrayList<Actor>();
-    protected CopyOnWriteArrayList<Actor> enemies = new CopyOnWriteArrayList<Actor>();
-    protected CopyOnWriteArrayList<Actor> projectiles = new CopyOnWriteArrayList<Actor>();
-    protected CopyOnWriteArrayList<Actor> items = new CopyOnWriteArrayList<Actor>();
-    protected Player player;
+    protected ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+    protected ArrayList<Item> items = new ArrayList<Item>();
+    protected ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
     /**
      * Constructor.
      *
-     * @param gameEngine
+     * @param gameEngine The game engine.
      */
     protected Level(GameEngine gameEngine) {
 
@@ -54,16 +56,16 @@ public abstract class Level {
         return player;
     }
 
-    public CopyOnWriteArrayList<Actor> getEnemies() {
+    public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
 
-    public CopyOnWriteArrayList<Actor> getProjectiles() {
-        return projectiles;
+    public ArrayList<Item> getItems() {
+        return items;
     }
 
-    public CopyOnWriteArrayList<Actor> getItems() {
-        return items;
+    public ArrayList<Projectile> getProjectiles() {
+        return projectiles;
     }
 
     public CopyOnWriteArrayList<Actor> getActors() {

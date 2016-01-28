@@ -1,6 +1,7 @@
 package backend.shipmodule;
 
 import backend.actor.Actor;
+import backend.actor.Projectile;
 import backend.actor.Rocket;
 import backend.main.FadingCanvas;
 import backend.main.Timer;

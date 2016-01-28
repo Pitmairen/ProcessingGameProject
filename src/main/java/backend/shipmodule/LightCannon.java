@@ -3,6 +3,7 @@ package backend.shipmodule;
 import backend.main.Timer;
 import backend.actor.Actor;
 import backend.actor.Bullet;
+import backend.actor.Projectile;
 import userinterface.Drawable;
 
 /**
@@ -49,7 +50,7 @@ public class LightCannon extends ShipModule implements Drawable {
 
         if (timer.timePassed() >= timeBetweenShots) {   // Check fire rate.
 
-            Actor bullet = new Bullet(owner.getPositionX(), owner.getPositionY(), this);
+            Bullet bullet = new Bullet(owner.getPositionX(), owner.getPositionY(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(bullet);
             owner.getGameEngine().getCurrentLevel().getActors().add(bullet);

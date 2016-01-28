@@ -34,6 +34,7 @@ public class LevelTest extends Level {
         switch (currentWave) {
             case 1: {
                 Item modulePickup = new ModuleContainer(200, 300, gameEngine, new RocketLauncher(player));
+                items.add(modulePickup);
                 actors.add(modulePickup);
                 actorSpawner.spawnFrigate(1);
                 break;

@@ -79,6 +79,11 @@ public abstract class Actor implements Drawable {
     public abstract void draw();
 
     /**
+     * This method handles what happens to an actor when it dies/is destroyed.
+     */
+    public abstract void die();
+
+    /**
      * Updates the actors state. Should be called once each cycle of the
      * simulation.
      *

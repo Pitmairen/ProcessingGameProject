@@ -1,5 +1,6 @@
 package backend.actor;
 
+import backend.shipmodule.RocketLauncher;
 import backend.shipmodule.ShipModule;
 import processing.core.PGraphics;
 import userinterface.Drawable;
@@ -58,6 +59,12 @@ public class Rocket extends Projectile implements Drawable {
     }
 
     @Override
+    public void die() {
+        gameEngine.getExplosionManager().explodeRocket(this);
+        gameEngine.getCurrentLevel().getProjectiles().remove(this);
+    }
+
+    @Override
     public void targetHit() {
         setHitPoints(0);
         hasExploded = true;
@@ -79,9 +86,14 @@ public class Rocket extends Projectile implements Drawable {
         canvas.tint(this.backgroundColor, 255);
         canvas.fill(this.backgroundColor, 200);
 
-        canvas.image(playerOwner.getRocketLauncher().getRocketImage(),
-                (float) this.positionX, (float) this.positionY,
-                (float) this.radius * 2, (float) this.radius * 2);
+        for (ShipModule module : playerOwner.getOffensiveModules()) {
+            if (module instanceof RocketLauncher) {
+                RocketLauncher rocketLauncher = (RocketLauncher) module;
+                canvas.image(rocketLauncher.getRocketImage(),
+                        (float) this.positionX, (float) this.positionY,
+                        (float) this.radius * 2, (float) this.radius * 2);
+            }
+        }
         canvas.ellipse((float) this.positionX, (float) this.positionY,
                 (float) this.radius / 2, (float) this.radius / 2);
     }

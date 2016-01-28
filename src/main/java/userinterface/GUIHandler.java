@@ -101,7 +101,7 @@ public class GUIHandler extends PApplet {
 
         switch (gameEngine.getSimulationState()) {
 
-            case "startScreen": {
+            case "menuScreen": {
                 drawStartScreen();
                 break;
             }
@@ -113,7 +113,7 @@ public class GUIHandler extends PApplet {
                 break;
             }
 
-            case "menuScreen": {
+            case "pauseScreen": {
                 drawOuterWalls();
                 drawActors();
                 drawPauseScreen();
