@@ -27,6 +27,7 @@ public class GameEngine {
     private CollisionDetector collisionDetector;
     private Level currentLevel;
     private ExplosionManager explosionManager;
+    private RocketManager rocketManager;
     private FadingCanvas fadingCanvas;
     private String simulationState = "menuScreen";
 
@@ -54,7 +55,11 @@ public class GameEngine {
         collisionDetector = new CollisionDetector(this);
 
         explosionManager = new ExplosionManager(new ParticleEmitter(guiHandler));
-
+        rocketManager = new RocketManager(guiHandler);
+        fadingCanvas = new FadingCanvas(guiHandler);
+        fadingCanvas.add(explosionManager);
+        fadingCanvas.add(rocketManager);
+        
         resetLevel();
     }
 
@@ -238,18 +243,7 @@ public class GameEngine {
      * Creates the currentLevel.
      */
     private void resetLevel() {
-        currentLevel = new LevelTest(this);
-        // The fading canvas must be reset because a new player object
-        // is created and thus there fireball cannon is also new and 
-        // must be added to the fading canvas.
-        fadingCanvas = new FadingCanvas(guiHandler);
-        fadingCanvas.add(explosionManager);
-
-        for (ShipModule module : currentLevel.getPlayer().getOffensiveModules()) {
-            if (module instanceof RocketLauncher) {
-                fadingCanvas.add((RocketLauncher) module);
-            }
-        }
+        currentLevel = new LevelTest(this, rocketManager);
     }
 
     // Getters.

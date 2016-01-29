@@ -4,6 +4,7 @@ import backend.main.GameEngine;
 import backend.actor.Player;
 import backend.item.Item;
 import backend.item.ModuleContainer;
+import backend.main.RocketManager;
 import backend.shipmodule.RocketLauncher;
 
 /**
@@ -13,13 +14,17 @@ import backend.shipmodule.RocketLauncher;
  */
 public class LevelTest extends Level {
 
+    private RocketManager rocketManager;
+    
     /**
      * Constructor.
      */
-    public LevelTest(GameEngine gameEngine) {
+    public LevelTest(GameEngine gameEngine, RocketManager rocketManager) {
 
         super(gameEngine);
 
+        this.rocketManager = rocketManager;
+        
         levelName = "Test level";
 
         player = new Player(300, 250, gameEngine);
@@ -33,7 +38,7 @@ public class LevelTest extends Level {
 
         switch (currentWave) {
             case 1: {
-                Item modulePickup = new ModuleContainer(200, 300, gameEngine, new RocketLauncher(player));
+                Item modulePickup = new ModuleContainer(200, 300, gameEngine, new RocketLauncher(player, rocketManager));
                 items.add(modulePickup);
                 actors.add(modulePickup);
                 actorSpawner.spawnFrigate(1);
