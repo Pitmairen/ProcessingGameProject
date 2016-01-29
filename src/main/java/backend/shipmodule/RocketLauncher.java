@@ -37,7 +37,7 @@ public class RocketLauncher extends ShipModule {
         super("Rocket Launcher", owner);
 
         this.rocketManager = rocketManager;
-        
+
         launchVelocity = 0.8;
         projectileDamage = 12;
     }
@@ -65,7 +65,7 @@ public class RocketLauncher extends ShipModule {
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(rocket);
             owner.getGameEngine().getCurrentLevel().getActors().add(rocket);
             rocketManager.addRocket(rocket);
-            
+
             timer.restart();
         }
     }

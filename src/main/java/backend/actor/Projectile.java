@@ -77,7 +77,7 @@ public abstract class Projectile extends Actor implements Drawable {
      * Call this function when the projectile have hit something.
      */
     public void targetHit() {
-        this.hitPoints = 0;
+        this.currentHitPoints = 0;
     }
 
     // Getters.

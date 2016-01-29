@@ -20,6 +20,9 @@ public class Player extends Actor implements Drawable {
 
     // Color.
     private int[] bodyRGBA = new int[]{0, 70, 200, 255};
+    private int[] healthBarRGBA = new int[]{20, 200, 20, 255};
+    private int healthBarWidth = 50;
+    private int healthBarHeight = 10;
     private final int backgroundColor;  // Set in constructor.
 
     // Modules.
@@ -43,7 +46,8 @@ public class Player extends Actor implements Drawable {
         drag = 0.001f;
         hitBoxRadius = 20;
         bounceModifier = 0.6f;
-        hitPoints = 30;
+        maxHitPoints = 30;
+        currentHitPoints = 30;
         mass = 100;
         backgroundColor = guiHandler.color(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2], 255);
         collisionDamageToOthers = 4;
@@ -73,6 +77,20 @@ public class Player extends Actor implements Drawable {
         if (currentDefensiveModule != null) {
             currentDefensiveModule.draw();
         }
+
+        // Draw health bar.
+        float healthPercentage = (float) currentHitPoints / (float) maxHitPoints;
+        if (healthPercentage >= 0.66) {
+            healthBarRGBA = new int[]{20, 200, 20, 255};
+        } else if (healthPercentage < 0.66 && healthPercentage > 0.33) {
+            healthBarRGBA = new int[]{200, 200, 20, 255};
+        } else {
+            healthBarRGBA = new int[]{200, 20, 20, 255};
+        }
+        guiHandler.strokeWeight(0);
+        guiHandler.stroke(healthBarRGBA[0], healthBarRGBA[1], healthBarRGBA[2]);
+        guiHandler.fill(healthBarRGBA[0], healthBarRGBA[1], healthBarRGBA[2]);
+        guiHandler.rect((float) positionX - (healthBarWidth / 2), (float) positionY + (float) hitBoxRadius + 5, healthBarWidth * healthPercentage, healthBarHeight, 6);
     }
 
     @Override

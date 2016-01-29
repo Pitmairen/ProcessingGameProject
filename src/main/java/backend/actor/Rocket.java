@@ -36,7 +36,7 @@ public class Rocket extends Projectile {
 
         name = "Rocket";
         hitBoxRadius = 8;
-        hitPoints = 1;
+        currentHitPoints = 1;
         mass = 3;
         collisionDamageToOthers = shipModule.getProjectileDamage();
 
@@ -65,7 +65,7 @@ public class Rocket extends Projectile {
 
     @Override
     public void targetHit() {
-        setHitPoints(0);
+        setCurrentHitPoints(0);
         hasExploded = true;
 
     }

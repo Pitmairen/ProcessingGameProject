@@ -22,7 +22,7 @@ public class Bullet extends Projectile implements Drawable {
 
         name = "Bullet";
         hitBoxRadius = 4;
-        hitPoints = 1;
+        currentHitPoints = 1;
         mass = 2;
         collisionDamageToOthers = shipModule.getProjectileDamage();
 

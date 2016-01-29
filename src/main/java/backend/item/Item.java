@@ -20,7 +20,7 @@ public abstract class Item extends Actor implements Drawable {
 
         super(positionX, positionY, gameEngine);
 
-        hitPoints = 1;
+        currentHitPoints = 1;
     }
 
     @Override

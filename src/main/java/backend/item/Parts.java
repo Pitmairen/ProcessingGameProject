@@ -35,7 +35,7 @@ public class Parts extends Item implements Drawable {
 
     @Override
     public Object pickup(Actor looter) {
-        hitPoints = 0;
+        currentHitPoints = 0;
         return this;
     }
 

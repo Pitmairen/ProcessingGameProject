@@ -33,7 +33,7 @@ public class Frigate extends Enemy implements Drawable {
         drag = 0.001f;
         hitBoxRadius = 15;
         bounceModifier = 0.6f;
-        hitPoints = 10;
+        currentHitPoints = 10;
         mass = 30;
         collisionDamageToOthers = 2;
         attackDelay = 2000;

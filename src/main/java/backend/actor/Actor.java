@@ -1,6 +1,5 @@
 package backend.actor;
 
-import backend.item.ModuleContainer;
 import backend.shipmodule.ShipModule;
 import backend.main.CollisionDetector;
 import backend.main.GameEngine;
@@ -38,7 +37,8 @@ public abstract class Actor implements Drawable {
     protected double mass = 0;
     protected double momentum; // Derived value.
     protected double bounceModifier = 0;
-    protected double hitPoints = 0;
+    protected double maxHitPoints = 0;
+    protected double currentHitPoints = 0;
     protected double collisionDamageToOthers = 0;
     // Score system.
     protected int killValue = 0;
@@ -332,7 +332,7 @@ public abstract class Actor implements Drawable {
      * @param healing Number of hit points to add.
      */
     public void addHitPoints(double healing) {
-        this.hitPoints = this.hitPoints + healing;
+        this.currentHitPoints = this.currentHitPoints + healing;
     }
 
     /**
@@ -342,9 +342,9 @@ public abstract class Actor implements Drawable {
      * @param damage Number of hit points to subtract.
      */
     public void removeHitPoints(double damage) {
-        this.hitPoints = this.hitPoints - damage;
-        if (hitPoints < 0) {
-            hitPoints = 0;
+        this.currentHitPoints = this.currentHitPoints - damage;
+        if (currentHitPoints < 0) {
+            currentHitPoints = 0;
         }
         killChain = 0;
     }
@@ -426,8 +426,8 @@ public abstract class Actor implements Drawable {
         return bounceModifier;
     }
 
-    public double getHitPoints() {
-        return hitPoints;
+    public double getCurrentHitPoints() {
+        return currentHitPoints;
     }
 
     public double getMass() {
@@ -482,6 +482,18 @@ public abstract class Actor implements Drawable {
         return name;
     }
 
+    public double getMaxHitPoints() {
+        return maxHitPoints;
+    }
+
+    public ShipModule getCurrentOffensiveModule() {
+        return currentOffensiveModule;
+    }
+
+    public ShipModule getCurrentDefensiveModule() {
+        return currentDefensiveModule;
+    }
+
     // Setters.
     public void setPositionX(double positionX) {
         this.positionX = positionX;
@@ -523,8 +535,8 @@ public abstract class Actor implements Drawable {
         this.bounceModifier = bounceModifier;
     }
 
-    public void setHitPoints(double hitPoints) {
-        this.hitPoints = hitPoints;
+    public void setCurrentHitPoints(double currentHitPoints) {
+        this.currentHitPoints = currentHitPoints;
     }
 
     public void setMass(double mass) {

@@ -62,7 +62,7 @@ public class RocketManager implements FadingCanvas.Drawable {
 
             rocket.draw(canvas, rocketImage);
 
-            if (rocket.isHasExploded() || rocket.getHitPoints() <= 0) {
+            if (rocket.isHasExploded() || rocket.getCurrentHitPoints() <= 0) {
                 it.remove(); // Remove the rockets after they have exploded.
             }
         }

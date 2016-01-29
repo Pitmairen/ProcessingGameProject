@@ -109,7 +109,7 @@ public class GameEngine {
 
         while (it.hasNext()) {
             Actor actorInList = it.next();
-            if (actorInList.getHitPoints() <= 0) {
+            if (actorInList.getCurrentHitPoints() <= 0) {
                 actorInList.die();
                 // it.remove();
                 deadActors.add(actorInList);
