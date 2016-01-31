@@ -63,10 +63,20 @@ public class CollisionDetector {
             Actor actorInList = it.next();
 
             if (actorInList != movingActor) {
-                if ((Math.abs(movingActor.getPositionX() - actorInList.getPositionX()) < movingActor.getHitBoxRadius() + actorInList.getHitBoxRadius())
-                        && (Math.abs(movingActor.getPositionY() - actorInList.getPositionY()) < movingActor.getHitBoxRadius() + actorInList.getHitBoxRadius())) {
+
+                // Detection between to round objects.
+                double dx = Math.abs(actorInList.getPositionX() - movingActor.getPositionX());
+                double dy = Math.abs(actorInList.getPositionY() - movingActor.getPositionY());
+                double distanceBetweenActors = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+                if (distanceBetweenActors < movingActor.getHitBoxRadius() + actorInList.getHitBoxRadius()) {
                     collisions.add(actorInList);
                 }
+
+//                // Detection between two square objects.
+//                if ((Math.abs(movingActor.getPositionX() - actorInList.getPositionX()) < movingActor.getHitBoxRadius() + actorInList.getHitBoxRadius())
+//                        && (Math.abs(movingActor.getPositionY() - actorInList.getPositionY()) < movingActor.getHitBoxRadius() + actorInList.getHitBoxRadius())) {
+//                    collisions.add(actorInList);
+//                }
             }
         }
         return collisions;
