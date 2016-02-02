@@ -77,7 +77,9 @@ public class LaserCannon extends ShipModule implements Drawable {
      *
      * This is done by calculating the determinant of the matrix that is created
      * by the heading vector of the laser (LH) and the vector from the laser to
-     * the target actor (LT) like so: [LH.x LT.x] [LH.y LT.y]
+     * the target actor (LT) like so:
+     * [LH.x LT.x]
+     * [LH.y LT.y]
      *
      * d = (LH.x*LT.y) - (LH.x*LT.y)
      *
