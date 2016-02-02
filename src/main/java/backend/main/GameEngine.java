@@ -28,6 +28,7 @@ public class GameEngine {
     private Level currentLevel;
     private ExplosionManager explosionManager;
     private RocketManager rocketManager;
+    private FadingCanvasItemManager fadingCanvasItems;
     private FadingCanvas fadingCanvas;
     private String simulationState = "menuScreen";
 
@@ -54,11 +55,14 @@ public class GameEngine {
         this.guiHandler = guiHandler;
         collisionDetector = new CollisionDetector(this);
 
+        fadingCanvasItems = new FadingCanvasItemManager();
         explosionManager = new ExplosionManager(new ParticleEmitter(guiHandler));
         rocketManager = new RocketManager(guiHandler);
         fadingCanvas = new FadingCanvas(guiHandler);
+        
         fadingCanvas.add(explosionManager);
         fadingCanvas.add(rocketManager);
+        fadingCanvas.add(fadingCanvasItems);
         
         resetLevel();
     }
@@ -243,7 +247,7 @@ public class GameEngine {
      * Creates the currentLevel.
      */
     private void resetLevel() {
-        currentLevel = new LevelTest(this, rocketManager);
+        currentLevel = new LevelTest(this, rocketManager, fadingCanvasItems);
     }
 
     // Getters.

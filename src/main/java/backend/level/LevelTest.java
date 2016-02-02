@@ -4,7 +4,9 @@ import backend.main.GameEngine;
 import backend.actor.Player;
 import backend.item.Item;
 import backend.item.ModuleContainer;
+import backend.main.FadingCanvasItemManager;
 import backend.main.RocketManager;
+import backend.shipmodule.EMPCannon;
 import backend.shipmodule.LaserCannon;
 import backend.shipmodule.RocketLauncher;
 
@@ -16,16 +18,16 @@ import backend.shipmodule.RocketLauncher;
 public class LevelTest extends Level {
 
     private RocketManager rocketManager;
-    
+    private FadingCanvasItemManager fadingCanvasItems;
     /**
      * Constructor.
      */
-    public LevelTest(GameEngine gameEngine, RocketManager rocketManager) {
+    public LevelTest(GameEngine gameEngine, RocketManager rocketManager, FadingCanvasItemManager itemManager) {
 
         super(gameEngine);
 
         this.rocketManager = rocketManager;
-        
+        this.fadingCanvasItems = itemManager;
         levelName = "Test level";
 
         player = new Player(300, 250, gameEngine);
@@ -46,6 +48,9 @@ public class LevelTest extends Level {
                 break;
             }
             case 2: {
+                Item modulePickup = new ModuleContainer(200, 300, gameEngine, new EMPCannon(player, fadingCanvasItems));
+                items.add(modulePickup);
+                actors.add(modulePickup);
                 actorSpawner.spawnFrigate(3);
                 break;
             }
