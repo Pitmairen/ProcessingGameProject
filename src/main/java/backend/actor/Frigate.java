@@ -43,7 +43,7 @@ public class Frigate extends NPC implements Drawable {
     public void act(double timePassed) {
         targetPlayerLocation();
         fireAtPlayer();
-        approachTarget(timePassed);
+        positionNearTarget(timePassed, 400);
         super.act(timePassed);
     }
 
