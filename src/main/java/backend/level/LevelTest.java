@@ -5,6 +5,7 @@ import backend.actor.Player;
 import backend.item.Item;
 import backend.item.ModuleContainer;
 import backend.main.RocketManager;
+import backend.shipmodule.LaserCannon;
 import backend.shipmodule.RocketLauncher;
 
 /**
@@ -49,6 +50,9 @@ public class LevelTest extends Level {
                 break;
             }
             case 3: {
+                Item modulePickup = new ModuleContainer(300, 400, gameEngine, new LaserCannon(player));
+                items.add(modulePickup);
+                actors.add(modulePickup);
                 actorSpawner.spawnFrigate(9);
                 break;
             }
