@@ -13,8 +13,8 @@ import processing.core.PGraphics;
 public class EMPPulse extends Projectile implements FadingCanvasItemManager.Item {
 
     // How fast the pulse radius grows
-    private final int pulseStepSize = 5;
-    private final int pulseRadiusLimit = 350;
+    private final int pulseStepSize = 2;
+    private final int pulseRadiusLimit = 200;
     
     public EMPPulse(double positionX, double positionY, ShipModule shipModule){
         super(positionX, positionY, shipModule);
@@ -78,7 +78,7 @@ public class EMPPulse extends Projectile implements FadingCanvasItemManager.Item
         canvas.stroke(0xff2D91EF, 255 - fadingStepSize*currentStep);
         canvas.strokeWeight(8);
         canvas.ellipse((float)getPositionX(), (float)getPositionY(),
-                (float)hitBoxRadius, (float)hitBoxRadius);
+                (float)hitBoxRadius*2, (float)hitBoxRadius*2);
         
         canvas.strokeWeight(0);
         canvas.blendMode(PGraphics.BLEND);
