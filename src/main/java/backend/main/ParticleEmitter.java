@@ -119,6 +119,7 @@ public class ParticleEmitter {
             this.particles[i].update(timeDelta);
             if (!this.particles[i].isAlive()) {   
                 recycle(i);
+                i--; // We have to update the particle that was swapped by the recycle
             }
         }
     }
