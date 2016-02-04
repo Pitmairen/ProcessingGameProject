@@ -2,6 +2,7 @@ package backend.level;
 
 import backend.actor.Enemy;
 import backend.actor.Frigate;
+import backend.actor.SimpleAI;
 import java.util.Random;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Random;
 public class ActorSpawner {
 
     Level currentLevel;
-
+    
     /**
      * Constructor.
      *
@@ -20,6 +21,7 @@ public class ActorSpawner {
      */
     public ActorSpawner(Level currentLevel) {
         this.currentLevel = currentLevel;
+        
     }
 
     /**
@@ -30,13 +32,16 @@ public class ActorSpawner {
     public void spawnFrigate(int amount) {
 
         Random random = new Random();
-
         for (int i = 0; i < amount; i++) {
 
             int randX = random.nextInt(currentLevel.getGameEngine().getGuiHandler().getWidth() - 200) + 100;
             int randY = random.nextInt(currentLevel.getGameEngine().getGuiHandler().getHeight() - 200) + 100;
 
+            
             Enemy enemy = new Frigate(randX, randY, currentLevel.getGameEngine());
+            SimpleAI simpleAI = new SimpleAI(currentLevel.getGameEngine(), currentLevel.getPlayer(), enemy);
+            enemy.setAI(simpleAI);
+            
             currentLevel.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
             currentLevel.getGameEngine().getCurrentLevel().getActors().add(enemy);
         }
