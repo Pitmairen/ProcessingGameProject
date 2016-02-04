@@ -5,6 +5,7 @@ import backend.level.Level;
 import backend.level.LevelTest;
 import backend.resources.Image;
 import backend.resources.ResourceManager;
+import backend.resources.Shader;
 import userinterface.GUIHandler;
 
 import java.awt.event.KeyEvent;
@@ -57,7 +58,7 @@ public class GameEngine {
         fadingCanvasItems = new FadingCanvasItemManager();
         explosionManager = new ExplosionManager(new ParticleEmitter(resourceManager));
         rocketManager = new RocketManager(resourceManager);
-        fadingCanvas = new FadingCanvas(guiHandler);
+        fadingCanvas = new FadingCanvas(guiHandler, resourceManager);
 
         fadingCanvas.add(explosionManager);
         fadingCanvas.add(rocketManager);
@@ -256,7 +257,9 @@ public class GameEngine {
         resourceManager.add(Image.PARTICLE, "particle.png");
         resourceManager.add(Image.ROCKET, "particle.png");
         resourceManager.add(Image.LASER_BEAM, "laser.png");
-
+        resourceManager.add(Image.BG_SHADER_NOISE, "shader_noise.png");
+        
+        resourceManager.add(Shader.BG_SHADER, "background.glsl");
     }
 
     // Getters.

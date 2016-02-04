@@ -10,5 +10,7 @@ public enum Image {
     LASER_BEAM,
     PARTICLE,
     ROCKET,
+    
+    BG_SHADER_NOISE,
 
 }

@@ -1,8 +1,12 @@
 package backend.main;
 
+import backend.resources.Image;
+import backend.resources.ResourceManager;
+import backend.resources.Shader;
 import java.util.ArrayList;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.opengl.PShader;
 import userinterface.GUIHandler;
 
 /**
@@ -30,14 +34,16 @@ public class FadingCanvas {
     private final PGraphics canvas;
     private final GUIHandler gui;
     private final ArrayList<Drawable> items;
-
+    private final PShader bgShader;
+    private final PImage bgNoise;
+    
     // The background image
     //private final PImage background; 
     
     /**
      * Constructor.
      */
-    public FadingCanvas(GUIHandler gui) {
+    public FadingCanvas(GUIHandler gui, ResourceManager resources) {
         this.gui = gui;
         this.canvas = gui.createGraphics(gui.getWidth(),
                 gui.getHeight(), PGraphics.P3D);
@@ -45,6 +51,11 @@ public class FadingCanvas {
         
         // Loads the background image from the src/main/resources/data folder.
         //background = gui.loadImage("background.jpg");
+        
+        bgShader = resources.getShader(Shader.BG_SHADER);
+        bgNoise = resources.getImage(Image.BG_SHADER_NOISE);
+        bgShader.set("resolution", (float)gui.width, (float)gui.height);
+
     }
 
     /**
@@ -66,7 +77,13 @@ public class FadingCanvas {
      * nothing gets drawn over.
      */
     public void draw() {
-
+        
+        bgShader.set("currentTime", gui.millis()/1000.0f);
+        gui.imageMode(PGraphics.CORNER);
+        gui.shader(bgShader);
+        gui.image(bgNoise, 0, 0, gui.width, gui.height);
+        gui.resetShader();
+        
         this.canvas.beginDraw();
 
         // Creates the fading tail effect. The second number (40) creates the 
@@ -89,7 +106,9 @@ public class FadingCanvas {
 
         this.canvas.endDraw();
         gui.tint(255); // Reset tint 
+        gui.blendMode(PGraphics.ADD);
         gui.image(this.canvas, 0, 0);
+        gui.blendMode(PGraphics.BLEND);
     }
 
 }
