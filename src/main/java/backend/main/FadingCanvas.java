@@ -2,6 +2,7 @@ package backend.main;
 
 import java.util.ArrayList;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import userinterface.GUIHandler;
 
 /**
@@ -30,6 +31,9 @@ public class FadingCanvas {
     private final GUIHandler gui;
     private final ArrayList<Drawable> items;
 
+    // The background image
+    //private final PImage background; 
+    
     /**
      * Constructor.
      */
@@ -38,6 +42,9 @@ public class FadingCanvas {
         this.canvas = gui.createGraphics(gui.getWidth(),
                 gui.getHeight(), PGraphics.P3D);
         this.items = new ArrayList<>();
+        
+        // Loads the background image from the src/main/resources/data folder.
+        //background = gui.loadImage("background.jpg");
     }
 
     /**
@@ -65,9 +72,17 @@ public class FadingCanvas {
         // Creates the fading tail effect. The second number (40) creates the 
         // tail effect, a lower number means a longer tail. This affects both
         // particles and the rockets.
+        
+        // Remove these lines when we have a background image.
         this.canvas.fill(0, 40);
         this.canvas.rect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Uncomment theses three lines to draw a background image:
+        //this.canvas.tint(255, 40);
+        //this.canvas.imageMode(PGraphics.CORNER);
+        //this.canvas.image(background, 0, 0, this.canvas.width, this.canvas.height);
 
+        
         for (Drawable it : items) {
             it.draw(this.canvas);
         }
