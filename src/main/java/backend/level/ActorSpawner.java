@@ -1,8 +1,10 @@
 package backend.level;
 
+import backend.actor.AI;
 import backend.actor.Enemy;
 import backend.actor.Frigate;
 import backend.actor.SimpleAI;
+import backend.actor.ExtraAI;
 import java.util.Random;
 
 /**
@@ -39,8 +41,13 @@ public class ActorSpawner {
 
             
             Enemy enemy = new Frigate(randX, randY, currentLevel.getGameEngine());
-            SimpleAI simpleAI = new SimpleAI(currentLevel.getGameEngine(), currentLevel.getPlayer(), enemy);
-            enemy.setAI(simpleAI);
+            if(Math.random()<=0.5){
+            AI extraAI = new ExtraAI(currentLevel.getGameEngine(), currentLevel.getPlayer(), enemy);
+            enemy.setAI(extraAI);
+            }else{
+            AI simpleAI = new SimpleAI(currentLevel.getGameEngine(), currentLevel.getPlayer(), enemy);
+            enemy.setAI(simpleAI);    
+            }
             
             currentLevel.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
             currentLevel.getGameEngine().getCurrentLevel().getActors().add(enemy);
