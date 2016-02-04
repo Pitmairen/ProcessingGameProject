@@ -8,6 +8,8 @@ import backend.actor.Player;
 import backend.item.Item;
 import backend.level.Level;
 import backend.level.LevelTest;
+import backend.resources.Image;
+import backend.resources.ResourceManager;
 import backend.shipmodule.RocketLauncher;
 import backend.shipmodule.ShipModule;
 import userinterface.GUIHandler;
@@ -31,6 +33,7 @@ public class GameEngine {
     private FadingCanvasItemManager fadingCanvasItems;
     private FadingCanvas fadingCanvas;
     private String simulationState = "menuScreen";
+    private ResourceManager resourceManager;
 
     // Key states.
     private boolean up = false;
@@ -54,17 +57,21 @@ public class GameEngine {
 
         this.guiHandler = guiHandler;
         collisionDetector = new CollisionDetector(this);
-
-        fadingCanvasItems = new FadingCanvasItemManager();
-        explosionManager = new ExplosionManager(new ParticleEmitter(guiHandler));
-        rocketManager = new RocketManager(guiHandler);
-        fadingCanvas = new FadingCanvas(guiHandler);
         
+        resourceManager = new ResourceManager(guiHandler);
+        loadResources();
+        
+        fadingCanvasItems = new FadingCanvasItemManager();
+        explosionManager = new ExplosionManager(new ParticleEmitter(resourceManager));
+        rocketManager = new RocketManager(resourceManager);
+        fadingCanvas = new FadingCanvas(guiHandler);
+
         fadingCanvas.add(explosionManager);
         fadingCanvas.add(rocketManager);
         fadingCanvas.add(fadingCanvasItems);
         
         resetLevel();
+
     }
 
     /**
@@ -249,6 +256,15 @@ public class GameEngine {
     private void resetLevel() {
         currentLevel = new LevelTest(this, rocketManager, fadingCanvasItems);
     }
+    
+    
+    private void loadResources(){
+        
+        resourceManager.add(Image.PARTICLE, "particle.png");
+        resourceManager.add(Image.ROCKET, "particle.png");
+        resourceManager.add(Image.LASER_BEAM, "laser.png");
+
+    }
 
     // Getters.
     public GUIHandler getGuiHandler() {
@@ -273,6 +289,10 @@ public class GameEngine {
 
     public ExplosionManager getExplosionManager() {
         return explosionManager;
+    }
+    
+    public ResourceManager getResourceManager(){
+        return resourceManager;
     }
 
     // Setters.

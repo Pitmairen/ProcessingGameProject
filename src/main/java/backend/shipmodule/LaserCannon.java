@@ -2,6 +2,7 @@ package backend.shipmodule;
 
 import backend.actor.Actor;
 import backend.actor.Enemy;
+import backend.resources.Image;
 import processing.core.PImage;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
@@ -26,7 +27,7 @@ public class LaserCannon extends ShipModule implements Drawable {
     public LaserCannon(Actor owner) {
         super("Laser Cannon", owner);
 
-        bgImage = owner.getGuiHandler().loadImage("laser.png");
+        bgImage = owner.getGameEngine().getResourceManager().getImage(Image.LASER_BEAM);
         projectileDamage = 100;
     }
 

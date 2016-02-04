@@ -1,10 +1,11 @@
 package backend.main;
 
+import backend.resources.Image;
+import backend.resources.ResourceManager;
 import java.util.Random;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
-import userinterface.GUIHandler;
 
 /**
  * The particle emitter manages all the particles in the explosions.
@@ -39,10 +40,11 @@ public class ParticleEmitter {
 
     /**
      * Constructor.
+     * @param resources the resource manager
      */
-    public ParticleEmitter(GUIHandler gui) {
+    public ParticleEmitter(ResourceManager resources) {
 
-        particleImage = gui.loadImage("particle.png");
+        particleImage = resources.getImage(Image.PARTICLE);
 
         this.particles = new Particle[PARTICLE_LIMIT];
 

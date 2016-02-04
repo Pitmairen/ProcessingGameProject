@@ -5,14 +5,13 @@
  */
 package backend.main;
 
-import backend.actor.Actor;
 import backend.actor.Rocket;
+import backend.resources.Image;
+import backend.resources.ResourceManager;
 import java.util.ArrayList;
 import java.util.Iterator;
-import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
-import userinterface.GUIHandler;
 
 /**
  * The rocket manager is responsible for drawing the rockets to the fading
@@ -31,8 +30,8 @@ public class RocketManager implements FadingCanvas.Drawable {
     /**
      * Creates a new rocket manager
      */
-    public RocketManager(GUIHandler gui) {
-        this.rocketImage = gui.loadImage("particle.png");
+    public RocketManager(ResourceManager resources) {
+        this.rocketImage = resources.getImage(Image.ROCKET);
         this.rockets = new ArrayList<>();
     }
 
