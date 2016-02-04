@@ -101,7 +101,7 @@ public class GUIHandler extends PApplet {
 
         switch (gameEngine.getSimulationState()) {
 
-            case "startScreen": {
+            case "menuScreen": {
                 drawStartScreen();
                 break;
             }
@@ -113,7 +113,7 @@ public class GUIHandler extends PApplet {
                 break;
             }
 
-            case "menuScreen": {
+            case "pauseScreen": {
                 drawOuterWalls();
                 drawActors();
                 drawPauseScreen();
@@ -155,8 +155,7 @@ public class GUIHandler extends PApplet {
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
 
         textFont(hudFont);
-        text("HP: " + format2.format(gameEngine.getCurrentLevel().getPlayer().getHitPoints())
-                + "\n" + "Level: " + gameEngine.getCurrentLevel().getLevelName()
+        text("Level: " + gameEngine.getCurrentLevel().getLevelName()
                 + "\n" + "Wave: " + gameEngine.getCurrentLevel().getCurrentWave()
                 + "\n" + "Kill chain: " + gameEngine.getCurrentLevel().getPlayer().getKillChain()
                 + "\n" + "Score: " + format1.format(gameEngine.getCurrentLevel().getPlayer().getScore()), 14, 40);

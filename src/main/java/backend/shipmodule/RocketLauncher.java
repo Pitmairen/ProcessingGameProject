@@ -2,13 +2,8 @@ package backend.shipmodule;
 
 import backend.actor.Actor;
 import backend.actor.Rocket;
-import backend.main.FadingCanvas;
+import backend.main.RocketManager;
 import backend.main.Timer;
-import java.util.ArrayList;
-import java.util.Iterator;
-import processing.core.PGraphics;
-import processing.core.PImage;
-import userinterface.Drawable;
 
 /**
  * Fires rockets. Slow rate of fire and large damage.
@@ -22,28 +17,26 @@ import userinterface.Drawable;
  *
  * @author pitmairen
  */
-public class RocketLauncher extends ShipModule implements Drawable, FadingCanvas.Drawable {
+public class RocketLauncher extends ShipModule {
 
     // Shape and color.
     private int turretLength = 22;
     private int turretWidth = 7;
     private int[] turretRGBA = new int[]{20, 20, 210, 255};
 
-    private final ArrayList<Rocket> rockets;
-    private final PImage rocketImage;
-
     private double timeBetweenShots = 600;
     private Timer timer = new Timer();
+    
+    private RocketManager rocketManager;
 
     /**
      * Constructor.
      */
-    public RocketLauncher(Actor owner) {
+    public RocketLauncher(Actor owner, RocketManager rocketManager) {
 
         super("Rocket Launcher", owner);
 
-        this.rocketImage = owner.getGuiHandler().loadImage("particle.png");
-        this.rockets = new ArrayList<>();
+        this.rocketManager = rocketManager;
 
         launchVelocity = 0.8;
         projectileDamage = 12;
@@ -59,27 +52,6 @@ public class RocketLauncher extends ShipModule implements Drawable, FadingCanvas
                 (float) owner.getPositionY() + (float) (turretLength * Math.sin(owner.getHeading())));
     }
 
-    @Override
-    public void draw(PGraphics canvas) {
-
-        // Add causes the colors of objects that are drawn on top of eachother
-        // to be added together which creates a nice visual effect.
-        // Draw the rockets.
-        Iterator<Rocket> it = this.rockets.iterator();
-        while (it.hasNext()) {
-
-            Rocket rocket = it.next();
-
-            rocket.draw(canvas);
-
-            if (rocket.isHasExploded() || rocket.getHitPoints() <= 0) {
-                it.remove(); // Remove the rockets after they have exploded.
-            }
-        }
-
-        canvas.blendMode(PGraphics.BLEND); // Reset blendMode
-    }
-
     /**
      * Fires a new rocket.
      */
@@ -92,18 +64,10 @@ public class RocketLauncher extends ShipModule implements Drawable, FadingCanvas
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(rocket);
             owner.getGameEngine().getCurrentLevel().getActors().add(rocket);
-            this.rockets.add(rocket);
+            rocketManager.addRocket(rocket);
+
             timer.restart();
         }
-    }
-
-    // Getters.
-    public ArrayList<Rocket> getRockets() {
-        return rockets;
-    }
-
-    public PImage getRocketImage() {
-        return rocketImage;
     }
 
 }

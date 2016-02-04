@@ -10,7 +10,8 @@ import userinterface.Drawable;
 import userinterface.GUIHandler;
 
 /**
- * Super class for all actors.
+ * Super class for all actors. An actor is an entity that can actively interact
+ * with the player in a way.
  *
  * @author Kristian Honningsvag.
  */
@@ -36,7 +37,8 @@ public abstract class Actor implements Drawable {
     protected double mass = 0;
     protected double momentum; // Derived value.
     protected double bounceModifier = 0;
-    protected double hitPoints = 0;
+    protected double maxHitPoints = 0;
+    protected double currentHitPoints = 0;
     protected double collisionDamageToOthers = 0;
     // Score system.
     protected int killValue = 0;
@@ -75,6 +77,11 @@ public abstract class Actor implements Drawable {
 
     @Override
     public abstract void draw();
+
+    /**
+     * This method handles what happens to an actor when it dies/is destroyed.
+     */
+    public abstract void die();
 
     /**
      * Updates the actors state. Should be called once each cycle of the
@@ -225,50 +232,21 @@ public abstract class Actor implements Drawable {
     }
 
     /**
-     * Check for actor collisions and react to them.
+     * Check for collisions with other actors and react to them.
      *
      * @param timePassed Number of milliseconds since the previous simulation
      * cycle.
      */
     protected void checkActorCollisions(double timePassed) {
-
         ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
 
         if (collisions.size() > 0) {
 
             for (Actor target : collisions) {
-
-                if ((target instanceof Projectile)) {
-                    Projectile projectile = (Projectile) target;
-                    if (((Projectile) target).getShipModule().getOwner() == this) {
-                        // This actor crashed into a projectile fired by itself.
-                        // No damage. Actors can't collide with their own projectiles.
-                    }
-                    
-                    else if (this instanceof NPC && projectile.getShipModule().getOwner() instanceof NPC) {
-                        // NPC can't run into projectiles fired by other NPS's.
-                    }
-                    
-                    else {
-                        // This actor crashed into an unfriendly projectile.
-                        elasticColision(this, target, timePassed);
-                        this.collision(target);
-                        target.collision(this);
-                        ((Projectile) target).targetHit();
-                    }
-                }
-                
-                else if (target.getClass() == this.getClass()) {
-                    // No collision damage when hitting an actor of the same type.
-                    elasticColision(this, target, timePassed);
-                }
-                
-                else {
-                    // This actor collided with an other actor.
-                    elasticColision(this, target, timePassed);
-                    this.collision(target);
-                    target.collision(this);
-                }
+                // This actor ran into another actor.
+                elasticColision(this, target, timePassed);
+                this.collision(target);
+                target.collision(this);
             }
         }
     }
@@ -354,7 +332,7 @@ public abstract class Actor implements Drawable {
      * @param healing Number of hit points to add.
      */
     public void addHitPoints(double healing) {
-        this.hitPoints = this.hitPoints + healing;
+        this.currentHitPoints = this.currentHitPoints + healing;
     }
 
     /**
@@ -364,9 +342,9 @@ public abstract class Actor implements Drawable {
      * @param damage Number of hit points to subtract.
      */
     public void removeHitPoints(double damage) {
-        this.hitPoints = this.hitPoints - damage;
-        if (hitPoints < 0) {
-            hitPoints = 0;
+        this.currentHitPoints = this.currentHitPoints - damage;
+        if (currentHitPoints < 0) {
+            currentHitPoints = 0;
         }
         killChain = 0;
     }
@@ -448,8 +426,8 @@ public abstract class Actor implements Drawable {
         return bounceModifier;
     }
 
-    public double getHitPoints() {
-        return hitPoints;
+    public double getCurrentHitPoints() {
+        return currentHitPoints;
     }
 
     public double getMass() {
@@ -504,6 +482,18 @@ public abstract class Actor implements Drawable {
         return name;
     }
 
+    public double getMaxHitPoints() {
+        return maxHitPoints;
+    }
+
+    public ShipModule getCurrentOffensiveModule() {
+        return currentOffensiveModule;
+    }
+
+    public ShipModule getCurrentDefensiveModule() {
+        return currentDefensiveModule;
+    }
+
     // Setters.
     public void setPositionX(double positionX) {
         this.positionX = positionX;
@@ -545,8 +535,8 @@ public abstract class Actor implements Drawable {
         this.bounceModifier = bounceModifier;
     }
 
-    public void setHitPoints(double hitPoints) {
-        this.hitPoints = hitPoints;
+    public void setCurrentHitPoints(double currentHitPoints) {
+        this.currentHitPoints = currentHitPoints;
     }
 
     public void setMass(double mass) {

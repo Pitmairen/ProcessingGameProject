@@ -6,11 +6,11 @@ import java.util.Random;
 import userinterface.Drawable;
 
 /**
- * Super class for all NPC's.
+ * Super class for all enemies in the game.
  *
  * @author Kristian Honningsvag.
  */
-public abstract class NPC extends Actor implements Drawable {
+public abstract class Enemy extends Actor implements Drawable {
 
     // AI configuration.
     protected Random random = new Random();
@@ -25,7 +25,7 @@ public abstract class NPC extends Actor implements Drawable {
     /**
      * Constructor.
      */
-    protected NPC(double positionX, double positionY, GameEngine gameEngine) {
+    protected Enemy(double positionX, double positionY, GameEngine gameEngine) {
 
         super(positionX, positionY, gameEngine);
     }

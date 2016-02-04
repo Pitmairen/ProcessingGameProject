@@ -31,8 +31,6 @@ public class ParticleEmitter {
 
     // The current number of live particles
     private int particleCount = 0;
-    // The current position of the first live particle 
-    private int firstPosition = 0;
 
     private final Random random = new Random();
 
@@ -63,9 +61,10 @@ public class ParticleEmitter {
      * @param particleColor the color of the particles
      */
     public void emitParticles(int count, PVector position, int particleColor) {
-        emitParticles(count, position, particleColor, 15.0f, 10.0f);
+        emitParticles(count, position, particleColor, 15.0f, 10.0f, 8f, 6f);
     }
 
+    
     /**
      * Emits a burst of particles that explodes out from @position in random
      * directions.
@@ -75,17 +74,35 @@ public class ParticleEmitter {
      * @param particleColor the color of the particles
      * @param sizeLimit the maximum size of the particles
      * @param speedLimit the maximum speed of the particles
+     * 
      */
     public void emitParticles(int count, PVector position, int particleColor, float sizeLimit, float speedLimit) {
+        emitParticles(count, position, particleColor, sizeLimit, speedLimit, 8f, 6f);
+    }
+    
+    /**
+     * Emits a burst of particles that explodes out from @position in random
+     * directions.
+     *
+     * @param count the number of particles
+     * @param position the position to emit the particles from
+     * @param particleColor the color of the particles
+     * @param sizeLimit the maximum size of the particles
+     * @param speedLimit the maximum speed of the particles
+     * @param opacityStep how much the particles opacity is reduces on each update
+     * @param lifeStep how much the particles life is reduced on each update
+     * 
+     */
+    public void emitParticles(int count, PVector position, int particleColor, float sizeLimit, float speedLimit, float opacityStep, float lifeStep) {
 
-        int start = (this.firstPosition + this.particleCount) % PARTICLE_LIMIT;
-
-        for (int i = 0; i < count; i++) {
-            this.particles[(start + i) % PARTICLE_LIMIT].reset(
+        for (int i=0; i < count; i++) {
+            this.particles[(particleCount + i) % PARTICLE_LIMIT].reset(
                     position.copy(),
                     PVector.random2D().mult(this.randomRange(0.2f, speedLimit)), // Velocity
                     particleColor,
-                    this.randomRange(2.0f, sizeLimit) // Particle size
+                    this.randomRange(2.0f, sizeLimit), // Particle size
+                    opacityStep,
+                    lifeStep
             );
         }
         this.particleCount = Math.min(PARTICLE_LIMIT, this.particleCount + count);
@@ -98,16 +115,11 @@ public class ParticleEmitter {
      */
     public void update(float timeDelta) {
 
-        int start = this.firstPosition;
-
         for (int i = 0; i < this.particleCount; i++) {
-            int pos = (start + i) % PARTICLE_LIMIT;
-
-            if (this.particles[pos].isAlive()) {
-                this.particles[pos].update(timeDelta);
-            } else {
-                this.particleCount--;
-                this.firstPosition = pos;
+            this.particles[i].update(timeDelta);
+            if (!this.particles[i].isAlive()) {   
+                recycle(i);
+                i--; // We have to update the particle that was swapped by the recycle
             }
         }
     }
@@ -118,16 +130,8 @@ public class ParticleEmitter {
      * @param canvas the canvas to draw to
      */
     public void draw(PGraphics canvas) {
-
-        int start = this.firstPosition;
-
         for (int i = 0; i < this.particleCount; i++) {
-            int pos = (start + i) % PARTICLE_LIMIT;
-
-            if (this.particles[pos].isAlive()) {
-                this.particles[pos].draw(canvas);
-
-            }
+            this.particles[i].draw(canvas);
         }
     }
 
@@ -136,6 +140,20 @@ public class ParticleEmitter {
      */
     private float randomRange(float min, float max) {
         return min + this.random.nextFloat() * ((max - min) + 1);
+    }
+    
+    /**
+     * Recycles a dead particle.
+     * 
+     * This is done by swapping the dead particles with the last known 
+     * live particles. This will keep all the live particles in the from 
+     * of the array and all the dead one at the end.
+     * 
+     */
+    private void recycle(int i){
+        Particle p = particles[i];
+        particles[i] = particles[--particleCount];
+        particles[particleCount] = p;
     }
 
     /**
@@ -151,7 +169,9 @@ public class ParticleEmitter {
         private int particleColor;
         private float size;
         private float opacity = 255; // 0-255;
-
+        private float opacityStep = 8.0f;
+        private float lifeStep = 6.0f;
+        
         /**
          * Constructor.
          */
@@ -164,8 +184,8 @@ public class ParticleEmitter {
          */
         public void update(float timeDelta) {
             this.position.add(this.velocity.copy().mult(timeDelta));
-            this.life -= (timeDelta * 5);
-            this.opacity -= (5 + this.velocity.mag());
+            this.life -= lifeStep; //(timeDelta * lifeStep);
+            this.opacity -= opacityStep; //(opacityStep + this.velocity.mag());
         }
 
         /**
@@ -181,13 +201,15 @@ public class ParticleEmitter {
         /**
          * Resets the particle
          */
-        public void reset(PVector position, PVector velocity, int pColor, float size) {
+        public void reset(PVector position, PVector velocity, int pColor, float size, float opacityStep, float lifeStep) {
             this.position = position;
             this.velocity = velocity;
             this.particleColor = pColor;
             this.life = 255;
             this.size = size;
             this.opacity = 255;
+            this.opacityStep = opacityStep + velocity.mag()/2.0f; // Make faster particles die quicker
+            this.lifeStep = lifeStep + velocity.mag()/2.0f;
         }
 
         /**

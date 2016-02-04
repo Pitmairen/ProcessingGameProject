@@ -2,19 +2,19 @@ package backend.actor;
 
 import backend.shipmodule.ShipModule;
 import processing.core.PGraphics;
-import userinterface.Drawable;
 import processing.core.PConstants;
+import processing.core.PImage;
 
 /**
  * The rockets need to be drawn on a offscreen graphics object to create the
  * trail/fading effect.
  *
  * It does not implement the normal draw method, but instead it uses a special
- * draw method that is called from the RocketLauncher class. which passes in the
+ * draw method that is called from the RocketManager class. which passes in the
  * graphics object that the rockets are drawn onto.
  *
  */
-public class Rocket extends Projectile implements Drawable {
+public class Rocket extends Projectile {
 
     private final int backgroundColor;
     private final float radius = 8.0f;
@@ -36,7 +36,7 @@ public class Rocket extends Projectile implements Drawable {
 
         name = "Rocket";
         hitBoxRadius = 8;
-        hitPoints = 1;
+        currentHitPoints = 1;
         mass = 3;
         collisionDamageToOthers = shipModule.getProjectileDamage();
 
@@ -53,13 +53,19 @@ public class Rocket extends Projectile implements Drawable {
 
     @Override
     public void draw() {
-        // Do nothing. The rockets are managed by the rocket launcher and are
+        // Do nothing. The rockets are managed by the rocket manager and are
         // drawn to the fading canvas. 
     }
 
     @Override
+    public void die() {
+        gameEngine.getExplosionManager().explodeRocket(this);
+        gameEngine.getCurrentLevel().getProjectiles().remove(this);
+    }
+
+    @Override
     public void targetHit() {
-        setHitPoints(0);
+        setCurrentHitPoints(0);
         hasExploded = true;
 
     }
@@ -68,8 +74,9 @@ public class Rocket extends Projectile implements Drawable {
      * Draws the ball
      *
      * @param canvas the graphics object to draw to
+     * @param image the background image to use for the rocket
      */
-    public void draw(PGraphics canvas) {
+    public void draw(PGraphics canvas, PImage image) {
         if (hasExploded) {
             return;
         }
@@ -79,9 +86,9 @@ public class Rocket extends Projectile implements Drawable {
         canvas.tint(this.backgroundColor, 255);
         canvas.fill(this.backgroundColor, 200);
 
-        canvas.image(playerOwner.getRocketLauncher().getRocketImage(),
-                (float) this.positionX, (float) this.positionY,
-                (float) this.radius * 2, (float) this.radius * 2);
+        canvas.image(image,
+                        (float) this.positionX, (float) this.positionY,
+                        (float) this.radius * 2, (float) this.radius * 2);
         canvas.ellipse((float) this.positionX, (float) this.positionY,
                 (float) this.radius / 2, (float) this.radius / 2);
     }

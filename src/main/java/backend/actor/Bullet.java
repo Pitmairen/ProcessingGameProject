@@ -22,7 +22,7 @@ public class Bullet extends Projectile implements Drawable {
 
         name = "Bullet";
         hitBoxRadius = 4;
-        hitPoints = 1;
+        currentHitPoints = 1;
         mass = 2;
         collisionDamageToOthers = shipModule.getProjectileDamage();
 
@@ -43,6 +43,11 @@ public class Bullet extends Projectile implements Drawable {
         guiHandler.stroke(bulletRGBA[0], bulletRGBA[1], bulletRGBA[2]);
         guiHandler.fill(bulletRGBA[0], bulletRGBA[1], bulletRGBA[2]);
         guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+    }
+
+    @Override
+    public void die() {
+        gameEngine.getCurrentLevel().getProjectiles().remove(this);
     }
 
     /**

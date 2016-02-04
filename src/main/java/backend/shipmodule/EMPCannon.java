@@ -1,34 +1,34 @@
 package backend.shipmodule;
 
-import backend.main.Timer;
 import backend.actor.Actor;
-import backend.actor.Bullet;
-import backend.actor.Projectile;
-import userinterface.Drawable;
+import backend.actor.EMPPulse;
+import backend.main.FadingCanvasItemManager;
+import backend.main.Timer;
 
 /**
- * Automatic cannon that fires bullets. Rapid fire and small damage.
- *
- * @author Kristian Honningsvag.
+ * Fires EMP Pulses
+ * 
+ * @author pitmairen
  */
-public class AutoCannon extends ShipModule implements Drawable {
+public class EMPCannon extends ShipModule {
 
     // Shape and color.
     private int turretLength = 27;
     private int turretWidth = 4;
     private int[] turretRGBA = new int[]{30, 30, 200, 255};
 
-    private double timeBetweenShots = 130;
+    private double timeBetweenShots = 3000;
     private Timer timer = new Timer();
+    private FadingCanvasItemManager fadingCanvasItems;
 
     /**
      * Constructor.
      */
-    public AutoCannon(Actor owner) {
-        super("Auto Cannon", owner);
+    public EMPCannon(Actor owner, FadingCanvasItemManager itemManager) {
+        super("EMP Cannon", owner);
 
-        launchVelocity = 1.8;
-        projectileDamage = 1.6;
+        this.fadingCanvasItems = itemManager;
+        projectileDamage = 1000;
     }
 
     @Override
@@ -42,18 +42,18 @@ public class AutoCannon extends ShipModule implements Drawable {
     }
 
     /**
-     * Fires a bullet from the actor towards the current heading.
+     * Fires a new EMP pulse.
      */
     @Override
     public void activate() {
 
         if (timer.timePassed() >= timeBetweenShots) {   // Check fire rate.
+            EMPPulse pulse = new EMPPulse(owner.getPositionX(), owner.getPositionY(), this);
 
-            Bullet bullet = new Bullet(owner.getPositionX(), owner.getPositionY(), this);
-
-            owner.getGameEngine().getCurrentLevel().getProjectiles().add(bullet);
-            owner.getGameEngine().getCurrentLevel().getActors().add(bullet);
-
+            owner.getGameEngine().getCurrentLevel().getProjectiles().add(pulse);
+            owner.getGameEngine().getCurrentLevel().getActors().add(pulse);
+            fadingCanvasItems.add(pulse);
+            
             timer.restart();
         }
     }

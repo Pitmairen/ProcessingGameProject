@@ -73,6 +73,7 @@ public class FadingCanvas {
         }
 
         this.canvas.endDraw();
+        gui.tint(255); // Reset tint 
         gui.image(this.canvas, 0, 0);
     }
 
