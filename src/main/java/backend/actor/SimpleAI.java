@@ -7,6 +7,8 @@ package backend.actor;
 
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
+import backend.main.Timer;
+import java.util.Random;
 
 /**
  *
@@ -21,23 +23,31 @@ public class SimpleAI implements AI {
     private Actor target;
     private double heading;
     private Enemy enemy;
+    
+    private double lastTimeFired = 0;
+    private double attackDelayFactor = 1;
+    private double attackDelay = 2000;
+    private Random random;
+    
     public SimpleAI(GameEngine gameEngine, Actor target, Enemy enemy) {
         this.gameEngine = gameEngine;
         this.target = target;
         this.enemy = enemy;
+        random = new Random();
     }
     
     
     @Override
     public void updateBehaviour(double timePassed) {
         targetPlayerLocation();
-        circleAroundTarget(timePassed, 600);
+        fireAtPlayer();
+        createMovement(timePassed);
     }
     
     /**
      * Sets heading towards the players location.
      */
-    protected void targetPlayerLocation() {
+    private void targetPlayerLocation() {
 
         xVector = target.getPositionX() - enemy.getPositionX();
         yVector = target.getPositionY() - enemy.getPositionY();
@@ -48,14 +58,14 @@ public class SimpleAI implements AI {
     /**
      * Fires a bullet towards the player.
      */
-    protected void fireAtPlayer() {
+    private void fireAtPlayer() {
 
-//        if (System.currentTimeMillis() - lastTimeFired > attackDelay * attackDelayFactor) {
-//            
-//            currentOffensiveModule.activate();
-//            lastTimeFired = System.currentTimeMillis();
-//            attackDelayFactor = random.nextFloat() + 1;
-//        }
+        if (System.currentTimeMillis() - lastTimeFired > attackDelay * attackDelayFactor) {
+            
+            enemy.getCurrentOffensiveModule().activate();
+            lastTimeFired = System.currentTimeMillis();
+            attackDelayFactor = random.nextFloat() + 1;
+        }
     }
 
     /**
@@ -72,7 +82,7 @@ public class SimpleAI implements AI {
      *
      * @param timePassed
      */
-    protected void circleAroundTarget(double timePassed, int minDistance) {
+    private void circleAroundTarget(double timePassed, int minDistance) {
 
         double distance = Math.sqrt(Math.pow(xVector, 2) + Math.pow(yVector, 2)); //Hypotenus calculated
 
@@ -90,5 +100,9 @@ public class SimpleAI implements AI {
         enemy.setSpeedX(speedX); 
         double speedY = enemy.getSpeedY() + (enemy.getAcceleration() * Math.sin(heading) * timePassed);
         enemy.setSpeedY(speedY); 
+    }
+    
+    protected void createMovement(double timePassed){
+        circleAroundTarget(timePassed, 600);
     }
 }
