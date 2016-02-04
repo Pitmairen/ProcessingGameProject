@@ -267,6 +267,7 @@ public class GameEngine {
     }
 
     // Getters.
+    
     public GUIHandler getGuiHandler() {
         return guiHandler;
     }
@@ -299,5 +300,4 @@ public class GameEngine {
     public void setSimulationState(String simulationState) {
         this.simulationState = simulationState;
     }
-
 }

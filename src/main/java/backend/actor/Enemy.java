@@ -18,46 +18,28 @@ public abstract class Enemy extends Actor implements Drawable {
     protected float attackDelayFactor = random.nextFloat() + 1;
     protected double lastTimeFired = 0;
     protected boolean isHostile = true;
+    protected AI ai;
 
     /**
      * Constructor.
      */
     protected Enemy(double positionX, double positionY, GameEngine gameEngine) {
-
+        
         super(positionX, positionY, gameEngine);
+        this.ai = null;
+        
     }
-
-    /**
-     * Sets heading towards the players location.
-     */
-    protected void targetPlayerLocation() {
-        double xVector = gameEngine.getCurrentLevel().getPlayer().getPositionX() - this.positionX;
-        double yVector = gameEngine.getCurrentLevel().getPlayer().getPositionY() - this.positionY;
-        heading = NumberCruncher.calculateAngle(xVector, yVector);
-    }
-
-    /**
-     * Fires a bullet towards the player.
-     */
-    protected void fireAtPlayer() {
-
-        if (System.currentTimeMillis() - lastTimeFired > attackDelay * attackDelayFactor) {
-
-            currentOffensiveModule.activate();
-            lastTimeFired = System.currentTimeMillis();
-            attackDelayFactor = random.nextFloat() + 1;
+    
+    @Override
+    public void act(double timePassed) {
+        if(ai != null){
+            ai.updateBehaviour(timePassed);
         }
+        
+        super.act(timePassed);
     }
 
-    /**
-     * Accelerate towards the target.
-     */
-    protected void approachTarget(double timePassed) {
-
-        if (speedT < speedLimit) {
-            speedX = speedX + (acceleration * Math.cos(heading) * timePassed);
-            speedY = speedY + (acceleration * Math.sin(heading) * timePassed);
-        }
+    public void setAI(AI ai){
+        this.ai = ai;
     }
-
 }

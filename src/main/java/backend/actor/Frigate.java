@@ -44,14 +44,6 @@ public class Frigate extends Enemy implements Drawable {
     }
 
     @Override
-    public void act(double timePassed) {
-        targetPlayerLocation();
-        fireAtPlayer();
-        approachTarget(timePassed);
-        super.act(timePassed);
-    }
-
-    @Override
     public void draw() {
 
         // Draw main body.
