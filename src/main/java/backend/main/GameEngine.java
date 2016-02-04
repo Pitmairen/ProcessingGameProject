@@ -1,17 +1,10 @@
 package backend.main;
 
 import backend.actor.Actor;
-import backend.actor.Enemy;
-import backend.actor.Rocket;
-import backend.actor.Frigate;
-import backend.actor.Player;
-import backend.item.Item;
 import backend.level.Level;
 import backend.level.LevelTest;
 import backend.resources.Image;
 import backend.resources.ResourceManager;
-import backend.shipmodule.RocketLauncher;
-import backend.shipmodule.ShipModule;
 import userinterface.GUIHandler;
 
 import java.awt.event.KeyEvent;

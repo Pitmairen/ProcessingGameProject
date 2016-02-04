@@ -6,6 +6,7 @@ import backend.main.GameEngine;
 import backend.main.NumberCruncher;
 import backend.main.Timer;
 import java.util.ArrayList;
+import processing.core.PVector;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
 
@@ -28,6 +29,9 @@ public abstract class Actor implements Drawable {
     protected double speedY = 0;
     protected double speedT; // Derived value.
     protected double speedLimit = 0;
+    
+    protected PVector forceT = new PVector();
+    
     // Acceleration. (pixels/ms^2)
     protected double acceleration = 0;
     protected double drag = 0;
