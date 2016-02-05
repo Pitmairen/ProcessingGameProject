@@ -113,16 +113,25 @@ public abstract class Actor implements Drawable {
     }
 
     /**
+     * Calculates the new speed vector based on the old one and the current
+     * acceleration.
      *
-     * @param timePassed
+     * @param timePassed Number of milliseconds since the previous simulation
+     * cycle.
      */
     protected void calcSpeed(double timePassed) {
         speedT.add(accelerationT.copy().mult(timePassed));    // v = v0 + a*dt
-        accelerationT.set(0, 0, 0);    // Reset the acceleration so it does not build up.
+        // Set speed to zero if the current speed is close to zero.
+        // This is to prevent the actors from never coming to a complete halt.
+        if (speedT.mag() < 0.001) {
+            speedT.setMag(0);
+        }
+        accelerationT.set(0, 0, 0);   // Reset the acceleration so it does not build up.
     }
 
     /**
-     *
+     * Calculates the current acceleration based on the actors mass and the sum
+     * of all of the forces applied.
      */
     protected void calcAcceleration() {
         accelerationT.add(forceT.copy().div(mass));     // f=m*a  =>  a=f/m
@@ -130,12 +139,16 @@ public abstract class Actor implements Drawable {
     }
 
     /**
-     * Makes the actor gradually come to a halt if no acceleration is applied.
+     * Adds a friction force in the opposite direction of the current speed
+     * vector. The magnitude of the friction force increases as the speed
+     * increases. This makes the actor gradually come to a halt if no
+     * acceleration is applied, and effectively sets a top speed limit for the
+     * actor.
      */
     protected void addFriction() {
         double frictionMagnitude = speedT.mag() * frictionCoefficient;
-        Vector frictionDirection = speedT.copy().normalize().mult(-1);
-        forceT.add(frictionDirection.mult(frictionMagnitude));
+        Vector frictionDirection = speedT.copy().normalize();
+        forceT.sub(frictionDirection.mult(frictionMagnitude));
     }
 
     /**
