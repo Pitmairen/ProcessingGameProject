@@ -18,7 +18,7 @@ public abstract class Enemy extends Actor implements Drawable {
     protected float attackDelayFactor = random.nextFloat() + 1;
     protected double lastTimeFired = 0;
     protected boolean isHostile = true;
-    protected AI ai;
+    protected AI ai = null;
 
     /**
      * Constructor.
@@ -26,8 +26,6 @@ public abstract class Enemy extends Actor implements Drawable {
     protected Enemy(Vector position, GameEngine gameEngine) {
         
         super(position, gameEngine);
-        this.ai = null;
-        
     }
     
     @Override

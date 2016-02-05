@@ -4,7 +4,6 @@ import backend.item.Item;
 import backend.item.ModuleContainer;
 import backend.item.Parts;
 import backend.main.GameEngine;
-import backend.main.NumberCruncher;
 import backend.main.Timer;
 import backend.main.Vector;
 import backend.shipmodule.AutoCannon;
@@ -31,7 +30,7 @@ public class Player extends Actor implements Drawable {
     private Timer defensiveModuleTimer = new Timer();
     private double offensiveModuleSwapDelay = 600;
     private double defensiveModuleSwapDelay = 600;
-    
+
     private int parts = 0;
 
     /**
@@ -43,7 +42,7 @@ public class Player extends Actor implements Drawable {
 
         name = "Player";
         engineThrust = 0.2f;
-        friction = 0.4;
+        frictionCoefficient = 0.4;
         hitBoxRadius = 20;
         bounceModifier = 0.6f;
         maxHitPoints = 30;
@@ -60,9 +59,7 @@ public class Player extends Actor implements Drawable {
     public void draw() {
 
         // Set heading.
-        double xVector = guiHandler.mouseX - this.getPosition().getX();
-        double yVector = guiHandler.mouseY - this.getPosition().getY();
-        heading = NumberCruncher.calculateAngle(xVector, yVector);
+        heading.set(guiHandler.mouseX - this.getPosition().getX(), guiHandler.mouseY - this.getPosition().getY(), 0);
 
         // Draw main body.
         guiHandler.strokeWeight(0);
@@ -114,23 +111,19 @@ public class Player extends Actor implements Drawable {
                     if (projectile.getShipModule().getOwner() == this) {
                         // This player crashed into a projectile fired by itself.
                         // No damage. Players can't collide with their own projectiles.
-                    }
-                    else {
+                    } else {
                         // This actor crashed into an unfriendly projectile.
                         elasticColision(this, target, timePassed);
                         this.collision(target);
                         target.collision(this);
                         projectile.targetHit();
                     }
-                }
-                
-                else if (target instanceof Item) {
+                } else if (target instanceof Item) {
                     if (target instanceof ModuleContainer) {
                         ModuleContainer modulePickup = (ModuleContainer) target;
                         ShipModule shipModule = (ShipModule) modulePickup.pickup(this);
                         offensiveModules.add(shipModule);
-                    }
-                    else if (target instanceof Parts) {
+                    } else if (target instanceof Parts) {
                         Parts pickedUpParts = (Parts) target;
                         this.parts++;
                     }

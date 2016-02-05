@@ -38,8 +38,8 @@ public class EMPCannon extends ShipModule {
         owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
         owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
         owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
-                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading())),
-                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading())));
+                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
+                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
     }
 
     /**

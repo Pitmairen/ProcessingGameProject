@@ -41,7 +41,7 @@ public class Rocket extends Projectile {
         mass = 3;
         collisionDamageToOthers = shipModule.getProjectileDamage();
 
-        setLaunchVelocity(shipModule.getOwner().getHeading());
+        setLaunchVelocity(shipModule.getOwner().getHeading().getAngle2D());
     }
 
     @Override

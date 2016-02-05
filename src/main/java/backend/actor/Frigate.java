@@ -21,9 +21,10 @@ public class Frigate extends Enemy implements Drawable {
 
     // Modules.
     private LightCannon LightCannon = new LightCannon(this);
-    
+
     //Image
-    private final PImage enemyGraphics; 
+    private final PImage enemyGraphics;
+
     /**
      * Constructor.
      */
@@ -33,7 +34,7 @@ public class Frigate extends Enemy implements Drawable {
 
         name = "Frigate";
         engineThrust = 0.0015f;
-        friction = 0.001f;
+        frictionCoefficient = 0.001f;
         hitBoxRadius = 15;
         bounceModifier = 0.6f;
         currentHitPoints = 10;
@@ -44,7 +45,7 @@ public class Frigate extends Enemy implements Drawable {
 
         offensiveModules.add(LightCannon);
         currentOffensiveModule = LightCannon;
-        
+
         enemyGraphics = guiHandler.loadImage("multishotDrone.png");
     }
 
@@ -52,15 +53,11 @@ public class Frigate extends Enemy implements Drawable {
     public void draw() {
 
         // Draw main body.
-        //guiHandler.strokeWeight(0);
-        //guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        //guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        //guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
-        guiHandler.image(enemyGraphics,(float) this.getPosition().getX()-15, (float) this.getPosition().getY()-15);
-        guiHandler.strokeWeight(0);
-        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+//        guiHandler.strokeWeight(0);
+//        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+//        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+//        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+        guiHandler.image(enemyGraphics, (float) this.getPosition().getX() - 15, (float) this.getPosition().getY() - 15);
 
         // Draw modules.
         if (currentOffensiveModule != null) {

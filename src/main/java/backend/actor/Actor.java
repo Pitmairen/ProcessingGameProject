@@ -11,43 +11,46 @@ import userinterface.GUIHandler;
 
 /**
  * Super class for all actors. An actor is an entity that can actively interact
- * with the player in a way.
+ * with the player.
  *
  * @author Kristian Honningsvag.
  */
 public abstract class Actor implements Drawable {
 
+    // Vectors.
     protected Vector position = new Vector();
     protected Vector speedT = new Vector();
-    protected Vector forceT = new Vector();         // The sum of all the forces working on the actor.
-    protected Vector accelerationT = new Vector();  // Derived.
-
-    protected double engineThrust = 0;
-    protected double friction = 0;
-    protected double heading = 0;       // Which direction the actor is pointing.
+    protected Vector forceT = new Vector();     // The sum of all the forces working on the actor.
+    protected Vector accelerationT = new Vector();
+    protected Vector heading = new Vector();    // Which direction the actor is currently pointing.
 
     // Attributes.
     protected String name = "NAME NOT SET";
     protected double hitBoxRadius = 0;
-    protected double mass = 1;
+    protected double mass = 0;
+    protected double engineThrust = 0;
+    protected double frictionCoefficient = 0;
     protected double bounceModifier = 0;
     protected double maxHitPoints = 0;
     protected double currentHitPoints = 0;
     protected double collisionDamageToOthers = 0;
+
     // Score system.
     protected int killValue = 0;
     protected int killChain = 0;
     protected int score = 0;
+
     // Modules.
     protected ArrayList<ShipModule> offensiveModules = new ArrayList<>();
     protected ArrayList<ShipModule> defensiveModules = new ArrayList<>();
     protected ShipModule currentOffensiveModule = null;
     protected ShipModule currentDefensiveModule = null;
+
     // Simulation.
     protected GameEngine gameEngine;               // From constructor.
     protected GUIHandler guiHandler;               // Set in constructor.
     protected CollisionDetector collisionDetector; // Set in constructor.
-    protected Actor whoHitMeLast = this;
+    protected Actor whoHitMeLast = null;
     protected Timer timer = new Timer();
 
     /**
@@ -130,7 +133,7 @@ public abstract class Actor implements Drawable {
      * Makes the actor gradually come to a halt if no acceleration is applied.
      */
     protected void addFriction() {
-        double frictionMagnitude = speedT.mag() * friction;
+        double frictionMagnitude = speedT.mag() * frictionCoefficient;
         Vector frictionDirection = speedT.copy().normalize().mult(-1);
         forceT.add(frictionDirection.mult(frictionMagnitude));
     }
@@ -417,11 +420,11 @@ public abstract class Actor implements Drawable {
         return engineThrust;
     }
 
-    public double getFriction() {
-        return friction;
+    public double getFrictionCoefficient() {
+        return frictionCoefficient;
     }
 
-    public double getHeading() {
+    public Vector getHeading() {
         return heading;
     }
 
@@ -430,12 +433,9 @@ public abstract class Actor implements Drawable {
     }
 
     // Setters.
+    @Deprecated
     public void setCurrentHitPoints(double currentHitPoints) {
         this.currentHitPoints = currentHitPoints;
-    }
-
-    public void setHeading(double heading) {
-        this.heading = heading;
     }
 
 }

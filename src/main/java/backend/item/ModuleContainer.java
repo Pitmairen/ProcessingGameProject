@@ -28,6 +28,7 @@ public class ModuleContainer extends Item implements Drawable {
 
         this.shipModule = shipModule;
 
+        mass = 1;
         hitBoxRadius = 20;
     }
 

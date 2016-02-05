@@ -27,7 +27,7 @@ public class Bullet extends Projectile implements Drawable {
         mass = 2;
         collisionDamageToOthers = shipModule.getProjectileDamage();
 
-        setLaunchVelocity(shipModule.getOwner().getHeading());
+        setLaunchVelocity(shipModule.getOwner().getHeading().getAngle2D());
     }
 
     @Override
