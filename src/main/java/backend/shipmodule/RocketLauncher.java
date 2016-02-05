@@ -61,7 +61,7 @@ public class RocketLauncher extends ShipModule {
 
         // Wait for timer for each shot.
         if (timer.timePassed() >= timeBetweenShots) {
-            Rocket rocket = new Rocket(new Vector(owner.getPosition().getX(), owner.getPosition().getY(), 0), this);
+            Rocket rocket = new Rocket(owner.getPosition().copy(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(rocket);
             owner.getGameEngine().getCurrentLevel().getActors().add(rocket);

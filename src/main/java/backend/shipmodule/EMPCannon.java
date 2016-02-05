@@ -49,7 +49,7 @@ public class EMPCannon extends ShipModule {
     public void activate() {
 
         if (timer.timePassed() >= timeBetweenShots) {   // Check fire rate.
-            EMPPulse pulse = new EMPPulse(new Vector(owner.getPosition().getX(), owner.getPosition().getY(), 0), this);
+            EMPPulse pulse = new EMPPulse(owner.getPosition().copy(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(pulse);
             owner.getGameEngine().getCurrentLevel().getActors().add(pulse);

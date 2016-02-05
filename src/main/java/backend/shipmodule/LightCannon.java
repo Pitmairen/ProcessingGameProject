@@ -50,7 +50,7 @@ public class LightCannon extends ShipModule implements Drawable {
 
         if (timer.timePassed() >= timeBetweenShots) {   // Check fire rate.
 
-            Bullet bullet = new Bullet(new Vector(owner.getPosition().getX(), owner.getPosition().getY(), 0), this);
+            Bullet bullet = new Bullet(owner.getPosition().copy(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(bullet);
             owner.getGameEngine().getCurrentLevel().getActors().add(bullet);
