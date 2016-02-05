@@ -238,7 +238,14 @@ public class GUIHandler extends PApplet {
         stroke(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
         fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
         textFont(menuFont);
-        text("You Were Defeated By " + gameEngine.getCurrentLevel().getPlayer().getWhoHitMeLast().getName()
+        
+        String hitByName = "N/A";
+        Actor lastHitBy = gameEngine.getCurrentLevel().getPlayer().getWhoHitMeLast();
+        if(lastHitBy != null){
+            hitByName = lastHitBy.getName();
+        }
+        
+        text("You Were Defeated By " + hitByName
                 + "\n" + "Press \"Space\" to return to Start Menu."
                 + "\n"
                 + "\n"
