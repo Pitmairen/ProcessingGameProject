@@ -33,12 +33,12 @@ public class Frigate extends Enemy implements Drawable {
         super(position, gameEngine);
 
         name = "Frigate";
-        engineThrust = 0.12f;
-        frictionCoefficient = 0.4f;
+        engineThrust = 0.02f;
+        frictionCoefficient = 0.04f;
         hitBoxRadius = 15;
         bounceModifier = 0.6f;
         currentHitPoints = 10;
-        mass = 30;
+        mass = 25;
         collisionDamageToOthers = 2;
         attackDelay = 2000;
         killValue = 1;
