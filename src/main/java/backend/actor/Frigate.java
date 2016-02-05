@@ -57,6 +57,7 @@ public class Frigate extends Enemy implements Drawable {
 //        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
 //        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
 //        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+        guiHandler.tint(255);
         guiHandler.image(enemyGraphics, (float) this.getPosition().getX() - 15, (float) this.getPosition().getY() - 15);
 
         // Draw modules.
