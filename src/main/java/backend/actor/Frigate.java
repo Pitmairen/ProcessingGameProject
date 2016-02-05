@@ -5,6 +5,7 @@ import backend.item.Parts;
 import backend.main.GameEngine;
 import backend.shipmodule.LightCannon;
 import java.util.ArrayList;
+import processing.core.PImage;
 import userinterface.Drawable;
 
 /**
@@ -19,7 +20,9 @@ public class Frigate extends Enemy implements Drawable {
 
     // Modules.
     private LightCannon LightCannon = new LightCannon(this);
-
+    
+    //Image
+    private final PImage enemyGraphics; 
     /**
      * Constructor.
      */
@@ -41,17 +44,19 @@ public class Frigate extends Enemy implements Drawable {
 
         offensiveModules.add(LightCannon);
         currentOffensiveModule = LightCannon;
+        
+        enemyGraphics = guiHandler.loadImage("multishotDrone.png");
     }
 
     @Override
     public void draw() {
 
         // Draw main body.
-        guiHandler.strokeWeight(0);
-        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
-
+        //guiHandler.strokeWeight(0);
+        //guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+        //guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+        //guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+        guiHandler.image(enemyGraphics,(float) this.getPositionX()-15, (float) this.getPositionY()-15);
         // Draw modules.
         if (currentOffensiveModule != null) {
             currentOffensiveModule.draw();
