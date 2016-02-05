@@ -151,6 +151,15 @@ public abstract class Actor implements Drawable {
     }
 
     /**
+     * Apply a force to the actor.
+     *
+     * @param force the force to apply
+     */
+    public void applyForce(Vector force) {
+        forceT.add(force);
+    }
+    
+    /**
      * Accelerates the actor in the given direction.
      *
      * @param direction The direction of the accelerationTemp.

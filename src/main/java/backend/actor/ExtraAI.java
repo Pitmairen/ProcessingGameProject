@@ -19,7 +19,7 @@ public class ExtraAI extends SimpleAI{
     
     @Override
     protected void createMovement(double timePassed){
-        approachTarget(timePassed);
+        approachTarget();
     }
     
 }

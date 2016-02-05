@@ -10,9 +10,7 @@ import java.util.Random;
  */
 public class SimpleAI implements AI {
 
-    private double xVector = 0;
-    private double yVector = 0;
-    private double timeReference = 0;
+
     private GameEngine gameEngine;
     private Actor target;
     private Vector heading = new Vector();
@@ -41,8 +39,8 @@ public class SimpleAI implements AI {
      * Sets heading towards the players location.
      */
     private void targetPlayerLocation() {
-        heading.set(target.getPosition().getX() - enemy.getPosition().getX(), target.getPosition().getY() - enemy.getPosition().getY(), 0);
-        enemy.getHeading().set(target.getPosition().getX() - enemy.getPosition().getX(), target.getPosition().getY() - enemy.getPosition().getY(), 0);
+        heading = target.getPosition().copy().sub(enemy.getPosition());
+        enemy.getHeading().set(heading);
     }
 
     /**
@@ -61,8 +59,8 @@ public class SimpleAI implements AI {
     /**
      * Accelerate into the target.
      */
-    protected void approachTarget(double timePassed) {
-        setSpeeds(timePassed);
+    protected void approachTarget() {
+        setSpeeds();
     }
 
     /**
@@ -70,27 +68,20 @@ public class SimpleAI implements AI {
      *
      * @param timePassed
      */
-    private void circleAroundTarget(double timePassed, int minDistance) {
+    private void circleAroundTarget(int minDistance) {
 
-        double distance = Math.sqrt(Math.pow(xVector, 2) + Math.pow(yVector, 2)); //Hypotenus calculated
-
-        if (distance > minDistance) {
-            timeReference = timePassed;
-            approachTarget(timePassed);
-        } else if (distance <= minDistance) {
-            enemy.getHeading().rotate(Math.PI / 4);
-            setSpeeds(timePassed);
+        double distance = heading.mag();
+        if (distance <= minDistance) {
+            heading.rotate(Math.PI/2.5);
         }
+        approachTarget();
     }
 
-    private void setSpeeds(double timePassed) {
-//        double speedX = enemy.getSpeed().getX() + (enemy.getAccelerationTemp() * Math.cos(heading) * timePassed);
-//        enemy.getSpeed().setX(speedX);
-//        double speedY = enemy.getSpeed().getY() + (enemy.getAccelerationTemp() * Math.sin(heading) * timePassed);
-//        enemy.getSpeed().setY(speedY);
+    private void setSpeeds() {
+        enemy.applyForce(heading.normalize().mult(enemy.getEngineThrust()));
     }
 
     protected void createMovement(double timePassed) {
-        circleAroundTarget(timePassed, 600);
+        circleAroundTarget(600);
     }
 }
