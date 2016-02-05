@@ -146,9 +146,8 @@ public abstract class Actor implements Drawable {
      * actor.
      */
     protected void addFriction() {
-        double frictionMagnitude = speedT.mag() * frictionCoefficient;
-        Vector frictionDirection = speedT.copy().normalize();
-        forceT.sub(frictionDirection.mult(frictionMagnitude));
+        // simple linear drag Fd = -b*velocity
+        forceT.add(speedT.copy().mult(-frictionCoefficient)); 
     }
 
     /**
