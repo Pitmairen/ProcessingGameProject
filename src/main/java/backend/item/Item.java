@@ -3,6 +3,7 @@ package backend.item;
 import backend.actor.Actor;
 import backend.actor.Player;
 import backend.main.GameEngine;
+import backend.main.Vector;
 import java.util.ArrayList;
 import userinterface.Drawable;
 
@@ -16,9 +17,9 @@ public abstract class Item extends Actor implements Drawable {
     /**
      * Constructor.
      */
-    public Item(double positionX, double positionY, GameEngine gameEngine) {
+    public Item(Vector position, GameEngine gameEngine) {
 
-        super(positionX, positionY, gameEngine);
+        super(position, gameEngine);
 
         currentHitPoints = 1;
     }

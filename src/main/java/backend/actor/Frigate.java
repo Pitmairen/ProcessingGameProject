@@ -3,6 +3,7 @@ package backend.actor;
 import backend.item.Item;
 import backend.item.Parts;
 import backend.main.GameEngine;
+import backend.main.Vector;
 import backend.shipmodule.LightCannon;
 import java.util.ArrayList;
 import processing.core.PImage;
@@ -26,14 +27,13 @@ public class Frigate extends Enemy implements Drawable {
     /**
      * Constructor.
      */
-    public Frigate(double positionX, double positionY, GameEngine gameEngine) {
+    public Frigate(Vector position, GameEngine gameEngine) {
 
-        super(positionX, positionY, gameEngine);
+        super(position, gameEngine);
 
         name = "Frigate";
-        speedLimit = 0.4f;
-        acceleration = 0.0015f;
-        drag = 0.001f;
+        engineThrust = 0.0015f;
+        friction = 0.001f;
         hitBoxRadius = 15;
         bounceModifier = 0.6f;
         currentHitPoints = 10;
@@ -56,7 +56,12 @@ public class Frigate extends Enemy implements Drawable {
         //guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
         //guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
         //guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
-        guiHandler.image(enemyGraphics,(float) this.getPositionX()-15, (float) this.getPositionY()-15);
+        guiHandler.image(enemyGraphics,(float) this.getPosition().getX()-15, (float) this.getPosition().getY()-15);
+        guiHandler.strokeWeight(0);
+        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+
         // Draw modules.
         if (currentOffensiveModule != null) {
             currentOffensiveModule.draw();
@@ -74,7 +79,7 @@ public class Frigate extends Enemy implements Drawable {
         gameEngine.getCurrentLevel().getEnemies().remove(this);
 
         // Spawn parts.
-        Parts parts = new Parts(positionX, positionY, gameEngine);
+        Parts parts = new Parts(new Vector(this.getPosition().getX(), this.getPosition().getY(), 0), gameEngine);
         gameEngine.getCurrentLevel().getItems().add(parts);
         gameEngine.getCurrentLevel().getActors().add(parts);
     }
@@ -92,25 +97,20 @@ public class Frigate extends Enemy implements Drawable {
 
                     if (projectile.getShipModule().getOwner() == this) {
                         // No damage from your own projectiles.
-                    }
-                    else if (projectile.getShipModule().getOwner() instanceof Enemy) {
+                    } else if (projectile.getShipModule().getOwner() instanceof Enemy) {
                         // No damage from other enemy projectiles.
-                    }
-                    else {
+                    } else {
                         // Crashed into an unfriendly projectile.
                         elasticColision(this, target, timePassed);
                         this.collision(target);
                         target.collision(this);
                         projectile.targetHit();
                     }
-                }
-                else if (target instanceof Item) {
+                } else if (target instanceof Item) {
                     // No interaction with items.
-                }
-                else if (target instanceof Enemy) {
+                } else if (target instanceof Enemy) {
                     elasticColision(this, target, timePassed);
-                }
-                else {
+                } else {
                     // Crashed into some other actor.
                     elasticColision(this, target, timePassed);
                     this.collision(target);

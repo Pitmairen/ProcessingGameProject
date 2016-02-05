@@ -2,6 +2,7 @@ package backend.item;
 
 import backend.actor.Actor;
 import backend.main.GameEngine;
+import backend.main.Vector;
 import userinterface.Drawable;
 
 /**
@@ -17,9 +18,9 @@ public class Parts extends Item implements Drawable {
     /**
      * Constructor.
      */
-    public Parts(double positionX, double positionY, GameEngine gameEngine) {
+    public Parts(Vector position, GameEngine gameEngine) {
 
-        super(positionX, positionY, gameEngine);
+        super(position, gameEngine);
 
         hitBoxRadius = 5;
     }
@@ -30,7 +31,7 @@ public class Parts extends Item implements Drawable {
         guiHandler.strokeWeight(0);
         guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
         guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
     }
 
     @Override

@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package backend.actor;
 
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
-import backend.main.Timer;
 import java.util.Random;
 
 /**
@@ -49,8 +44,8 @@ public class SimpleAI implements AI {
      */
     private void targetPlayerLocation() {
 
-        xVector = target.getPositionX() - enemy.getPositionX();
-        yVector = target.getPositionY() - enemy.getPositionY();
+        xVector = target.getPosition().getX()- enemy.getPosition().getX();
+        yVector = target.getPosition().getY() - enemy.getPosition().getY();
         heading = NumberCruncher.calculateAngle(xVector, yVector);
         enemy.setHeading(heading);
     }
@@ -72,9 +67,7 @@ public class SimpleAI implements AI {
      * Accelerate into the target.
      */
     protected void approachTarget(double timePassed) {
-        if (enemy.getSpeedT() < enemy.getSpeedLimit()) {
             setSpeeds(timePassed);
-        }
     }
 
     /**
@@ -96,10 +89,10 @@ public class SimpleAI implements AI {
     }
 
     private void setSpeeds(double timePassed) {
-        double speedX = enemy.getSpeedX() + (enemy.getAcceleration() * Math.cos(heading) * timePassed);
-        enemy.setSpeedX(speedX); 
-        double speedY = enemy.getSpeedY() + (enemy.getAcceleration() * Math.sin(heading) * timePassed);
-        enemy.setSpeedY(speedY); 
+//        double speedX = enemy.getSpeed().getX() + (enemy.getAccelerationTemp() * Math.cos(heading) * timePassed);
+//        enemy.getSpeed().setX(speedX); 
+//        double speedY = enemy.getSpeed().getY() + (enemy.getAccelerationTemp() * Math.sin(heading) * timePassed);
+//        enemy.getSpeed().setY(speedY); 
     }
     
     protected void createMovement(double timePassed){

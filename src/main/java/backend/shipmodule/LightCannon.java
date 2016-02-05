@@ -3,7 +3,7 @@ package backend.shipmodule;
 import backend.main.Timer;
 import backend.actor.Actor;
 import backend.actor.Bullet;
-import backend.actor.Projectile;
+import backend.main.Vector;
 import userinterface.Drawable;
 
 /**
@@ -37,9 +37,9 @@ public class LightCannon extends ShipModule implements Drawable {
         owner.getGuiHandler().strokeWeight(turretWidth);
         owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
         owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-        owner.getGuiHandler().line((float) owner.getPositionX(), (float) owner.getPositionY(),
-                (float) owner.getPositionX() + (float) (turretLength * Math.cos(owner.getHeading())),
-                (float) owner.getPositionY() + (float) (turretLength * Math.sin(owner.getHeading())));
+        owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
+                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading())),
+                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading())));
     }
 
     /**
@@ -50,7 +50,7 @@ public class LightCannon extends ShipModule implements Drawable {
 
         if (timer.timePassed() >= timeBetweenShots) {   // Check fire rate.
 
-            Bullet bullet = new Bullet(owner.getPositionX(), owner.getPositionY(), this);
+            Bullet bullet = new Bullet(new Vector(owner.getPosition().getX(), owner.getPosition().getY(), 0), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(bullet);
             owner.getGameEngine().getCurrentLevel().getActors().add(bullet);

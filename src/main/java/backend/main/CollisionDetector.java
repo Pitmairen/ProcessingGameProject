@@ -32,16 +32,16 @@ public class CollisionDetector {
 
         String wallLocation = null;
 
-        if (movingActor.getPositionX() + movingActor.getHitBoxRadius() >= (gameEngine.getGuiHandler().getWidth() - gameEngine.getGuiHandler().getOuterWallThickness())) {
+        if (movingActor.getPosition().getX() + movingActor.getHitBoxRadius() >= (gameEngine.getGuiHandler().getWidth() - gameEngine.getGuiHandler().getOuterWallThickness())) {
             wallLocation = "east";
         }
-        if (movingActor.getPositionY() + (movingActor.getHitBoxRadius()) >= (gameEngine.getGuiHandler().getHeight() - gameEngine.getGuiHandler().getOuterWallThickness())) {
+        if (movingActor.getPosition().getY() + (movingActor.getHitBoxRadius()) >= (gameEngine.getGuiHandler().getHeight() - gameEngine.getGuiHandler().getOuterWallThickness())) {
             wallLocation = "south";
         }
-        if (movingActor.getPositionX() - (movingActor.getHitBoxRadius()) <= (0 + gameEngine.getGuiHandler().getOuterWallThickness())) {
+        if (movingActor.getPosition().getX() - (movingActor.getHitBoxRadius()) <= (0 + gameEngine.getGuiHandler().getOuterWallThickness())) {
             wallLocation = "west";
         }
-        if (movingActor.getPositionY() - (movingActor.getHitBoxRadius()) <= (0 + gameEngine.getGuiHandler().getOuterWallThickness())) {
+        if (movingActor.getPosition().getY() - (movingActor.getHitBoxRadius()) <= (0 + gameEngine.getGuiHandler().getOuterWallThickness())) {
             wallLocation = "north";
         }
         return wallLocation;
@@ -65,8 +65,8 @@ public class CollisionDetector {
             if (actorInList != movingActor) {
 
                 // Detection between to round objects.
-                double dx = Math.abs(actorInList.getPositionX() - movingActor.getPositionX());
-                double dy = Math.abs(actorInList.getPositionY() - movingActor.getPositionY());
+                double dx = Math.abs(actorInList.getPosition().getX() - movingActor.getPosition().getX());
+                double dy = Math.abs(actorInList.getPosition().getY() - movingActor.getPosition().getY());
                 double distanceBetweenActors = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
                 if (distanceBetweenActors < movingActor.getHitBoxRadius() + actorInList.getHitBoxRadius()) {
                     collisions.add(actorInList);

@@ -8,9 +8,9 @@ package backend.main;
  */
 public class Vector {
 
-    private float x;
-    private float y;
-    private float z;
+    private double x;
+    private double y;
+    private double z;
 
     /**
      * Constructor. Creates a zero-vector.
@@ -29,7 +29,7 @@ public class Vector {
      * @param y The vectors Y-component.
      * @param z The vectors Z-component.
      */
-    public Vector(float x, float y, float z) {
+    public Vector(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -42,7 +42,7 @@ public class Vector {
      * @param y The Y component to be added.
      * @param z The Z component to be added.
      */
-    public void add(float x, float y, float z) {
+    public void add(double x, double y, double z) {
         this.x = this.x + x;
         this.y = this.y + y;
         this.z = this.z + z;
@@ -81,7 +81,7 @@ public class Vector {
      * @param y The Y component to be subtracted.
      * @param z The Z component to be subtracted.
      */
-    public void sub(float x, float y, float z) {
+    public void sub(double x, double y, double z) {
         this.x = this.x - x;
         this.y = this.y - y;
         this.z = this.z - z;
@@ -99,25 +99,29 @@ public class Vector {
     }
 
     /**
-     * Multiplies this vector with a scalar.
+     * Multiplies this vector with a scalar and returns this vector.
      *
      * @param n The scalar to multiply with the vector.
+     * @return The resulting vector.
      */
-    public void mult(float n) {
+    public Vector mult(double n) {
         this.x = this.x * n;
         this.y = this.y * n;
         this.z = this.z * n;
+        return this;
     }
 
     /**
-     * Divides this vector by a scalar.
+     * Divides this vector by a scalar and returns this vector.
      *
      * @param n The scalar to divide the vector by.
+     * @return The resulting vector.
      */
-    public void div(float n) {
+    public Vector div(double n) {
         this.x = this.x / n;
         this.y = this.y / n;
         this.z = this.z / n;
+        return this;
     }
 
     /**
@@ -127,8 +131,8 @@ public class Vector {
      *
      * @return The magnitude of the vector.
      */
-    public float mag() {
-        return (float) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+    public double mag() {
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
     }
 
     /**
@@ -145,11 +149,11 @@ public class Vector {
      * @param v2 The second point in vector form.
      * @return The distance between the two points.
      */
-    public float dist(Vector v2) {
-        float dx = this.x - v2.getX();
-        float dy = this.y - v2.getY();
-        float dz = this.z - v2.getZ();
-        return (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
+    public double dist(Vector v2) {
+        double dx = this.x - v2.getX();
+        double dy = this.y - v2.getY();
+        double dz = this.z - v2.getZ();
+        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
     }
 
     /**
@@ -160,11 +164,11 @@ public class Vector {
      * @param v2 The second point in vector form.
      * @return The distance between the two points.
      */
-    public float dist(Vector v1, Vector v2) {
-        float dx = v1.getX() - v2.getX();
-        float dy = v1.getY() - v2.getY();
-        float dz = v1.getZ() - v2.getZ();
-        return (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
+    public double dist(Vector v1, Vector v2) {
+        double dx = v1.getX() - v2.getX();
+        double dy = v1.getY() - v2.getY();
+        double dz = v1.getZ() - v2.getZ();
+        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
     }
 
     /**
@@ -174,7 +178,7 @@ public class Vector {
      * @param v2 The second vector.
      * @return The dot product.
      */
-    public float dot(Vector v2) {
+    public double dot(Vector v2) {
         return this.x * v2.getX() + this.y * v2.getY() + this.z * v2.getZ();
     }
 
@@ -186,7 +190,7 @@ public class Vector {
      * @param v2 The second vector.
      * @return The dot product.
      */
-    public float dot(Vector v1, Vector v2) {
+    public double dot(Vector v1, Vector v2) {
         return v1.getX() * v2.getX() + v1.getY() * v2.getY() + v1.getZ() * v2.getZ();
     }
 
@@ -198,9 +202,9 @@ public class Vector {
      * @return The cross product.
      */
     public Vector cross(Vector v2) {
-        float crossX = this.getY() * v2.getZ() - this.getZ() * v2.getY();
-        float crossY = this.getZ() * v2.getX() - this.getX() * v2.getZ();
-        float crossZ = this.getX() * v2.getY() - this.getY() * v2.getX();
+        double crossX = this.getY() * v2.getZ() - this.getZ() * v2.getY();
+        double crossY = this.getZ() * v2.getX() - this.getX() * v2.getZ();
+        double crossZ = this.getX() * v2.getY() - this.getY() * v2.getX();
         return new Vector(crossX, crossY, crossZ);
     }
 
@@ -213,20 +217,23 @@ public class Vector {
      * @return The cross product.
      */
     public Vector cross(Vector v1, Vector v2) {
-        float crossX = v1.getY() * v2.getZ() - v1.getZ() * v2.getY();
-        float crossY = v1.getZ() * v2.getX() - v1.getX() * v2.getZ();
-        float crossZ = v1.getX() * v2.getY() - v1.getY() * v2.getX();
+        double crossX = v1.getY() * v2.getZ() - v1.getZ() * v2.getY();
+        double crossY = v1.getZ() * v2.getX() - v1.getX() * v2.getZ();
+        double crossZ = v1.getX() * v2.getY() - v1.getY() * v2.getX();
         return new Vector(crossX, crossY, crossZ);
     }
 
     /**
      * Transform this vector to an unit vector by making it length 1.
+     *
+     * @return The resulting vector.
      */
-    public void normalize() {
-        float m = this.mag();
+    public Vector normalize() {
+        double m = this.mag();
         if (m != 0 && m != 1) {
             this.div(m);
         }
+        return this;
     }
 
     /**
@@ -234,7 +241,7 @@ public class Vector {
      *
      * @param magnitude The new magnitude of the vector.
      */
-    public void setMag(float magnitude) {
+    public void setMag(double magnitude) {
         this.normalize();
         this.mult(magnitude);
     }
@@ -244,8 +251,8 @@ public class Vector {
      *
      * @return Angle of rotation in radians.
      */
-    public float heading2D() {
-        float angle = (float) Math.atan2(this.y, this.x);
+    public double heading2D() {
+        double angle = Math.atan2(this.y, this.x);
         return angle;
     }
 
@@ -254,10 +261,10 @@ public class Vector {
      *
      * @param angle The angle of rotation.
      */
-    public void rotate(float angle) {
-        float oldX = x;
-        this.x = this.x * (float) Math.cos(angle) - this.y * (float) Math.sin(angle);
-        this.y = oldX * (float) Math.sin(angle) + y * (float) Math.cos(angle);
+    public void rotate(double angle) {
+        double oldX = x;
+        this.x = this.x * Math.cos(angle) - this.y * Math.sin(angle);
+        this.y = oldX * Math.sin(angle) + y * Math.cos(angle);
     }
 
     /**
@@ -270,7 +277,7 @@ public class Vector {
      * vector.
      * @return The point of interpolation in vector form.
      */
-    public Vector linInterp(Vector v1, Vector v2, float pos) {
+    public Vector linInterp(Vector v1, Vector v2, double pos) {
         Vector v3 = new Vector();
         v3.setX(v1.getX() + (v2.getX() - v1.getX()) * pos);
         v3.setY(v1.getY() + (v2.getY() - v1.getY()) * pos);
@@ -285,7 +292,7 @@ public class Vector {
      * @param v2 The second vector.
      * @return The angle between the vectors in radians.
      */
-    public float angleBetween(Vector v2) {
+    public double angleBetween(Vector v2) {
 
         // Return zero if one of the vectors are zero.
         if ((this.x == 0 && this.y == 0 && this.z == 0) || (v2.getX() == 0 && v2.getY() == 0 && v2.getZ() == 0)) {
@@ -298,52 +305,52 @@ public class Vector {
         double amt = dot / (v1mag * v2mag);  // This should be a number between -1 and 1.
 
         if (amt <= -1) {
-            return (float) Math.PI;
+            return Math.PI;
         } else if (amt >= 1) {
             return 0;
         }
-        return (float) Math.acos(amt);
+        return Math.acos(amt);
     }
 
     /**
      * Returns the vectors X-component.
      */
-    public float getX() {
+    public double getX() {
         return x;
     }
 
     /**
      * Returns the vectors Y-component.
      */
-    public float getY() {
+    public double getY() {
         return y;
     }
 
     /**
      * Returns the vectors Z-component.
      */
-    public float getZ() {
+    public double getZ() {
         return z;
     }
 
     /**
      * Sets the vectors X-component.
      */
-    public void setX(float x) {
+    public void setX(double x) {
         this.x = x;
     }
 
     /**
      * Sets the vectors Y-component.
      */
-    public void setY(float y) {
+    public void setY(double y) {
         this.y = y;
     }
 
     /**
      * Sets the vectors Z-component.
      */
-    public void setZ(float z) {
+    public void setZ(double z) {
         this.z = z;
     }
 
@@ -355,7 +362,7 @@ public class Vector {
      * @param y The vectors new Y component.
      * @param z The vectors new Z component.
      */
-    public void set(float x, float y, float z) {
+    public void set(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;

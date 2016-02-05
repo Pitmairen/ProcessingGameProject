@@ -3,10 +3,9 @@ package backend.actor;
 import backend.shipmodule.ShipModule;
 import backend.main.CollisionDetector;
 import backend.main.GameEngine;
-import backend.main.NumberCruncher;
 import backend.main.Timer;
+import backend.main.Vector;
 import java.util.ArrayList;
-import processing.core.PVector;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
 
@@ -18,28 +17,19 @@ import userinterface.GUIHandler;
  */
 public abstract class Actor implements Drawable {
 
-    // Position. (pixels)
-    protected double positionX; // From constructor.
-    protected double positionY; // From constructor.
-    // Direction. (radians)
-    protected double heading = 0;
-    protected double course; // Derived value.
-    // Speed. (pixels/ms)
-    protected double speedX = 0;
-    protected double speedY = 0;
-    protected double speedT; // Derived value.
-    protected double speedLimit = 0;
-    
-    protected PVector forceT = new PVector();
-    
-    // Acceleration. (pixels/ms^2)
-    protected double acceleration = 0;
-    protected double drag = 0;
+    protected Vector position = new Vector();
+    protected Vector speedT = new Vector();
+    protected Vector forceT = new Vector();         // The sum of all the forces working on the actor.
+    protected Vector accelerationT = new Vector();  // Derived.
+
+    protected double engineThrust = 0;
+    protected double friction = 0;
+    protected double heading = 0;       // Which direction the actor is pointing.
+
     // Attributes.
     protected String name = "NAME NOT SET";
     protected double hitBoxRadius = 0;
-    protected double mass = 0;
-    protected double momentum; // Derived value.
+    protected double mass = 1;
     protected double bounceModifier = 0;
     protected double maxHitPoints = 0;
     protected double currentHitPoints = 0;
@@ -63,20 +53,16 @@ public abstract class Actor implements Drawable {
     /**
      * Constructor.
      *
-     * @param positionX Actors X-position in pixels.
-     * @param positionY Actors Y-position in pixels.
+     * @param position The actors position in vector form.
      * @param gameEngine The game engine in charge of the simulation.
      */
-    protected Actor(double positionX, double positionY, GameEngine gameEngine) {
+    protected Actor(Vector position, GameEngine gameEngine) {
 
-        this.positionX = positionX;
-        this.positionY = positionY;
+        this.position = position;
         this.gameEngine = gameEngine;
 
         guiHandler = gameEngine.getGuiHandler();
         collisionDetector = gameEngine.getCollisionDetector();
-
-        updateVectors();
     }
 
     @Override
@@ -95,19 +81,12 @@ public abstract class Actor implements Drawable {
      * milliseconds. Used in calculations.
      */
     public void act(double timePassed) {
-        addFriction(timePassed);
+        addFriction();
+        calcAcceleration();
+        calcSpeed(timePassed);
         updatePosition(timePassed);
         checkWallCollisions(timePassed);
         checkActorCollisions(timePassed);
-    }
-
-    /**
-     * Updates the actors derived variables.
-     */
-    protected void updateVectors() {
-        course = NumberCruncher.calculateAngle(speedX, speedY);
-        speedT = Math.sqrt(Math.pow(speedX, 2) + Math.pow(speedY, 2));
-        momentum = mass * speedT;
     }
 
     /**
@@ -117,8 +96,7 @@ public abstract class Actor implements Drawable {
      * cycle.
      */
     protected void updatePosition(double timePassed) {
-        positionX = positionX + speedX * timePassed;   // s = s0 + v*dt
-        positionY = positionY + speedY * timePassed;
+        position.add(speedT.copy().mult(timePassed));    // s = s0 + v*dt
     }
 
     /**
@@ -128,50 +106,60 @@ public abstract class Actor implements Drawable {
      * cycle.
      */
     protected void rollbackPosition(double timePassed) {
-        positionX = positionX - speedX * timePassed;
-        positionY = positionY - speedY * timePassed;
+        position.sub(speedT.copy().mult(timePassed));
+    }
+
+    /**
+     *
+     * @param timePassed
+     */
+    protected void calcSpeed(double timePassed) {
+        speedT.add(accelerationT.copy().mult(timePassed));    // v = v0 + a*dt
+        accelerationT.set(0, 0, 0);    // Reset the acceleration so it does not build up.
+    }
+
+    /**
+     *
+     */
+    protected void calcAcceleration() {
+        accelerationT.add(forceT.copy().div(mass));     // f=m*a  =>  a=f/m
+        forceT.set(0, 0, 0);     // Reset the forces so it does not build up.
     }
 
     /**
      * Makes the actor gradually come to a halt if no acceleration is applied.
+     */
+    protected void addFriction() {
+        double frictionMagnitude = speedT.mag() * friction;
+        Vector frictionDirection = speedT.copy().normalize().mult(-1);
+        forceT.add(frictionDirection.mult(frictionMagnitude));
+    }
+
+    /**
+     * Accelerates the actor in the given direction.
      *
+     * @param direction The direction of the accelerationTemp.
      * @param timePassed Number of milliseconds since the previous simulation
      * cycle.
      */
-    protected void addFriction(double timePassed) {
+    public void accelerate(String direction, double timePassed) {
 
-        if (speedX > 0) {
-            if (Math.abs(speedX) < drag * Math.cos(course) * timePassed) {
-                speedX = 0;
-            } else {
-                speedX = speedX - drag * Math.cos(course) * timePassed;
-            }
+        // Accelerate upwards.
+        if (direction.equalsIgnoreCase("up")) {
+            this.forceT.add(new Vector(0, -1, 0).mult(engineThrust));
         }
-
-        if (speedX < 0) {
-            if (Math.abs(speedX) < drag * Math.cos(course) * timePassed) {
-                speedX = 0;
-            } else {
-                speedX = speedX - drag * Math.cos(course) * timePassed;
-            }
+        // Accelerate downwards.
+        if (direction.equalsIgnoreCase("down")) {
+            this.forceT.add(new Vector(0, 1, 0).mult(engineThrust));
         }
-
-        if (speedY > 0) {
-            if (Math.abs(speedY) < drag * Math.sin(course) * timePassed) {
-                speedY = 0;
-            } else {
-                speedY = speedY - drag * Math.sin(course) * timePassed;
-            }
+        // Accelerate left.
+        if (direction.equalsIgnoreCase("left")) {
+            this.forceT.add(new Vector(-1, 0, 0).mult(engineThrust));
         }
-
-        if (speedY < 0) {
-            if (Math.abs(speedY) < drag * Math.sin(course) * timePassed) {
-                speedY = 0;
-            } else {
-                speedY = speedY - drag * Math.sin(course) * timePassed;
-            }
+        // Accelerate right.
+        if (direction.equalsIgnoreCase("right")) {
+            this.forceT.add(new Vector(1, 0, 0).mult(engineThrust));
         }
-        updateVectors();
     }
 
     /**
@@ -190,7 +178,7 @@ public abstract class Actor implements Drawable {
     }
 
     /**
-     * Changes actor speed and direction upon collision with the outer walls.
+     * Changes actor speedT and direction upon collision with the outer walls.
      *
      * @param wall The wall that was hit.
      * @param timePassed Number of milliseconds since the previous simulation
@@ -203,35 +191,30 @@ public abstract class Actor implements Drawable {
         switch (wall) {
 
             case "east":
-                if (speedX > 0) {
-                    speedX = speedX * (-bounceModifier);
-//                    speedY = speedY * (bounceModifier);
+                if (this.speedT.getX() > 0) {
+                    this.getSpeedT().setX(this.getSpeedT().getX() * (-bounceModifier));
                     break;
                 }
 
             case "south":
-                if (speedY > 0) {
-//                    speedX = speedX * (bounceModifier);
-                    speedY = speedY * (-bounceModifier);
+                if (this.speedT.getY() > 0) {
+                    this.getSpeedT().setY(this.getSpeedT().getY() * (-bounceModifier));
                     break;
                 }
 
             case "west":
-                if (speedX < 0) {
-                    speedX = speedX * (-bounceModifier);
-//                    speedY = speedY * (bounceModifier);
+                if (this.speedT.getX() < 0) {
+                    this.getSpeedT().setX(this.getSpeedT().getX() * (-bounceModifier));
                     break;
                 }
 
             case "north":
-                if (speedY < 0) {
-//                    speedX = speedX * (bounceModifier);
-                    speedY = speedY * (-bounceModifier);
+                if (this.speedT.getY() < 0) {
+                    this.getSpeedT().setY(this.getSpeedT().getY() * (-bounceModifier));
                     break;
                 }
 
         }
-        updateVectors();
         updatePosition(timePassed);
     }
 
@@ -256,7 +239,7 @@ public abstract class Actor implements Drawable {
     }
 
     /**
-     * Calculates the resulting speed and direction after a fully elastic head
+     * Calculates the resulting speedT and direction after a fully elastic head
      * on collision between two actors.
      *
      * @param a First actor.
@@ -265,7 +248,6 @@ public abstract class Actor implements Drawable {
      * cycle.
      */
     protected void elasticColision(Actor a, Actor b, double timePassed) {
-
         rollbackPosition(timePassed);
 
         double speedFinalAx;
@@ -273,61 +255,22 @@ public abstract class Actor implements Drawable {
         double speedFinalBx;
         double speedFinalBy;
 
-        speedFinalAx = (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedX()
-                + (2 * b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedX());
+        speedFinalAx = (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedT().getX()
+                + (2 * b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedT().getX());
 
-        speedFinalAy = (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedY()
-                + (2 * b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedY());
+        speedFinalAy = (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedT().getY()
+                + (2 * b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedT().getY());
 
-        speedFinalBx = (2 * a.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedX()
-                - (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedX());
+        speedFinalBx = (2 * a.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedT().getX()
+                - (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedT().getX());
 
-        speedFinalBy = (2 * a.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedY()
-                - (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedY());
+        speedFinalBy = (2 * a.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedT().getY()
+                - (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedT().getY());
 
-        a.setSpeedX(speedFinalAx);
-        a.setSpeedY(speedFinalAy);
-        b.setSpeedX(speedFinalBx);
-        b.setSpeedY(speedFinalBy);
+        a.getSpeedT().set(speedFinalAx, speedFinalAy, 0);
+        b.getSpeedT().set(speedFinalBx, speedFinalBy, 0);
 
-        updateVectors();
         updatePosition(timePassed);
-    }
-
-    /**
-     * Accelerates the actor in the given direction.
-     *
-     * @param direction The direction of the acceleration.
-     * @param timePassed Number of milliseconds since the previous simulation
-     * cycle.
-     */
-    public void accelerate(String direction, double timePassed) {
-
-        // Accelerate upwards.
-        if (direction.equalsIgnoreCase("up")) {
-            if (speedY > (-speedLimit)) {
-                speedY = speedY - acceleration * timePassed;
-            }
-        }
-        // Accelerate downwards.
-        if (direction.equalsIgnoreCase("down")) {
-            if (speedY < (speedLimit)) {
-                speedY = speedY + acceleration * timePassed;
-            }
-        }
-        // Accelerate left.
-        if (direction.equalsIgnoreCase("left")) {
-            if (speedX > (-speedLimit)) {
-                speedX = speedX - acceleration * timePassed;
-            }
-        }
-        // Accelerate right.
-        if (direction.equalsIgnoreCase("right")) {
-            if (speedX < (speedLimit)) {
-                speedX = speedX + acceleration * timePassed;
-            }
-        }
-        updateVectors();
     }
 
     /**
@@ -382,46 +325,6 @@ public abstract class Actor implements Drawable {
     }
 
     // Getters.
-    public double getPositionX() {
-        return positionX;
-    }
-
-    public double getPositionY() {
-        return positionY;
-    }
-
-    public double getHeading() {
-        return heading;
-    }
-
-    public double getCourse() {
-        return course;
-    }
-
-    public double getSpeedX() {
-        return speedX;
-    }
-
-    public double getSpeedY() {
-        return speedY;
-    }
-
-    public double getSpeedT() {
-        return speedT;
-    }
-
-    public double getSpeedLimit() {
-        return speedLimit;
-    }
-
-    public double getAcceleration() {
-        return acceleration;
-    }
-
-    public double getDrag() {
-        return drag;
-    }
-
     public double getHitBoxRadius() {
         return hitBoxRadius;
     }
@@ -436,10 +339,6 @@ public abstract class Actor implements Drawable {
 
     public double getMass() {
         return mass;
-    }
-
-    public double getMomentum() {
-        return momentum;
     }
 
     public GameEngine getGameEngine() {
@@ -498,61 +397,45 @@ public abstract class Actor implements Drawable {
         return currentDefensiveModule;
     }
 
+    public Vector getPosition() {
+        return position;
+    }
+
+    public Vector getSpeedT() {
+        return speedT;
+    }
+
+    public Vector getForceT() {
+        return forceT;
+    }
+
+    public Vector getAccelerationT() {
+        return accelerationT;
+    }
+
+    public double getEngineThrust() {
+        return engineThrust;
+    }
+
+    public double getFriction() {
+        return friction;
+    }
+
+    public double getHeading() {
+        return heading;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
     // Setters.
-    public void setPositionX(double positionX) {
-        this.positionX = positionX;
-    }
-
-    public void setPositionY(double positionY) {
-        this.positionY = positionY;
-    }
-
-    public void setHeading(double heading) {
-        this.heading = heading;
-    }
-
-    public void setSpeedX(double speedX) {
-        this.speedX = speedX;
-    }
-
-    public void setSpeedY(double speedY) {
-        this.speedY = speedY;
-    }
-
-    public void setSpeedLimit(double speedLimit) {
-        this.speedLimit = speedLimit;
-    }
-
-    public void setAcceleration(double acceleration) {
-        this.acceleration = acceleration;
-    }
-
-    public void setDrag(double drag) {
-        this.drag = drag;
-    }
-
-    public void setHitBoxRadius(double hitBoxRadius) {
-        this.hitBoxRadius = hitBoxRadius;
-    }
-
-    public void setBounceModifier(double bounceModifier) {
-        this.bounceModifier = bounceModifier;
-    }
-
     public void setCurrentHitPoints(double currentHitPoints) {
         this.currentHitPoints = currentHitPoints;
     }
 
-    public void setMass(double mass) {
-        this.mass = mass;
-    }
-
-    public void setGameEngine(GameEngine gameEngine) {
-        this.gameEngine = gameEngine;
-    }
-
-    public void setGuiHandler(GUIHandler guiHandler) {
-        this.guiHandler = guiHandler;
+    public void setHeading(double heading) {
+        this.heading = heading;
     }
 
 }

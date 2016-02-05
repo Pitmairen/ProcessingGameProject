@@ -6,6 +6,7 @@ import backend.item.Parts;
 import backend.main.GameEngine;
 import backend.main.NumberCruncher;
 import backend.main.Timer;
+import backend.main.Vector;
 import backend.shipmodule.AutoCannon;
 import backend.shipmodule.ShipModule;
 import java.util.ArrayList;
@@ -36,14 +37,13 @@ public class Player extends Actor implements Drawable {
     /**
      * Constructor.
      */
-    public Player(double positionX, double positionY, GameEngine gameEngine) {
+    public Player(Vector position, GameEngine gameEngine) {
 
-        super(positionX, positionY, gameEngine);
+        super(position, gameEngine);
 
         name = "Player";
-        speedLimit = 0.6f;
-        acceleration = 0.002f;
-        drag = 0.001f;
+        engineThrust = 0.2f;
+        friction = 0.4;
         hitBoxRadius = 20;
         bounceModifier = 0.6f;
         maxHitPoints = 30;
@@ -60,15 +60,15 @@ public class Player extends Actor implements Drawable {
     public void draw() {
 
         // Set heading.
-        double xVector = guiHandler.mouseX - positionX;
-        double yVector = guiHandler.mouseY - positionY;
+        double xVector = guiHandler.mouseX - this.getPosition().getX();
+        double yVector = guiHandler.mouseY - this.getPosition().getY();
         heading = NumberCruncher.calculateAngle(xVector, yVector);
 
         // Draw main body.
         guiHandler.strokeWeight(0);
         guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
         guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
 
         // Draw modules.
         if (currentOffensiveModule != null) {
@@ -90,7 +90,7 @@ public class Player extends Actor implements Drawable {
         guiHandler.strokeWeight(0);
         guiHandler.stroke(healthBarRGBA[0], healthBarRGBA[1], healthBarRGBA[2]);
         guiHandler.fill(healthBarRGBA[0], healthBarRGBA[1], healthBarRGBA[2]);
-        guiHandler.rect((float) positionX - (healthBarWidth / 2), (float) positionY + (float) hitBoxRadius + 5, healthBarWidth * healthPercentage, healthBarHeight, 6);
+        guiHandler.rect((float) this.getPosition().getX() - (healthBarWidth / 2), (float) this.getPosition().getY() + (float) hitBoxRadius + 5, healthBarWidth * healthPercentage, healthBarHeight, 6);
     }
 
     @Override

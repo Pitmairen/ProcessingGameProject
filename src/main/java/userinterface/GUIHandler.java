@@ -173,15 +173,16 @@ public class GUIHandler extends PApplet {
         textFont(debugHUDFont);
         text("FPS: " + format2.format((int) frameRate)
                 + "\n"
-                + "\n" + "Active actors: " + format1.format(gameEngine.getCurrentLevel().getActors().size())
-                + "\n" + "Active enemies: " + format1.format(gameEngine.getCurrentLevel().getEnemies().size())
-                + "\n" + "Active projectiles: " + format1.format(gameEngine.getCurrentLevel().getProjectiles().size())
+                + "\n" + "Total actors: " + format1.format(gameEngine.getCurrentLevel().getActors().size())
+                + "\n" + "enemies: " + format1.format(gameEngine.getCurrentLevel().getEnemies().size())
+                + "\n" + "projectiles: " + format1.format(gameEngine.getCurrentLevel().getProjectiles().size())
+                + "\n" + "items: " + format1.format(gameEngine.getCurrentLevel().getItems().size())
                 + "\n"
-                + "\n" + "Player posX: " + format5.format(gameEngine.getCurrentLevel().getPlayer().getPositionX()) + " pixel"
-                + "\n" + "Player posY: " + format5.format(gameEngine.getCurrentLevel().getPlayer().getPositionY()) + " pixel"
-                + "\n" + "Player speedT: " + format10.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT()) + " pixel/ms"
-                + "\n" + "Player heading: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getHeading()) + " rad"
-                + "\n" + "Player course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getCourse()) + " rad", width - 500, 100);
+                + "\n" + "posX: " + format5.format(gameEngine.getCurrentLevel().getPlayer().getPosition().getX())
+                + "\n" + "posY: " + format5.format(gameEngine.getCurrentLevel().getPlayer().getPosition().getY())
+                + "\n" + "speed: " + format10.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().mag())
+                + "\n" + "heading: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getHeading()) + " rad"
+                + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().heading2D()) + " rad", width - 500, 100);
     }
 
     /**

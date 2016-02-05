@@ -38,9 +38,9 @@ public class LaserCannon extends ShipModule implements Drawable {
         owner.getGuiHandler().strokeWeight(turretWidth);
         owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
         owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-        owner.getGuiHandler().line((float) owner.getPositionX(), (float) owner.getPositionY(),
-                (float) owner.getPositionX() + (float) (turretLength * Math.cos(owner.getHeading())),
-                (float) owner.getPositionY() + (float) (turretLength * Math.sin(owner.getHeading())));
+        owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
+                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading())),
+                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading())));
 
         // Draw the laser beam.
         if (this.moduleActive) {
@@ -53,7 +53,7 @@ public class LaserCannon extends ShipModule implements Drawable {
             GUIHandler gui = owner.getGuiHandler();
             gui.pushMatrix();
             gui.tint(0xffff0000);
-            gui.translate((float) owner.getPositionX(), (float) owner.getPositionY());
+            gui.translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
             gui.rotate((float)owner.getHeading());
             gui.image(bgImage, 25, -5, (float)laserLength - 25, 10);
             gui.popMatrix();
@@ -103,8 +103,8 @@ public class LaserCannon extends ShipModule implements Drawable {
      */
     private float findLaserLength() {
         // The laser line
-        float x1 = (float) owner.getPositionX();
-        float y1 = (float) owner.getPositionY();
+        float x1 = (float) owner.getPosition().getX();
+        float y1 = (float) owner.getPosition().getY();
         float x2 = x1 + (float) Math.cos(owner.getHeading());
         float y2 = y1 + (float) Math.sin(owner.getHeading());
 
@@ -140,8 +140,8 @@ public class LaserCannon extends ShipModule implements Drawable {
                 continue;
             }
 
-            float x = (float) act.getPositionX();
-            float y = (float) act.getPositionY();
+            float x = (float) act.getPosition().getX();
+            float y = (float) act.getPosition().getY();
 
             // We only want to hit targets that are in fron of the player, 
             // so we check the dot product between the laser heading and the
