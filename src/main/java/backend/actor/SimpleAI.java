@@ -72,7 +72,7 @@ public class SimpleAI implements AI {
 
         double distance = heading.mag();
         if (distance <= minDistance) {
-            heading.rotate(Math.PI/2.5);
+            heading.rotate(Math.PI/4);
         }
         approachTarget();
     }
