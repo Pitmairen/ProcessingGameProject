@@ -256,6 +256,7 @@ public class GameEngine {
         resourceManager.add(Image.PARTICLE, "particle.png");
         resourceManager.add(Image.ROCKET, "particle.png");
         resourceManager.add(Image.LASER_BEAM, "laser.png");
+        resourceManager.add(Image.SEEKER_MISSILE, "particle.png");
 
     }
 

@@ -10,5 +10,6 @@ public enum Image {
     LASER_BEAM,
     PARTICLE,
     ROCKET,
-
+    SEEKER_MISSILE,
+    
 }

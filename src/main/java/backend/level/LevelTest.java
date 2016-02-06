@@ -10,6 +10,7 @@ import backend.main.Vector;
 import backend.shipmodule.EMPCannon;
 import backend.shipmodule.LaserCannon;
 import backend.shipmodule.RocketLauncher;
+import backend.shipmodule.SeekerCannon;
 
 /**
  * A level for testing purposes.
@@ -45,6 +46,12 @@ public class LevelTest extends Level {
                 Item modulePickup = new ModuleContainer(new Vector(200, 300, 0), gameEngine, new RocketLauncher(player, rocketManager));
                 items.add(modulePickup);
                 actors.add(modulePickup);
+                
+                modulePickup = new ModuleContainer(new Vector(400, 400, 0), gameEngine, new SeekerCannon(player,fadingCanvasItems));
+                items.add(modulePickup);
+                actors.add(modulePickup);
+                
+                
                 actorSpawner.spawnFrigate(1);
                 break;
             }
