@@ -1,13 +1,10 @@
 package backend.actor;
 
 import backend.item.Item;
-import backend.item.ModuleContainer;
-import backend.item.Parts;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.main.Vector;
 import backend.shipmodule.AutoCannon;
-import backend.shipmodule.ShipModule;
 import java.util.ArrayList;
 import userinterface.Drawable;
 
@@ -30,8 +27,6 @@ public class Player extends Actor implements Drawable {
     private Timer defensiveModuleTimer = new Timer();
     private double offensiveModuleSwapDelay = 600;
     private double defensiveModuleSwapDelay = 600;
-
-    private int parts = 0;
 
     /**
      * Constructor.
@@ -119,14 +114,7 @@ public class Player extends Actor implements Drawable {
                         projectile.targetHit();
                     }
                 } else if (target instanceof Item) {
-                    if (target instanceof ModuleContainer) {
-                        ModuleContainer modulePickup = (ModuleContainer) target;
-                        ShipModule shipModule = (ShipModule) modulePickup.pickup(this);
-                        offensiveModules.add(shipModule);
-                    } else if (target instanceof Parts) {
-                        Parts pickedUpParts = (Parts) target;
-                        this.parts++;
-                    }
+                    ((Item) target).pickup(this);
                 } else {
                     // This player crashed into an actor.
                     elasticColision(this, target, timePassed);
@@ -171,13 +159,6 @@ public class Player extends Actor implements Drawable {
             currentDefensiveModule = defensiveModules.get((defensiveModules.indexOf(currentDefensiveModule) + 1) % defensiveModules.size());
             defensiveModuleTimer.restart();
         }
-    }
-
-    /**
-     * Increments the parts counter.
-     */
-    public void addParts(int numberOfParts) {
-        parts = parts + numberOfParts;
     }
 
     public int getBackgroundColor() {

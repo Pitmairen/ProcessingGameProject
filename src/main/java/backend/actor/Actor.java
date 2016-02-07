@@ -147,7 +147,7 @@ public abstract class Actor implements Drawable {
      */
     protected void addFriction() {
         // simple linear drag Fd = -b*velocity
-        forceT.add(speedT.copy().mult(-frictionCoefficient)); 
+        forceT.add(speedT.copy().mult(-frictionCoefficient));
     }
 
     /**
@@ -158,7 +158,7 @@ public abstract class Actor implements Drawable {
     public void applyForce(Vector force) {
         forceT.add(force);
     }
-    
+
     /**
      * Accelerates the actor in the given direction.
      *
@@ -303,7 +303,12 @@ public abstract class Actor implements Drawable {
      * @param healing Number of hit points to add.
      */
     public void addHitPoints(double healing) {
-        this.currentHitPoints = this.currentHitPoints + healing;
+        if (currentHitPoints < maxHitPoints) {
+            this.currentHitPoints = this.currentHitPoints + healing;
+            if (currentHitPoints > maxHitPoints) {
+                currentHitPoints = maxHitPoints;
+            }
+        }
     }
 
     /**
