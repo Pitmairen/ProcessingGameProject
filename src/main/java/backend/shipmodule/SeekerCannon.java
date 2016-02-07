@@ -125,16 +125,14 @@ public class SeekerCannon extends ShipModule {
         public TargetSelector(ArrayList<Enemy> actors){
             this.enemies = actors;
             
-            // The enemies are sorted by their distance away from the
-            // cannon. So we start at the 5th position ad go backwards
-            // until we hit the first one which will be the closest target.
-            currentPosition = Math.min(5, actors.size()-1);
+            // Currenlty we only hightlight the closest enemy.
+            currentPosition = 0; 
         }
         
         public void update(){
             updateCounter++;
-            // Update the position every 3rd frame
-            if(updateCounter % 3 == 0) 
+            // Update the position every 20rd frame
+            if(updateCounter % 20 == 0) 
                 currentPosition--;   
         }
         
