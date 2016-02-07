@@ -47,21 +47,21 @@ public class LevelTest extends Level {
 
             switch (currentWave) {
                 case 1: {
-                    Item modulePickup = new ModuleContainer(new Vector(200, 400, 0), gameEngine, new RocketLauncher(player, rocketManager));
-                    items.add(modulePickup);
-                    actors.add(modulePickup);
+                    Item moduleContainer = new ModuleContainer(new Vector(200, 400, 0), gameEngine, new RocketLauncher(player, rocketManager));
+                    items.add(moduleContainer);
+                    actors.add(moduleContainer);
 
-                    modulePickup = new ModuleContainer(new Vector(200, 500, 0), gameEngine, new SeekerCannon(player, fadingCanvasItems));
-                    items.add(modulePickup);
-                    actors.add(modulePickup);
+                    moduleContainer = new ModuleContainer(new Vector(200, 500, 0), gameEngine, new SeekerCannon(player, fadingCanvasItems));
+                    items.add(moduleContainer);
+                    actors.add(moduleContainer);
 
-                    modulePickup = new ModuleContainer(new Vector(200, 600, 0), gameEngine, new LaserCannon(player));
-                    items.add(modulePickup);
-                    actors.add(modulePickup);
+                    moduleContainer = new ModuleContainer(new Vector(200, 600, 0), gameEngine, new LaserCannon(player));
+                    items.add(moduleContainer);
+                    actors.add(moduleContainer);
 
-                    modulePickup = new ModuleContainer(new Vector(200, 700, 0), gameEngine, new EMPCannon(player, fadingCanvasItems));
-                    items.add(modulePickup);
-                    actors.add(modulePickup);
+                    moduleContainer = new ModuleContainer(new Vector(200, 700, 0), gameEngine, new EMPCannon(player, fadingCanvasItems));
+                    items.add(moduleContainer);
+                    actors.add(moduleContainer);
 
                     actorSpawner.spawnFrigate(1);
 

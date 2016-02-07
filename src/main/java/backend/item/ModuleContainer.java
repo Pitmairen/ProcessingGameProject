@@ -43,8 +43,10 @@ public class ModuleContainer extends Item implements Drawable {
 
     @Override
     public void pickup(Actor looter) {
-        currentHitPoints = 0;
-        looter.getOffensiveModules().add(shipModule);
+        if (currentHitPoints > 0) {
+            looter.getOffensiveModules().add(shipModule);
+            currentHitPoints = 0;
+        }
     }
 
     @Override
