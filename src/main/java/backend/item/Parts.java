@@ -7,14 +7,14 @@ import backend.main.Vector;
 import userinterface.Drawable;
 
 /**
- * Parts dropped by defeated enemies. Used to upgrade weapon modules.
+ * Parts dropped by defeated enemies. Increases current health.
  *
  * @author Kristian Honningsvag.
  */
 public class Parts extends Item implements Drawable {
 
     // Color.
-    private int[] bodyRGBA = new int[]{240, 240, 10, 255};
+    private int[] bodyRGBA = new int[]{10, 240, 10, 255};
 
     /**
      * Constructor.
@@ -41,7 +41,7 @@ public class Parts extends Item implements Drawable {
         currentHitPoints = 0;
         if (looter instanceof Player) {
             Player player = (Player) looter;
-            player.addParts(1);
+            player.addHitPoints(1);
         }
     }
 

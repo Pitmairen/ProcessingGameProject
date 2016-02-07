@@ -28,8 +28,6 @@ public class Player extends Actor implements Drawable {
     private double offensiveModuleSwapDelay = 600;
     private double defensiveModuleSwapDelay = 600;
 
-    private int parts = 0;
-
     /**
      * Constructor.
      */
@@ -161,13 +159,6 @@ public class Player extends Actor implements Drawable {
             currentDefensiveModule = defensiveModules.get((defensiveModules.indexOf(currentDefensiveModule) + 1) % defensiveModules.size());
             defensiveModuleTimer.restart();
         }
-    }
-
-    /**
-     * Increments the parts counter.
-     */
-    public void addParts(int numberOfParts) {
-        parts = parts + numberOfParts;
     }
 
     public int getBackgroundColor() {
