@@ -1,6 +1,7 @@
 package backend.item;
 
 import backend.actor.Actor;
+import backend.actor.Player;
 import backend.main.GameEngine;
 import backend.main.Vector;
 import userinterface.Drawable;
@@ -23,6 +24,7 @@ public class Parts extends Item implements Drawable {
         super(position, gameEngine);
 
         hitBoxRadius = 5;
+        pullDistance = gameEngine.getCurrentLevel().getPlayer().getHitBoxRadius() * 8;
     }
 
     @Override
@@ -35,9 +37,12 @@ public class Parts extends Item implements Drawable {
     }
 
     @Override
-    public Object pickup(Actor looter) {
+    public void pickup(Actor looter) {
         currentHitPoints = 0;
-        return this;
+        if (looter instanceof Player) {
+            Player player = (Player) looter;
+            player.addParts(1);
+        }
     }
 
     @Override

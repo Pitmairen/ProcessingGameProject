@@ -28,8 +28,8 @@ public class ModuleContainer extends Item implements Drawable {
 
         this.shipModule = shipModule;
 
-        mass = 1;
         hitBoxRadius = 20;
+        pullDistance = gameEngine.getCurrentLevel().getPlayer().getHitBoxRadius() * 5;
     }
 
     @Override
@@ -42,9 +42,9 @@ public class ModuleContainer extends Item implements Drawable {
     }
 
     @Override
-    public Object pickup(Actor looter) {
+    public void pickup(Actor looter) {
         currentHitPoints = 0;
-        return shipModule;
+        looter.getOffensiveModules().add(shipModule);
     }
 
     @Override

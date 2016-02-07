@@ -4,7 +4,6 @@ import backend.actor.Actor;
 import backend.actor.Rocket;
 import backend.main.RocketManager;
 import backend.main.Timer;
-import backend.main.Vector;
 
 /**
  * Fires rockets. Slow rate of fire and large damage.

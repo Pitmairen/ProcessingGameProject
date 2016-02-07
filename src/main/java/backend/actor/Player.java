@@ -1,13 +1,10 @@
 package backend.actor;
 
 import backend.item.Item;
-import backend.item.ModuleContainer;
-import backend.item.Parts;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.main.Vector;
 import backend.shipmodule.AutoCannon;
-import backend.shipmodule.ShipModule;
 import java.util.ArrayList;
 import userinterface.Drawable;
 
@@ -119,14 +116,7 @@ public class Player extends Actor implements Drawable {
                         projectile.targetHit();
                     }
                 } else if (target instanceof Item) {
-                    if (target instanceof ModuleContainer) {
-                        ModuleContainer modulePickup = (ModuleContainer) target;
-                        ShipModule shipModule = (ShipModule) modulePickup.pickup(this);
-                        offensiveModules.add(shipModule);
-                    } else if (target instanceof Parts) {
-                        Parts pickedUpParts = (Parts) target;
-                        this.parts++;
-                    }
+                    ((Item) target).pickup(this);
                 } else {
                     // This player crashed into an actor.
                     elasticColision(this, target, timePassed);
