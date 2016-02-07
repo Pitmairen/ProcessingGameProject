@@ -19,7 +19,7 @@ public abstract class Level {
 
     protected String levelName = "NAME NOT SET";
     protected int currentWave = 0;
-    protected double timeToNextWave = 0;
+    protected double initialTimeToNextWave = 0;
     protected Timer timer = new Timer();
     protected boolean onLastWave = false;
     protected GameEngine gameEngine;     // From constructor parameter.
@@ -82,6 +82,18 @@ public abstract class Level {
 
     public int getCurrentWave() {
         return currentWave;
+    }
+
+    public double getInitialTimeToNextWave() {
+        return initialTimeToNextWave;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public boolean isOnLastWave() {
+        return onLastWave;
     }
 
 }

@@ -32,7 +32,7 @@ public class LevelTest extends Level {
         this.rocketManager = rocketManager;
         this.fadingCanvasItems = itemManager;
         levelName = "Test level";
-        timeToNextWave = 0;  // Time to the first wave spawns.
+        initialTimeToNextWave = 0;  // Time to the first wave spawns.
 
         player = new Player(new Vector(300, 250, 0), gameEngine);
         actors.add(player);
@@ -41,7 +41,7 @@ public class LevelTest extends Level {
     @Override
     public void nextWave() {
 
-        if (timer.timePassed() >= timeToNextWave && !onLastWave) {
+        if (timer.timePassed() >= initialTimeToNextWave && !onLastWave) {
 
             currentWave++;
 
@@ -65,46 +65,46 @@ public class LevelTest extends Level {
 
                     actorSpawner.spawnFrigate(1);
 
-                    timeToNextWave = 5000;
+                    initialTimeToNextWave = 5000;
                     timer.restart();
                     break;
                 }
                 case 2: {
 
                     actorSpawner.spawnFrigate(3);
-                    timeToNextWave = 5000;
+                    initialTimeToNextWave = 5000;
                     timer.restart();
                     break;
                 }
                 case 3: {
 
                     actorSpawner.spawnFrigate(9);
-                    timeToNextWave = 5000;
+                    initialTimeToNextWave = 5000;
                     timer.restart();
                     break;
                 }
                 case 4: {
                     actorSpawner.spawnFrigate(9);
-                    timeToNextWave = 5000;
+                    initialTimeToNextWave = 5000;
                     timer.restart();
                     break;
                 }
                 case 5: {
                     actorSpawner.spawnFrigate(25);
-                    timeToNextWave = 5000;
+                    initialTimeToNextWave = 5000;
                     timer.restart();
                     break;
                 }
                 case 6: {
                     actorSpawner.spawnFrigate(25);
-                    timeToNextWave = 5000;
+                    initialTimeToNextWave = 5000;
                     timer.restart();
                     break;
                 }
                 case 7: {
                     actorSpawner.spawnFrigate(50);
                     onLastWave = true;
-                    timeToNextWave = 5000;
+                    initialTimeToNextWave = 5000;
                     timer.restart();
                     break;
                 }
