@@ -131,11 +131,8 @@ public class GameEngine {
         for (Actor actor : currentLevel.getActors()) {
             actor.act(timePassed);
         }
-
-        // Spawn new wave if current wave have been defeated.
-        if (currentLevel.getEnemies().isEmpty()) {
-            currentLevel.nextWave();
-        }
+        // Spawn the next wave if the timer has run out.
+        currentLevel.nextWave();
     }
 
     /**

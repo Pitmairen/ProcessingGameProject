@@ -6,6 +6,7 @@ import backend.actor.Enemy;
 import backend.actor.Player;
 import backend.actor.Projectile;
 import backend.item.Item;
+import backend.main.Timer;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -18,6 +19,8 @@ public abstract class Level {
 
     protected String levelName = "NAME NOT SET";
     protected int currentWave = 0;
+    protected double timeToNextWave = 0;
+    protected Timer timer = new Timer();
     protected GameEngine gameEngine;     // From constructor parameter.
     protected ActorSpawner actorSpawner; // From constructor parameter.
 
