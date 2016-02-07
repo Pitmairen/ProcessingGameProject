@@ -91,13 +91,13 @@ public class FadingCanvas {
         // particles and the rockets.
         
         // Code for no background image
-        //this.canvas.fill(0, 40);
-        //this.canvas.rect(0, 0, this.canvas.width, this.canvas.height);
+        this.canvas.fill(0, 40);
+        this.canvas.rect(0, 0, this.canvas.width, this.canvas.height);
         
         // Code for background image
-        this.canvas.tint(255, 40);
-        this.canvas.imageMode(PGraphics.CORNER);
-        this.canvas.image(background, 0, 0, this.canvas.width, this.canvas.height);
+        //this.canvas.tint(255, 40);
+        //this.canvas.imageMode(PGraphics.CORNER);
+        //this.canvas.image(background, 0, 0, this.canvas.width, this.canvas.height);
 
         
         for (Drawable it : items) {
