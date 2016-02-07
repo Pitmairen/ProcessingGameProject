@@ -38,7 +38,7 @@ public class FadingCanvas {
     private final PImage bgNoise;
     
     // The background image
-    //private final PImage background; 
+    private final PImage background; 
     
     /**
      * Constructor.
@@ -50,12 +50,12 @@ public class FadingCanvas {
         this.items = new ArrayList<>();
         
         // Loads the background image from the src/main/resources/data folder.
-        //background = gui.loadImage("background.jpg");
+        background = resources.getImage(Image.BACKGROUND_IMAGE);
+        
         
         bgShader = resources.getShader(Shader.BG_SHADER);
         bgNoise = resources.getImage(Image.BG_SHADER_NOISE);
         bgShader.set("resolution", (float)gui.width, (float)gui.height);
-
     }
 
     /**
@@ -90,14 +90,14 @@ public class FadingCanvas {
         // tail effect, a lower number means a longer tail. This affects both
         // particles and the rockets.
         
-        // Remove these lines when we have a background image.
-        this.canvas.fill(0, 40);
-        this.canvas.rect(0, 0, this.canvas.width, this.canvas.height);
+        // Code for no background image
+        //this.canvas.fill(0, 40);
+        //this.canvas.rect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Uncomment theses three lines to draw a background image:
-        //this.canvas.tint(255, 40);
-        //this.canvas.imageMode(PGraphics.CORNER);
-        //this.canvas.image(background, 0, 0, this.canvas.width, this.canvas.height);
+        // Code for background image
+        this.canvas.tint(255, 40);
+        this.canvas.imageMode(PGraphics.CORNER);
+        this.canvas.image(background, 0, 0, this.canvas.width, this.canvas.height);
 
         
         for (Drawable it : items) {

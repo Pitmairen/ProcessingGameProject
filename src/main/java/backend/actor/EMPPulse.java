@@ -1,6 +1,7 @@
 package backend.actor;
 
 import backend.main.FadingCanvasItemManager;
+import backend.main.Vector;
 import backend.shipmodule.ShipModule;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -16,8 +17,8 @@ public class EMPPulse extends Projectile implements FadingCanvasItemManager.Item
     private final int pulseStepSize = 2;
     private final int pulseRadiusLimit = 200;
     
-    public EMPPulse(double positionX, double positionY, ShipModule shipModule){
-        super(positionX, positionY, shipModule);
+    public EMPPulse(Vector position, ShipModule shipModule){
+        super(position, shipModule);
 
         name = "EMPPulse";
         
@@ -77,7 +78,7 @@ public class EMPPulse extends Projectile implements FadingCanvasItemManager.Item
         
         canvas.stroke(0xff2D91EF, 255 - fadingStepSize*currentStep);
         canvas.strokeWeight(8);
-        canvas.ellipse((float)getPositionX(), (float)getPositionY(),
+        canvas.ellipse((float)getPosition().getX(), (float)getPosition().getY(),
                 (float)hitBoxRadius*2, (float)hitBoxRadius*2);
         
         canvas.strokeWeight(0);

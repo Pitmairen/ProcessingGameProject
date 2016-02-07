@@ -1,5 +1,6 @@
 package backend.actor;
 
+import backend.main.Vector;
 import backend.shipmodule.ShipModule;
 import userinterface.Drawable;
 
@@ -16,9 +17,9 @@ public class Bullet extends Projectile implements Drawable {
     /**
      * Constructor.
      */
-    public Bullet(double positionX, double positionY, ShipModule shipModule) {
+    public Bullet(Vector position, ShipModule shipModule) {
 
-        super(positionX, positionY, shipModule);
+        super(position, shipModule);
 
         name = "Bullet";
         hitBoxRadius = 4;
@@ -26,12 +27,14 @@ public class Bullet extends Projectile implements Drawable {
         mass = 2;
         collisionDamageToOthers = shipModule.getProjectileDamage();
 
-        setLaunchVelocity(shipModule.getOwner().getHeading());
+        setLaunchVelocity(shipModule.getOwner().getHeading().getAngle2D());
     }
 
     @Override
     public void act(double timePassed) {
-        super.addFriction(timePassed);
+        super.addFriction();
+        super.calcAcceleration();
+        super.calcSpeed(timePassed);
         super.updatePosition(timePassed);
         checkWallCollisions(timePassed);
         checkActorCollisions(timePassed);
@@ -42,7 +45,7 @@ public class Bullet extends Projectile implements Drawable {
         guiHandler.strokeWeight(0);
         guiHandler.stroke(bulletRGBA[0], bulletRGBA[1], bulletRGBA[2]);
         guiHandler.fill(bulletRGBA[0], bulletRGBA[1], bulletRGBA[2]);
-        guiHandler.ellipse((float) this.getPositionX(), (float) this.getPositionY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
     }
 
     @Override
@@ -51,13 +54,12 @@ public class Bullet extends Projectile implements Drawable {
     }
 
     /**
-     * Sets the projectiles speed vectors.
+     * Sets the projectiles speedT vectors.
      *
      * @param heading The direction the actor is aiming.
      */
     private void setLaunchVelocity(double heading) {
-        speedX = shipModule.getLaunchVelocity() * Math.cos(heading);
-        speedY = shipModule.getLaunchVelocity() * Math.sin(heading);
+        this.getSpeedT().set(shipModule.getLaunchVelocity() * Math.cos(heading), shipModule.getLaunchVelocity() * Math.sin(heading), 0);
     }
 
 }

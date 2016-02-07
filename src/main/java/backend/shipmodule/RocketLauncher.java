@@ -47,9 +47,9 @@ public class RocketLauncher extends ShipModule {
         owner.getGuiHandler().strokeWeight(turretWidth);
         owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
         owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-        owner.getGuiHandler().line((float) owner.getPositionX(), (float) owner.getPositionY(),
-                (float) owner.getPositionX() + (float) (turretLength * Math.cos(owner.getHeading())),
-                (float) owner.getPositionY() + (float) (turretLength * Math.sin(owner.getHeading())));
+        owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
+                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
+                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
     }
 
     /**
@@ -60,7 +60,7 @@ public class RocketLauncher extends ShipModule {
 
         // Wait for timer for each shot.
         if (timer.timePassed() >= timeBetweenShots) {
-            Rocket rocket = new Rocket(owner.getPositionX(), owner.getPositionY(), this);
+            Rocket rocket = new Rocket(owner.getPosition().copy(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(rocket);
             owner.getGameEngine().getCurrentLevel().getActors().add(rocket);

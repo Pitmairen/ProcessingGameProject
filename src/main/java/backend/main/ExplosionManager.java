@@ -63,7 +63,7 @@ public class ExplosionManager implements FadingCanvas.Drawable {
      */
     public void explodeEnemy(Frigate enemy) {
         this.particles.emitParticles(100,
-                new PVector((float) enemy.getPositionX(), (float) enemy.getPositionY()), 0xffFF1511, 30.0f, 20.0f);
+                new PVector((float) enemy.getPosition().getX(), (float) enemy.getPosition().getY()), 0xffFF1511, 30.0f, 20.0f);
     }
 
     /**
@@ -73,7 +73,7 @@ public class ExplosionManager implements FadingCanvas.Drawable {
      */
     public void explodeRocket(Rocket rocket) {
         this.particles.emitParticles(50,
-                new PVector((float) rocket.getPositionX(), (float) rocket.getPositionY()), rocket.getBackgroundColor(), 10f, 8f);
+                new PVector((float) rocket.getPosition().getX(), (float) rocket.getPosition().getY()), rocket.getBackgroundColor(), 10f, 8f);
     }
 
     /**
@@ -83,7 +83,7 @@ public class ExplosionManager implements FadingCanvas.Drawable {
      */
     public void explodePlayer(Player player) {
         this.particles.emitParticles(200,
-                new PVector((float) player.getPositionX(), (float) player.getPositionY()), player.getBackgroundColor(), 30f, 20f, 2f, 2f);
+                new PVector((float) player.getPosition().getX(), (float) player.getPosition().getY()), player.getBackgroundColor(), 30f, 20f, 2f, 2f);
     }
 
 }

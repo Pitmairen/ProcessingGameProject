@@ -1,6 +1,7 @@
 package backend.actor;
 
 import backend.item.Item;
+import backend.main.Vector;
 import backend.shipmodule.ShipModule;
 import java.util.ArrayList;
 import userinterface.Drawable;
@@ -17,9 +18,9 @@ public abstract class Projectile extends Actor implements Drawable {
     /**
      * Constructor.
      */
-    public Projectile(double positionX, double positionY, ShipModule shipModule) {
+    public Projectile(Vector position, ShipModule shipModule) {
 
-        super(positionX, positionY, shipModule.getOwner().getGameEngine());
+        super(position, shipModule.getOwner().getGameEngine());
 
         this.shipModule = shipModule;
     }

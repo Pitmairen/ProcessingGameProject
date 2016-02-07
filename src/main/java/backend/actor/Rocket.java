@@ -1,5 +1,6 @@
 package backend.actor;
 
+import backend.main.Vector;
 import backend.shipmodule.ShipModule;
 import processing.core.PGraphics;
 import processing.core.PConstants;
@@ -25,9 +26,9 @@ public class Rocket extends Projectile {
     /**
      * Constructor.
      */
-    public Rocket(double positionX, double positionY, ShipModule shipModule) {
+    public Rocket(Vector position, ShipModule shipModule) {
 
-        super(positionX, positionY, shipModule);
+        super(position, shipModule);
 
         this.playerOwner = (Player) shipModule.getOwner();
 
@@ -40,12 +41,12 @@ public class Rocket extends Projectile {
         mass = 3;
         collisionDamageToOthers = shipModule.getProjectileDamage();
 
-        setLaunchVelocity(shipModule.getOwner().getHeading());
+        setLaunchVelocity(shipModule.getOwner().getHeading().getAngle2D());
     }
 
     @Override
     public void act(double timePassed) {
-        super.addFriction(timePassed);
+        super.addFriction();
         super.updatePosition(timePassed);
         checkWallCollisions(timePassed);
         checkActorCollisions(timePassed);
@@ -87,9 +88,9 @@ public class Rocket extends Projectile {
         canvas.fill(this.backgroundColor, 200);
 
         canvas.image(image,
-                        (float) this.positionX, (float) this.positionY,
+                        (float) this.getPosition().getX(), (float) this.getPosition().getY(),
                         (float) this.radius * 2, (float) this.radius * 2);
-        canvas.ellipse((float) this.positionX, (float) this.positionY,
+        canvas.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(),
                 (float) this.radius / 2, (float) this.radius / 2);
     }
 
@@ -101,13 +102,12 @@ public class Rocket extends Projectile {
     }
 
     /**
-     * Sets the projectiles speed vectors.
+     * Sets the projectiles speedT vectors.
      *
      * @param heading The direction the actor is aiming.
      */
     private void setLaunchVelocity(double heading) {
-        speedX = shipModule.getLaunchVelocity() * Math.cos(heading);
-        speedY = shipModule.getLaunchVelocity() * Math.sin(heading);
+        this.getSpeedT().set(shipModule.getLaunchVelocity() * Math.cos(heading), shipModule.getLaunchVelocity() * Math.sin(heading), 0);
     }
 
     // Getters.

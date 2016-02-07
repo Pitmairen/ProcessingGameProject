@@ -257,6 +257,8 @@ public class GameEngine {
         resourceManager.add(Image.PARTICLE, "particle.png");
         resourceManager.add(Image.ROCKET, "particle.png");
         resourceManager.add(Image.LASER_BEAM, "laser.png");
+        resourceManager.add(Image.SEEKER_MISSILE, "particle.png");
+        resourceManager.add(Image.BACKGROUND_IMAGE, "background.png");
         resourceManager.add(Image.BG_SHADER_NOISE, "shader_noise.png");
         
         resourceManager.add(Shader.BG_SHADER, "background.glsl");

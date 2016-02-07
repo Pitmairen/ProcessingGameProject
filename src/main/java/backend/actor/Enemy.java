@@ -1,7 +1,7 @@
 package backend.actor;
 
 import backend.main.GameEngine;
-import backend.main.NumberCruncher;
+import backend.main.Vector;
 import java.util.Random;
 import userinterface.Drawable;
 
@@ -18,16 +18,14 @@ public abstract class Enemy extends Actor implements Drawable {
     protected float attackDelayFactor = random.nextFloat() + 1;
     protected double lastTimeFired = 0;
     protected boolean isHostile = true;
-    protected AI ai;
+    protected AI ai = null;
 
     /**
      * Constructor.
      */
-    protected Enemy(double positionX, double positionY, GameEngine gameEngine) {
+    protected Enemy(Vector position, GameEngine gameEngine) {
         
-        super(positionX, positionY, gameEngine);
-        this.ai = null;
-        
+        super(position, gameEngine);
     }
     
     @Override
