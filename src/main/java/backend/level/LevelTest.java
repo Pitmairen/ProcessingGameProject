@@ -41,72 +41,78 @@ public class LevelTest extends Level {
     @Override
     public void nextWave() {
 
-        if (timer.timePassed() >= initialTimeToNextWave && !onLastWave) {
+        if (!onLastWave) {
 
-            currentWave++;
+            timeToNextWave = initialTimeToNextWave - timer.timePassed();
 
-            switch (currentWave) {
-                case 1: {
-                    Item moduleContainer = new ModuleContainer(new Vector(200, 400, 0), gameEngine, new RocketLauncher(player, rocketManager));
-                    items.add(moduleContainer);
-                    actors.add(moduleContainer);
+            if (timeToNextWave <= 0) {
 
-                    moduleContainer = new ModuleContainer(new Vector(200, 500, 0), gameEngine, new SeekerCannon(player, fadingCanvasItems));
-                    items.add(moduleContainer);
-                    actors.add(moduleContainer);
+                currentWave++;
 
-                    moduleContainer = new ModuleContainer(new Vector(200, 600, 0), gameEngine, new LaserCannon(player));
-                    items.add(moduleContainer);
-                    actors.add(moduleContainer);
+                switch (currentWave) {
+                    case 1: {
+                        Item moduleContainer = new ModuleContainer(new Vector(200, 400, 0), gameEngine, new RocketLauncher(player, rocketManager));
+                        items.add(moduleContainer);
+                        actors.add(moduleContainer);
 
-                    moduleContainer = new ModuleContainer(new Vector(200, 700, 0), gameEngine, new EMPCannon(player, fadingCanvasItems));
-                    items.add(moduleContainer);
-                    actors.add(moduleContainer);
+                        moduleContainer = new ModuleContainer(new Vector(200, 500, 0), gameEngine, new SeekerCannon(player, fadingCanvasItems));
+                        items.add(moduleContainer);
+                        actors.add(moduleContainer);
 
-                    actorSpawner.spawnFrigate(1);
+                        moduleContainer = new ModuleContainer(new Vector(200, 600, 0), gameEngine, new LaserCannon(player));
+                        items.add(moduleContainer);
+                        actors.add(moduleContainer);
 
-                    initialTimeToNextWave = 5000;
-                    timer.restart();
-                    break;
-                }
-                case 2: {
+                        moduleContainer = new ModuleContainer(new Vector(200, 700, 0), gameEngine, new EMPCannon(player, fadingCanvasItems));
+                        items.add(moduleContainer);
+                        actors.add(moduleContainer);
 
-                    actorSpawner.spawnFrigate(3);
-                    initialTimeToNextWave = 5000;
-                    timer.restart();
-                    break;
-                }
-                case 3: {
+                        actorSpawner.spawnFrigate(1);
 
-                    actorSpawner.spawnFrigate(9);
-                    initialTimeToNextWave = 5000;
-                    timer.restart();
-                    break;
-                }
-                case 4: {
-                    actorSpawner.spawnFrigate(9);
-                    initialTimeToNextWave = 5000;
-                    timer.restart();
-                    break;
-                }
-                case 5: {
-                    actorSpawner.spawnFrigate(25);
-                    initialTimeToNextWave = 5000;
-                    timer.restart();
-                    break;
-                }
-                case 6: {
-                    actorSpawner.spawnFrigate(25);
-                    initialTimeToNextWave = 5000;
-                    timer.restart();
-                    break;
-                }
-                case 7: {
-                    actorSpawner.spawnFrigate(50);
-                    onLastWave = true;
-                    initialTimeToNextWave = 5000;
-                    timer.restart();
-                    break;
+                        initialTimeToNextWave = 5000;
+                        timer.restart();
+                        break;
+                    }
+                    case 2: {
+
+                        actorSpawner.spawnFrigate(3);
+                        initialTimeToNextWave = 5000;
+                        timer.restart();
+                        break;
+                    }
+                    case 3: {
+
+                        actorSpawner.spawnFrigate(9);
+                        initialTimeToNextWave = 5000;
+                        timer.restart();
+                        break;
+                    }
+                    case 4: {
+                        actorSpawner.spawnFrigate(9);
+                        initialTimeToNextWave = 5000;
+                        timer.restart();
+                        break;
+                    }
+                    case 5: {
+                        actorSpawner.spawnFrigate(25);
+                        initialTimeToNextWave = 5000;
+                        timer.restart();
+                        break;
+                    }
+                    case 6: {
+                        actorSpawner.spawnFrigate(25);
+                        initialTimeToNextWave = 6000;
+                        timer.restart();
+                        break;
+                    }
+                    case 7: {
+                        actorSpawner.spawnFrigate(50);
+                        onLastWave = true;
+                        initialTimeToNextWave = 0;
+                        timeToNextWave = 0;
+                        timer.restart();
+                        break;
+                    }
                 }
             }
         }

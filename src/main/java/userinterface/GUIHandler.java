@@ -158,7 +158,7 @@ public class GUIHandler extends PApplet {
         text("Level: " + gameEngine.getCurrentLevel().getLevelName()
                 + "\n"
                 + "\n" + "Current Wave: " + gameEngine.getCurrentLevel().getCurrentWave()
-                + "\n" + "Next Wave: " + format4.format(((gameEngine.getCurrentLevel().getInitialTimeToNextWave() - gameEngine.getCurrentLevel().getTimer().timePassed()) / 1000))
+                + "\n" + "Next Wave: " + format4.format(gameEngine.getCurrentLevel().getTimeToNextWave() / 1000)
                 + "\n"
                 + "\n" + "Kill chain: " + gameEngine.getCurrentLevel().getPlayer().getKillChain()
                 + "\n" + "Score: " + format1.format(gameEngine.getCurrentLevel().getPlayer().getScore()), 14, 40);
