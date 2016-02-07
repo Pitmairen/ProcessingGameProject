@@ -11,5 +11,5 @@ public enum Image {
     PARTICLE,
     ROCKET,
     SEEKER_MISSILE,
-    
+    BACKGROUND_IMAGE,
 }

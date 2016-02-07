@@ -57,7 +57,7 @@ public class GameEngine {
         fadingCanvasItems = new FadingCanvasItemManager();
         explosionManager = new ExplosionManager(new ParticleEmitter(resourceManager));
         rocketManager = new RocketManager(resourceManager);
-        fadingCanvas = new FadingCanvas(guiHandler);
+        fadingCanvas = new FadingCanvas(guiHandler, resourceManager);
 
         fadingCanvas.add(explosionManager);
         fadingCanvas.add(rocketManager);
@@ -257,6 +257,8 @@ public class GameEngine {
         resourceManager.add(Image.ROCKET, "particle.png");
         resourceManager.add(Image.LASER_BEAM, "laser.png");
         resourceManager.add(Image.SEEKER_MISSILE, "particle.png");
+        resourceManager.add(Image.BACKGROUND_IMAGE, "background.png");
+
 
     }
 

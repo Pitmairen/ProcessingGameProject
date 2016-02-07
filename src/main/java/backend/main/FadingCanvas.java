@@ -1,5 +1,7 @@
 package backend.main;
 
+import backend.resources.Image;
+import backend.resources.ResourceManager;
 import java.util.ArrayList;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -37,14 +39,14 @@ public class FadingCanvas {
     /**
      * Constructor.
      */
-    public FadingCanvas(GUIHandler gui) {
+    public FadingCanvas(GUIHandler gui, ResourceManager resources) {
         this.gui = gui;
         this.canvas = gui.createGraphics(gui.getWidth(),
                 gui.getHeight(), PGraphics.P3D);
         this.items = new ArrayList<>();
         
         // Loads the background image from the src/main/resources/data folder.
-        background = gui.loadImage("background.png");
+        background = resources.getImage(Image.BACKGROUND_IMAGE);
     }
 
     /**
