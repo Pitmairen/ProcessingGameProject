@@ -21,6 +21,7 @@ public abstract class Level {
     protected int currentWave = 0;
     protected double timeToNextWave = 0;
     protected Timer timer = new Timer();
+    protected boolean onLastWave = false;
     protected GameEngine gameEngine;     // From constructor parameter.
     protected ActorSpawner actorSpawner; // From constructor parameter.
 

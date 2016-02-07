@@ -41,7 +41,7 @@ public class LevelTest extends Level {
     @Override
     public void nextWave() {
 
-        if (timer.timePassed() >= timeToNextWave) {
+        if (timer.timePassed() >= timeToNextWave && !onLastWave) {
 
             currentWave++;
 
@@ -103,6 +103,7 @@ public class LevelTest extends Level {
                 }
                 case 7: {
                     actorSpawner.spawnFrigate(50);
+                    onLastWave = true;
                     timeToNextWave = 5000;
                     timer.restart();
                     break;
