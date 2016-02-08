@@ -13,11 +13,11 @@ import java.util.ArrayList;
  * 
  * @author pitmairen
  */
-public class SeekerCannon extends ShipModule {
+public class SeekerCannon extends OffensiveModule {
     
-    private final int turretLength = 22;
+    private final int turretLength = 20;
     private final int turretWidth = 7;
-    private final int turretRGBA = 0xff1515ee;
+    private final int turretRGBA = 0xff441599;
     
     private final Timer timer = new Timer();
     private final double timeBetweenShots = 1000;

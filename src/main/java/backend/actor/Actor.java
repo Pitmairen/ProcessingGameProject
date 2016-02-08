@@ -43,6 +43,7 @@ public abstract class Actor implements Drawable {
     // Modules.
     protected ArrayList<ShipModule> offensiveModules = new ArrayList<>();
     protected ArrayList<ShipModule> defensiveModules = new ArrayList<>();
+    protected ShipModule tacticalModule = null;
     protected ShipModule currentOffensiveModule = null;
     protected ShipModule currentDefensiveModule = null;
 
@@ -458,10 +459,18 @@ public abstract class Actor implements Drawable {
         return timer;
     }
 
+    public ShipModule getTacticalModule() {
+        return tacticalModule;
+    }
+
     // Setters.
     @Deprecated
     public void setCurrentHitPoints(double currentHitPoints) {
         this.currentHitPoints = currentHitPoints;
+    }
+
+    public void setTacticalModule(ShipModule tacticalModule) {
+        this.tacticalModule = tacticalModule;
     }
 
 }

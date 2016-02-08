@@ -33,11 +33,11 @@ public class GameEngine {
     private boolean down = false;
     private boolean left = false;
     private boolean right = false;
-    private boolean activatePrimary = false;
-    private boolean activateSecondary = false;
-    private boolean swapPrimary = false;
-    private boolean swapSecondary = false;
-    private boolean space = false;
+    private boolean offensiveModule = false;
+    private boolean defensiveModule = false;
+    private boolean tacticalModule = false;
+    private boolean swapOffensive = false;
+    private boolean swapDefensive = false;
     private boolean tab = false;
     private boolean enter = false;
 
@@ -50,10 +50,10 @@ public class GameEngine {
 
         this.guiHandler = guiHandler;
         collisionDetector = new CollisionDetector(this);
-        
+
         resourceManager = new ResourceManager(guiHandler);
         loadResources();
-        
+
         fadingCanvasItems = new FadingCanvasItemManager();
         explosionManager = new ExplosionManager(new ParticleEmitter(resourceManager));
         rocketManager = new RocketManager(resourceManager);
@@ -62,7 +62,7 @@ public class GameEngine {
         fadingCanvas.add(explosionManager);
         fadingCanvas.add(rocketManager);
         fadingCanvas.add(fadingCanvasItems);
-        
+
         resetLevel();
 
     }
@@ -156,19 +156,19 @@ public class GameEngine {
             right = keyState;
         }
         if (keyCode == 37) {
-            activatePrimary = keyState;
+            offensiveModule = keyState;
         }
         if (keyCode == 39) {
-            activateSecondary = keyState;
-        }
-        if (keyCode == KeyEvent.VK_W) {
-            swapPrimary = keyState;
-        }
-        if (keyCode == KeyEvent.VK_R) {
-            swapSecondary = keyState;
+            defensiveModule = keyState;
         }
         if (keyCode == KeyEvent.VK_SPACE) {
-            space = keyState;
+            tacticalModule = keyState;
+        }
+        if (keyCode == KeyEvent.VK_W) {
+            swapOffensive = keyState;
+        }
+        if (keyCode == KeyEvent.VK_R) {
+            swapDefensive = keyState;
         }
         if (keyCode == KeyEvent.VK_TAB) {
             tab = keyState;
@@ -205,15 +205,22 @@ public class GameEngine {
                 if (right) {
                     currentLevel.getPlayer().accelerate("right", timePassed);
                 }
-                if (activatePrimary) {
+                if (offensiveModule) {
                     currentLevel.getPlayer().activateOffensiveModule();
                 }
-                if (activateSecondary) {
+                if (defensiveModule) {
+                    currentLevel.getPlayer().activateDefensiveModule();
                 }
-                if (swapPrimary) {
+                if (tacticalModule) {
+                    currentLevel.getPlayer().activateTacticalModule();
+                }
+                if (swapOffensive) {
                     currentLevel.getPlayer().swapOffensiveModule();
                 }
-                if (space) {
+                if (swapDefensive) {
+                    currentLevel.getPlayer().swapDefensiveModule();
+                }
+                if (enter) {
                     simulationState = "pauseScreen";
                 }
                 if (tab) {
@@ -223,14 +230,14 @@ public class GameEngine {
             }
 
             case "pauseScreen": {
-                if (enter) {
+                if (offensiveModule) {
                     simulationState = "gameplay";
                 }
                 break;
             }
 
             case "deathScreen": {
-                if (space) {
+                if (tacticalModule) {
                     resetLevel();
                     simulationState = "menuScreen";
                 }
@@ -246,21 +253,18 @@ public class GameEngine {
     private void resetLevel() {
         currentLevel = new LevelTest(this, rocketManager, fadingCanvasItems);
     }
-    
-    
-    private void loadResources(){
-        
+
+    private void loadResources() {
+
         resourceManager.add(Image.PARTICLE, "particle.png");
         resourceManager.add(Image.ROCKET, "particle.png");
         resourceManager.add(Image.LASER_BEAM, "laser.png");
         resourceManager.add(Image.SEEKER_MISSILE, "particle.png");
         resourceManager.add(Image.BACKGROUND_IMAGE, "background.png");
 
-
     }
 
     // Getters.
-    
     public GUIHandler getGuiHandler() {
         return guiHandler;
     }
@@ -284,8 +288,8 @@ public class GameEngine {
     public ExplosionManager getExplosionManager() {
         return explosionManager;
     }
-    
-    public ResourceManager getResourceManager(){
+
+    public ResourceManager getResourceManager() {
         return resourceManager;
     }
 

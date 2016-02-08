@@ -69,6 +69,9 @@ public class Player extends Actor implements Drawable {
         if (currentDefensiveModule != null) {
             currentDefensiveModule.draw();
         }
+        if (tacticalModule != null) {
+            tacticalModule.draw();
+        }
 
         // Draw health bar.
         float healthPercentage = (float) currentHitPoints / (float) maxHitPoints;
@@ -129,14 +132,27 @@ public class Player extends Actor implements Drawable {
      * Activates the selected offensive ship module.
      */
     public void activateOffensiveModule() {
-        currentOffensiveModule.activate();
+        if (currentOffensiveModule != null) {
+            currentOffensiveModule.activate();
+        }
     }
 
     /**
      * Activates the selected defensive ship module.
      */
     public void activateDefensiveModule() {
-        currentDefensiveModule.activate();
+        if (currentDefensiveModule != null) {
+            currentDefensiveModule.activate();
+        }
+    }
+
+    /**
+     * Activates the tactical ship module.
+     */
+    public void activateTacticalModule() {
+        if (tacticalModule != null) {
+            tacticalModule.activate();
+        }
     }
 
     /**

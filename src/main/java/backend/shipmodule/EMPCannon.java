@@ -4,19 +4,19 @@ import backend.actor.Actor;
 import backend.actor.EMPPulse;
 import backend.main.FadingCanvasItemManager;
 import backend.main.Timer;
-import backend.main.Vector;
+import userinterface.GUIHandler;
 
 /**
  * Fires EMP Pulses
- * 
+ *
  * @author pitmairen
  */
-public class EMPCannon extends ShipModule {
+public class EMPCannon extends TacticalModule {
 
     // Shape and color.
-    private int turretLength = 27;
-    private int turretWidth = 4;
-    private int[] turretRGBA = new int[]{30, 30, 200, 255};
+    private int weaponLength = 8;
+    private int weaponWidth = 4;
+    private int[] weaponRGBA = new int[]{10, 10, 140, 255};
 
     private double timeBetweenShots = 3000;
     private Timer timer = new Timer();
@@ -34,12 +34,17 @@ public class EMPCannon extends ShipModule {
 
     @Override
     public void draw() {
-        owner.getGuiHandler().strokeWeight(turretWidth);
-        owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-        owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-        owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
-                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
-                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
+        GUIHandler gui = owner.getGuiHandler();
+        gui.pushMatrix();
+        gui.tint(0xffff0000);
+        gui.translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
+        gui.rotate((float) owner.getHeading().getAngle2D());
+
+        owner.getGuiHandler().strokeWeight(weaponWidth);
+        owner.getGuiHandler().stroke(weaponRGBA[0], weaponRGBA[1], weaponRGBA[2]);
+        owner.getGuiHandler().fill(weaponRGBA[0], weaponRGBA[1], weaponRGBA[2]);
+        owner.getGuiHandler().rect((float) -owner.getHitBoxRadius() / 2, -weaponLength / 2, weaponWidth, weaponLength, 2);
+        gui.popMatrix();
     }
 
     /**
@@ -54,7 +59,7 @@ public class EMPCannon extends ShipModule {
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(pulse);
             owner.getGameEngine().getCurrentLevel().getActors().add(pulse);
             fadingCanvasItems.add(pulse);
-            
+
             timer.restart();
         }
     }

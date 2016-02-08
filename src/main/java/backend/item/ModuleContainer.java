@@ -3,7 +3,10 @@ package backend.item;
 import backend.actor.Actor;
 import backend.main.GameEngine;
 import backend.main.Vector;
+import backend.shipmodule.DefensiveModule;
+import backend.shipmodule.OffensiveModule;
 import backend.shipmodule.ShipModule;
+import backend.shipmodule.TacticalModule;
 import userinterface.Drawable;
 
 /**
@@ -43,8 +46,16 @@ public class ModuleContainer extends Item implements Drawable {
 
     @Override
     public void pickup(Actor looter) {
-        if (currentHitPoints > 0) {
-            looter.getOffensiveModules().add(shipModule);
+        if (currentHitPoints > 0) {  // Only add a module if this container is alive.
+            if (shipModule instanceof OffensiveModule) {
+                looter.getOffensiveModules().add(shipModule);
+            }
+            if (shipModule instanceof DefensiveModule) {
+                looter.getDefensiveModules().add(shipModule);
+            }
+            if (shipModule instanceof TacticalModule) {
+                looter.setTacticalModule(shipModule);
+            }
             currentHitPoints = 0;
         }
     }
