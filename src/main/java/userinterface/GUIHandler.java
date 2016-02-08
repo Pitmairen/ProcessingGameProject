@@ -208,15 +208,20 @@ public class GUIHandler extends PApplet {
         fill(mainMenuRGBA[0], mainMenuRGBA[1], mainMenuRGBA[2]);
         textFont(menuFont);
         text("Title Screen"
-                + "\n" + "Press \"Enter\" to start."
+                + "\n" + "Press \"LMB\" to start."
                 + "\n"
                 + "\n"
-                + "\n" + "Acceleration: E, S, D, F"
-                + "\n" + "Offensive module: Left mouse button"
-                + "\n" + "Cycle between offensive modules: W"
-                + "\n" + "Spawn enemies: TAB"
-                + "\n" + "Pause: Space"
-                + "\n" + "Quit: ESC", width / 2 - 300, 300);
+                + "\n" + "Movement: E, S, D, F"
+                + "\n" + "Activate offensive: LMB"
+                + "\n" + "Activate defensive: RMB"
+                + "\n" + "Activate tactical: SPACE"
+                + "\n" + "Cycle primary: W"
+                + "\n" + "Cycle secondary: R"
+                + "\n" + "Pause: TAB"
+                + "\n" + "Quit: ESC"
+                + "\n"
+                + "\n" + "Debug HUD: Z"
+                + "\n" + "Spawn enemies: Q", width / 2 - 300, 300);
     }
 
     /**
@@ -229,7 +234,7 @@ public class GUIHandler extends PApplet {
         fill(pauseScreenRGBA[0], pauseScreenRGBA[1], pauseScreenRGBA[2]);
         textFont(menuFont);
         text("PAUSED"
-                + "\n" + "Press \"Enter\" to unpause.", width / 2 - 300, 300);
+                + "\n" + "Press \"TAB\" to unpause.", width / 2 - 300, 300);
     }
 
     /**
@@ -249,7 +254,7 @@ public class GUIHandler extends PApplet {
         }
         
         text("You Were Defeated By " + hitByName
-                + "\n" + "Press \"Space\" to return to Start Menu."
+                + "\n" + "Press \"ENTER\" to return to Start Menu."
                 + "\n"
                 + "\n"
                 + "\n" + "Your score where " + gameEngine.getCurrentLevel().getPlayer().getScore(), width / 2 - 300, 300);
@@ -273,7 +278,7 @@ public class GUIHandler extends PApplet {
     @Override
     public void keyPressed() {
         gameEngine.userInput(keyCode, true);
-        if (keyCode == VK_Q) {
+        if (keyCode == VK_Z) {
             this.toggleDebugMode();
         }
     }

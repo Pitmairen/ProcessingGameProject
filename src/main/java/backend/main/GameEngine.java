@@ -38,8 +38,10 @@ public class GameEngine {
     private boolean tacticalModule = false;
     private boolean swapOffensive = false;
     private boolean swapDefensive = false;
-    private boolean tab = false;
+    private boolean pause = false;
+    private Timer pauseTimer = new Timer();
     private boolean enter = false;
+    private boolean spawnEnemies = false;
 
     /**
      * Constructor.
@@ -171,10 +173,13 @@ public class GameEngine {
             swapDefensive = keyState;
         }
         if (keyCode == KeyEvent.VK_TAB) {
-            tab = keyState;
+            pause = keyState;
         }
         if (keyCode == KeyEvent.VK_ENTER) {
             enter = keyState;
+        }
+        if (keyCode == KeyEvent.VK_Q) {
+            spawnEnemies = keyState;
         }
     }
 
@@ -186,7 +191,7 @@ public class GameEngine {
         switch (simulationState) {
 
             case "menuScreen": {
-                if (enter) {
+                if (offensiveModule) {
                     simulationState = "gameplay";
                 }
                 break;
@@ -220,24 +225,30 @@ public class GameEngine {
                 if (swapDefensive) {
                     currentLevel.getPlayer().swapDefensiveModule();
                 }
-                if (enter) {
-                    simulationState = "pauseScreen";
+                if (pause) {
+                    if (pauseTimer.timePassed() >= 200) {
+                        simulationState = "pauseScreen";
+                        pauseTimer.restart();
+                    }
                 }
-                if (tab) {
+                if (spawnEnemies) {
                     currentLevel.getActorSpawner().spawnFrigate(1);
                 }
                 break;
             }
 
             case "pauseScreen": {
-                if (offensiveModule) {
-                    simulationState = "gameplay";
+                if (pause) {
+                    if (pauseTimer.timePassed() >= 200) {
+                        simulationState = "gameplay";
+                        pauseTimer.restart();
+                    }
                 }
                 break;
             }
 
             case "deathScreen": {
-                if (tacticalModule) {
+                if (enter) {
                     resetLevel();
                     simulationState = "menuScreen";
                 }
