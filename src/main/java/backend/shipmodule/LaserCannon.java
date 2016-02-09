@@ -5,7 +5,6 @@ import backend.actor.Enemy;
 import backend.main.Vector;
 import backend.resources.Image;
 import processing.core.PImage;
-import userinterface.Drawable;
 import userinterface.GUIHandler;
 
 /**
@@ -13,7 +12,7 @@ import userinterface.GUIHandler;
  *
  * @author Kristian Honningsvag.
  */
-public class LaserCannon extends ShipModule implements Drawable {
+public class LaserCannon extends OffensiveModule {
 
     // Shape and color.
     private int turretLength = 27;
@@ -21,7 +20,7 @@ public class LaserCannon extends ShipModule implements Drawable {
     private int[] turretRGBA = new int[]{200, 30, 30, 255};
 
     private PImage bgImage;
-    
+
     /**
      * Constructor.
      */

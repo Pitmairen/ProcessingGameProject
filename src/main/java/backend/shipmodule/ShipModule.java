@@ -10,8 +10,8 @@ import userinterface.Drawable;
  */
 public abstract class ShipModule implements Drawable {
 
-    protected String name; // From constructor.
-    protected Actor owner; // From constructor.
+    protected String name;  // From constructor.
+    protected Actor owner;  // From constructor.
     protected double launchVelocity = 0;
     protected double projectileDamage = 0;
     protected boolean moduleActive = false;

@@ -34,13 +34,15 @@ public class GameEngine {
     private boolean down = false;
     private boolean left = false;
     private boolean right = false;
-    private boolean activatePrimary = false;
-    private boolean activateSecondary = false;
-    private boolean swapPrimary = false;
-    private boolean swapSecondary = false;
-    private boolean space = false;
-    private boolean tab = false;
+    private boolean offensiveModule = false;
+    private boolean defensiveModule = false;
+    private boolean tacticalModule = false;
+    private boolean swapOffensive = false;
+    private boolean swapDefensive = false;
+    private boolean pause = false;
+    private Timer pauseTimer = new Timer();
     private boolean enter = false;
+    private boolean spawnEnemies = false;
 
     /**
      * Constructor.
@@ -51,10 +53,10 @@ public class GameEngine {
 
         this.guiHandler = guiHandler;
         collisionDetector = new CollisionDetector(this);
-        
+
         resourceManager = new ResourceManager(guiHandler);
         loadResources();
-        
+
         fadingCanvasItems = new FadingCanvasItemManager();
         explosionManager = new ExplosionManager(new ParticleEmitter(resourceManager));
         rocketManager = new RocketManager(resourceManager);
@@ -63,7 +65,7 @@ public class GameEngine {
         fadingCanvas.add(explosionManager);
         fadingCanvas.add(rocketManager);
         fadingCanvas.add(fadingCanvasItems);
-        
+
         resetLevel();
 
     }
@@ -132,11 +134,8 @@ public class GameEngine {
         for (Actor actor : currentLevel.getActors()) {
             actor.act(timePassed);
         }
-
-        // Spawn new wave if current wave have been defeated.
-        if (currentLevel.getEnemies().isEmpty()) {
-            currentLevel.nextWave();
-        }
+        // Spawn the next wave if the timer has run out.
+        currentLevel.nextWave();
     }
 
     /**
@@ -160,25 +159,28 @@ public class GameEngine {
             right = keyState;
         }
         if (keyCode == 37) {
-            activatePrimary = keyState;
+            offensiveModule = keyState;
         }
         if (keyCode == 39) {
-            activateSecondary = keyState;
-        }
-        if (keyCode == KeyEvent.VK_W) {
-            swapPrimary = keyState;
-        }
-        if (keyCode == KeyEvent.VK_R) {
-            swapSecondary = keyState;
+            defensiveModule = keyState;
         }
         if (keyCode == KeyEvent.VK_SPACE) {
-            space = keyState;
+            tacticalModule = keyState;
+        }
+        if (keyCode == KeyEvent.VK_W) {
+            swapOffensive = keyState;
+        }
+        if (keyCode == KeyEvent.VK_R) {
+            swapDefensive = keyState;
         }
         if (keyCode == KeyEvent.VK_TAB) {
-            tab = keyState;
+            pause = keyState;
         }
         if (keyCode == KeyEvent.VK_ENTER) {
             enter = keyState;
+        }
+        if (keyCode == KeyEvent.VK_Q) {
+            spawnEnemies = keyState;
         }
     }
 
@@ -190,7 +192,7 @@ public class GameEngine {
         switch (simulationState) {
 
             case "menuScreen": {
-                if (enter) {
+                if (offensiveModule) {
                     simulationState = "gameplay";
                 }
                 break;
@@ -209,32 +211,45 @@ public class GameEngine {
                 if (right) {
                     currentLevel.getPlayer().accelerate("right", timePassed);
                 }
-                if (activatePrimary) {
+                if (offensiveModule) {
                     currentLevel.getPlayer().activateOffensiveModule();
                 }
-                if (activateSecondary) {
+                if (defensiveModule) {
+                    currentLevel.getPlayer().activateDefensiveModule();
                 }
-                if (swapPrimary) {
+                if (tacticalModule) {
+                    currentLevel.getPlayer().activateTacticalModule();
+                }
+                if (swapOffensive) {
                     currentLevel.getPlayer().swapOffensiveModule();
                 }
-                if (space) {
-                    simulationState = "pauseScreen";
+                if (swapDefensive) {
+                    currentLevel.getPlayer().swapDefensiveModule();
                 }
-                if (tab) {
+                if (pause) {
+                    if (pauseTimer.timePassed() >= 200) {
+                        simulationState = "pauseScreen";
+                        pauseTimer.restart();
+                    }
+                }
+                if (spawnEnemies) {
                     currentLevel.getActorSpawner().spawnFrigate(1);
                 }
                 break;
             }
 
             case "pauseScreen": {
-                if (enter) {
-                    simulationState = "gameplay";
+                if (pause) {
+                    if (pauseTimer.timePassed() >= 200) {
+                        simulationState = "gameplay";
+                        pauseTimer.restart();
+                    }
                 }
                 break;
             }
 
             case "deathScreen": {
-                if (space) {
+                if (enter) {
                     resetLevel();
                     simulationState = "menuScreen";
                 }
@@ -250,10 +265,9 @@ public class GameEngine {
     private void resetLevel() {
         currentLevel = new LevelTest(this, rocketManager, fadingCanvasItems);
     }
-    
-    
-    private void loadResources(){
-        
+
+    private void loadResources() {
+
         resourceManager.add(Image.PARTICLE, "particle.png");
         resourceManager.add(Image.ROCKET, "particle.png");
         resourceManager.add(Image.LASER_BEAM, "laser.png");
@@ -265,7 +279,6 @@ public class GameEngine {
     }
 
     // Getters.
-    
     public GUIHandler getGuiHandler() {
         return guiHandler;
     }
@@ -289,8 +302,8 @@ public class GameEngine {
     public ExplosionManager getExplosionManager() {
         return explosionManager;
     }
-    
-    public ResourceManager getResourceManager(){
+
+    public ResourceManager getResourceManager() {
         return resourceManager;
     }
 

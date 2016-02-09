@@ -3,19 +3,17 @@ package backend.shipmodule;
 import backend.main.Timer;
 import backend.actor.Actor;
 import backend.actor.Bullet;
-import backend.main.Vector;
-import userinterface.Drawable;
 
 /**
  * Automatic cannon that fires bullets. Rapid fire and small damage.
  *
  * @author Kristian Honningsvag.
  */
-public class AutoCannon extends ShipModule implements Drawable {
+public class AutoCannon extends OffensiveModule {
 
     // Shape and color.
     private int turretLength = 27;
-    private int turretWidth = 4;
+    private int turretWidth = 5;
     private int[] turretRGBA = new int[]{30, 30, 200, 255};
 
     private double timeBetweenShots = 130;

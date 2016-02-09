@@ -17,12 +17,12 @@ import backend.main.Timer;
  *
  * @author pitmairen
  */
-public class RocketLauncher extends ShipModule {
+public class RocketLauncher extends OffensiveModule {
 
     // Shape and color.
     private int turretLength = 22;
     private int turretWidth = 7;
-    private int[] turretRGBA = new int[]{20, 20, 210, 255};
+    private int[] turretRGBA = new int[]{100, 100, 100, 255};
 
     private double timeBetweenShots = 600;
     private Timer timer = new Timer();

@@ -3,15 +3,13 @@ package backend.shipmodule;
 import backend.main.Timer;
 import backend.actor.Actor;
 import backend.actor.Bullet;
-import backend.main.Vector;
-import userinterface.Drawable;
 
 /**
  * Cannon that fires single slow moving bullets.
  *
  * @author Kristian Honningsvag.
  */
-public class LightCannon extends ShipModule implements Drawable {
+public class LightCannon extends OffensiveModule {
 
     // Shape.
     private int turretLength = 10;

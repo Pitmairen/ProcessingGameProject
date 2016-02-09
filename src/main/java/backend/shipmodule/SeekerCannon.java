@@ -13,11 +13,11 @@ import java.util.ArrayList;
  * 
  * @author pitmairen
  */
-public class SeekerCannon extends ShipModule {
+public class SeekerCannon extends OffensiveModule {
     
-    private final int turretLength = 22;
+    private final int turretLength = 20;
     private final int turretWidth = 7;
-    private final int turretRGBA = 0xff1515ee;
+    private final int turretRGBA = 0xff441599;
     
     private final Timer timer = new Timer();
     private final double timeBetweenShots = 1000;
@@ -29,15 +29,16 @@ public class SeekerCannon extends ShipModule {
         super("SeekerCannon", owner);
         
          projectileDamage = 12;
-         fadingCanvasItems = itemManager;
+        fadingCanvasItems = itemManager;
     }
 
-    
     @Override
     public void activate() {
-        if (timer.timePassed() >= timeBetweenShots) { 
-            selector = findTarget();
-            timer.restart();
+        if (owner.getGameEngine().getCurrentLevel().getEnemies().size() > 0) {
+            if (timer.timePassed() >= timeBetweenShots) {
+                selector = findTarget();
+                timer.restart();
+            }
         }
     }
 
@@ -49,7 +50,7 @@ public class SeekerCannon extends ShipModule {
         owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
                 (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
                 (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
-        
+
         updateSelector();
     }
     
