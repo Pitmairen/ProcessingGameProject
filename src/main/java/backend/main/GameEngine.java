@@ -5,6 +5,7 @@ import backend.level.Level;
 import backend.level.LevelTest;
 import backend.resources.Image;
 import backend.resources.ResourceManager;
+import backend.resources.Shader;
 import userinterface.GUIHandler;
 
 import java.awt.event.KeyEvent;
@@ -272,7 +273,10 @@ public class GameEngine {
         resourceManager.add(Image.LASER_BEAM, "laser.png");
         resourceManager.add(Image.SEEKER_MISSILE, "particle.png");
         resourceManager.add(Image.BACKGROUND_IMAGE, "background.png");
-
+        resourceManager.add(Image.SHIELD_NOISE, "shieldNoise.png");
+        resourceManager.add(Image.SHIELD_BACKGROUND, "shield.png");
+        
+        resourceManager.add(Shader.SHIELD_SHADER, "shield.glsl");
     }
 
     // Getters.

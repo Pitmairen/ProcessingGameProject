@@ -12,4 +12,6 @@ public enum Image {
     ROCKET,
     SEEKER_MISSILE,
     BACKGROUND_IMAGE,
+    SHIELD_NOISE,
+    SHIELD_BACKGROUND,
 }
