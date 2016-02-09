@@ -95,9 +95,9 @@ public class FadingCanvas {
         this.canvas.rect(0, 0, this.canvas.width, this.canvas.height);
         
         // Code for background image
-        //this.canvas.tint(255, 40);
-        //this.canvas.imageMode(PGraphics.CORNER);
-        //this.canvas.image(background, 0, 0, this.canvas.width, this.canvas.height);
+        this.canvas.tint(255, 40);
+        this.canvas.imageMode(PGraphics.CORNER);
+        this.canvas.image(background, 0, 0, this.canvas.width, this.canvas.height);
 
         
         for (Drawable it : items) {
