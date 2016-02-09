@@ -274,7 +274,10 @@ public class GameEngine {
         resourceManager.add(Image.SEEKER_MISSILE, "particle.png");
         resourceManager.add(Image.BACKGROUND_IMAGE, "background.png");
         resourceManager.add(Image.BG_SHADER_NOISE, "shader_noise.png");
+        resourceManager.add(Image.SHIELD_NOISE, "shieldNoise.png");
+        resourceManager.add(Image.SHIELD_BACKGROUND, "shield.png");
         
+        resourceManager.add(Shader.SHIELD_SHADER, "shield.glsl");
         resourceManager.add(Shader.BG_SHADER, "background.glsl");
     }
 

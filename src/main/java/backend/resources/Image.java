@@ -13,4 +13,6 @@ public enum Image {
     BG_SHADER_NOISE,
     SEEKER_MISSILE,
     BACKGROUND_IMAGE,
+    SHIELD_NOISE,
+    SHIELD_BACKGROUND,
 }

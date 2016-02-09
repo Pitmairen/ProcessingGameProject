@@ -12,6 +12,7 @@ package backend.resources;
  */
 public enum Shader {
     
-    BG_SHADER
+    BG_SHADER,
+    SHIELD_SHADER,
     
 }

@@ -5,6 +5,7 @@ import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.main.Vector;
 import backend.shipmodule.AutoCannon;
+import backend.shipmodule.Shield;
 import java.util.ArrayList;
 import userinterface.Drawable;
 
@@ -48,6 +49,9 @@ public class Player extends Actor implements Drawable {
 
         offensiveModules.add(new AutoCannon(this));  // Starting weapon.
         currentOffensiveModule = offensiveModules.get(0);
+        
+        defensiveModules.add(new Shield(this));
+        currentDefensiveModule = defensiveModules.get(0);
     }
 
     @Override
@@ -118,6 +122,8 @@ public class Player extends Actor implements Drawable {
                     }
                 } else if (target instanceof Item) {
                     ((Item) target).pickup(this);
+                } else if (target instanceof Shield.ShieldActor && ((Shield.ShieldActor)target).getOwner() == this){ 
+                    // The player doesn't collide with its own shield
                 } else {
                     // This player crashed into an actor.
                     elasticColision(this, target, timePassed);

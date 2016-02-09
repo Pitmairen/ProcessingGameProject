@@ -2,6 +2,7 @@ package backend.actor;
 
 import backend.item.Item;
 import backend.main.Vector;
+import backend.shipmodule.Shield;
 import backend.shipmodule.ShipModule;
 import java.util.ArrayList;
 import userinterface.Drawable;
@@ -55,6 +56,9 @@ public abstract class Projectile extends Actor implements Drawable {
                     else {
                         // Projectiles can't hit other projectiles.
                     }
+                }
+                else if(target instanceof Shield.ShieldActor && ((Shield.ShieldActor) target).getOwner() == this.shipModule.getOwner()){
+                    // Projectiles can't hit the owner's shield
                 }
                 else if (target instanceof Enemy){
                     if (this.getShipModule().getOwner() instanceof Enemy) {
