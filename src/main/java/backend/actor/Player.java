@@ -21,6 +21,9 @@ public class Player extends Actor implements Drawable {
     private int[] healthBarRGBA = new int[]{20, 200, 20, 255};
     private int healthBarWidth = 50;
     private int healthBarHeight = 10;
+    private int[] energyBarRGBA = new int[]{20, 20, 200, 255};
+    private int energyBarWidth = 50;
+    private int energyBarHeight = 10;
     private final int backgroundColor;  // Set in constructor.
 
     // Modules.
@@ -43,6 +46,8 @@ public class Player extends Actor implements Drawable {
         bounceModifier = 0.6f;
         maxHitPoints = 30;
         currentHitPoints = 30;
+        maxEnergy = 100;
+        currentEnergy = 100;
         mass = 100;
         backgroundColor = guiHandler.color(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2], 255);
         collisionDamageToOthers = 4;
@@ -86,10 +91,28 @@ public class Player extends Actor implements Drawable {
         } else {
             healthBarRGBA = new int[]{200, 20, 20, 255};
         }
-        guiHandler.strokeWeight(0);
+        guiHandler.strokeWeight(2);
         guiHandler.stroke(healthBarRGBA[0], healthBarRGBA[1], healthBarRGBA[2]);
+        guiHandler.noFill();
+        guiHandler.rect((float) this.getPosition().getX() - (healthBarWidth / 2), (float) this.getPosition().getY() + (float) hitBoxRadius + 5, healthBarWidth, healthBarHeight, 6);
         guiHandler.fill(healthBarRGBA[0], healthBarRGBA[1], healthBarRGBA[2]);
         guiHandler.rect((float) this.getPosition().getX() - (healthBarWidth / 2), (float) this.getPosition().getY() + (float) hitBoxRadius + 5, healthBarWidth * healthPercentage, healthBarHeight, 6);
+
+        // Draw energy bar.
+        float energyPercentage = (float) currentEnergy / (float) maxEnergy;
+        if (energyPercentage >= 0.66) {
+            energyBarRGBA = new int[]{20, 20, 200, 255};
+        } else if (energyPercentage < 0.66 && energyPercentage > 0.33) {
+            energyBarRGBA = new int[]{20, 20, 200, 255};
+        } else {
+            energyBarRGBA = new int[]{200, 20, 200, 255};
+        }
+        guiHandler.strokeWeight(2);
+        guiHandler.stroke(energyBarRGBA[0], energyBarRGBA[1], energyBarRGBA[2]);
+        guiHandler.noFill();
+        guiHandler.rect((float) this.getPosition().getX() - (energyBarWidth / 2), (float) this.getPosition().getY() + (float) hitBoxRadius + 20, energyBarWidth, energyBarHeight, 6);
+        guiHandler.fill(energyBarRGBA[0], energyBarRGBA[1], energyBarRGBA[2]);
+        guiHandler.rect((float) this.getPosition().getX() - (energyBarWidth / 2), (float) this.getPosition().getY() + (float) hitBoxRadius + 20, energyBarWidth * energyPercentage, energyBarHeight, 6);
     }
 
     @Override

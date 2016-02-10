@@ -33,6 +33,8 @@ public abstract class Actor implements Drawable {
     protected double bounceModifier = 0;
     protected double maxHitPoints = 0;
     protected double currentHitPoints = 0;
+    protected double maxEnergy = 0;
+    protected double currentEnergy = 0;
     protected double collisionDamageToOthers = 0;
 
     // Score system.
@@ -461,6 +463,14 @@ public abstract class Actor implements Drawable {
 
     public ShipModule getTacticalModule() {
         return tacticalModule;
+    }
+
+    public double getMaxEnergy() {
+        return maxEnergy;
+    }
+
+    public double getCurrentEnergy() {
+        return currentEnergy;
     }
 
     // Setters.
