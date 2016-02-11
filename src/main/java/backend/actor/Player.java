@@ -7,6 +7,7 @@ import backend.main.Vector;
 import backend.shipmodule.AutoCannon;
 import backend.shipmodule.Shield;
 import java.util.ArrayList;
+import processing.core.PImage;
 import userinterface.Drawable;
 
 /**
@@ -31,6 +32,9 @@ public class Player extends Actor implements Drawable {
     private Timer defensiveModuleTimer = new Timer();
     private double offensiveModuleSwapDelay = 600;
     private double defensiveModuleSwapDelay = 600;
+    
+    // Image.
+    private final PImage playerGraphics;
 
     /**
      * Constructor.
@@ -57,6 +61,8 @@ public class Player extends Actor implements Drawable {
         
         defensiveModules.add(new Shield(this));
         currentDefensiveModule = defensiveModules.get(0);
+        
+        playerGraphics = guiHandler.loadImage("drone.png");
     }
 
     @Override
@@ -66,11 +72,14 @@ public class Player extends Actor implements Drawable {
         heading.set(guiHandler.mouseX - this.getPosition().getX(), guiHandler.mouseY - this.getPosition().getY(), 0);
 
         // Draw main body.
-        guiHandler.strokeWeight(0);
-        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+//        guiHandler.strokeWeight(0);
+//        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+//        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+//        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
 
+        guiHandler.tint(255);
+        guiHandler.image(playerGraphics, (float) this.getPosition().getX() - 20, (float) this.getPosition().getY() - 20);
+        
         // Draw modules.
         if (currentOffensiveModule != null) {
             currentOffensiveModule.draw();
