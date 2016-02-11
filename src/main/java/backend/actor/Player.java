@@ -68,8 +68,10 @@ public class Player extends Actor implements Drawable {
     @Override
     public void draw() {
 
-        // Set heading.
-        heading.set(guiHandler.mouseX - this.getPosition().getX(), guiHandler.mouseY - this.getPosition().getY(), 0);
+        // Set heading. Mouse position is adjusted to account for the camera following the player
+        heading.set((guiHandler.mouseX - (guiHandler.width/2 -this.getPosition().getX())) - this.getPosition().getX(),
+                (guiHandler.mouseY - (guiHandler.height/2 -this.getPosition().getY())) - this.getPosition().getY(),
+                0);
 
         // Draw main body.
 //        guiHandler.strokeWeight(0);

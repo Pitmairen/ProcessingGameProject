@@ -92,7 +92,8 @@ public class Shield extends DefensiveModule {
             gui.blendMode(PApplet.ADD);
             gui.shader(shieldShader);  
             
-            shieldShader.set("position", x, (gui.height - y), 0f, 0f);
+            // Adjust position to account for the camera following the player
+            shieldShader.set("position", x + (gui.width/2 - (float)pos.getX()), (gui.height - y) - (gui.height/2 - (float)pos.getY()), 0f, 0f);
             shieldShader.set("time", (float)gui.millis()*0.00004f);
 
             gui.imageMode(PApplet.CENTER);

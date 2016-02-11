@@ -3,6 +3,7 @@ package userinterface;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.actor.Actor;
+import backend.main.Vector;
 import static java.awt.event.KeyEvent.*;
 
 import java.text.DecimalFormat;
@@ -96,6 +97,8 @@ public class GUIHandler extends PApplet {
     @Override
     public void draw() {
 
+        Vector playerPos = gameEngine.getCurrentLevel().getPlayer().getPosition();
+
         gameEngine.run(timer.timePassed());
         timer.restart();
 
@@ -107,9 +110,14 @@ public class GUIHandler extends PApplet {
             }
 
             case "gameplay": {
+                
+                camera((float)playerPos.getX(), (float)playerPos.getY(), 1000.0f,
+                        (float)playerPos.getX(), (float)playerPos.getY(), 0.0f, 
+                       0.0f, 1.0f, 0.0f);
+
                 drawOuterWalls();
                 drawActors();
-                drawHUD();
+                drawHUD((float)playerPos.getX() - width/2 + 100, (float)playerPos.getY() - height/2 + 100);
                 break;
             }
 
@@ -128,7 +136,12 @@ public class GUIHandler extends PApplet {
             }
         }
         if (debugMode) {
-            drawDebugHud();
+            
+            if(gameEngine.getSimulationState().equals("gameplay")){
+                drawDebugHud((float)playerPos.getX() + width/2 - 500, (float)playerPos.getY() - height/2 + 100);
+            }else{
+                drawDebugHud();
+            }
         }
     }
 
@@ -139,16 +152,16 @@ public class GUIHandler extends PApplet {
         strokeWeight(outerWallThickness);
         stroke(outerWallsRGBA[0], outerWallsRGBA[1], outerWallsRGBA[2]);
         fill(backgroundRGBA[0], backgroundRGBA[1], backgroundRGBA[2]);
-        rect(0 + outerWallThickness / 2,
-                0 + outerWallThickness / 2,
-                width - outerWallThickness,
-                height - outerWallThickness);
+        rect(-1000 + outerWallThickness / 2,
+                -1000 + outerWallThickness / 2,
+                2000 + width - outerWallThickness,
+                2000 + height - outerWallThickness);
     }
 
     /**
      * Draws the HUD.
      */
-    private void drawHUD() {
+    private void drawHUD(float x, float y) {
 
         strokeWeight(1);
         stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
@@ -161,13 +174,22 @@ public class GUIHandler extends PApplet {
                 + "\n" + "Next Wave: " + format4.format(gameEngine.getCurrentLevel().getTimeToNextWave() / 1000)
                 + "\n"
                 + "\n" + "Kill chain: " + gameEngine.getCurrentLevel().getPlayer().getKillChain()
-                + "\n" + "Score: " + format1.format(gameEngine.getCurrentLevel().getPlayer().getScore()), 14, 40);
+                + "\n" + "Score: " + format1.format(gameEngine.getCurrentLevel().getPlayer().getScore()), x, y);
     }
-
+    
+    /**
+     * Draws the HUD.
+     */
+    private void drawHUD() {
+        drawHUD(14, 40);
+    }
+    
+    
     /**
      * Draws the debugging HUD.
      */
-    private void drawDebugHud() {
+    private void drawDebugHud(float x, float y) {
+    Vector p = gameEngine.getCurrentLevel().getPlayer().getPosition();
 
         strokeWeight(1);
         stroke(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
@@ -185,9 +207,15 @@ public class GUIHandler extends PApplet {
                 + "\n" + "posY: " + format5.format(gameEngine.getCurrentLevel().getPlayer().getPosition().getY())
                 + "\n" + "speed: " + format10.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().mag())
                 + "\n" + "heading: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getHeading().getAngle2D()) + " rad"
-                + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad", width - 500, 100);
+                + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad", x, y);
     }
-
+    /**
+     * Draws the debugging HUD.
+     */
+    private void drawDebugHud() {
+        drawDebugHud(width - 500, 100);
+    }
+    
     /**
      * Draws the start screen.
      */
