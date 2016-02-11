@@ -18,12 +18,17 @@ public class Frigate extends Enemy implements Drawable {
 
     // Color.
     private int[] bodyRGBA = new int[]{200, 30, 30, 255};
+    private int[] healthBarRGBA = new int[]{20, 200, 20, 255};
 
-    // Modules.
-    private LightCannon LightCannon = new LightCannon(this);
+    // Shape.
+    private int healthBarWidth = 30;
+    private int healthBarHeight = 7;
 
     //Image
     private final PImage enemyGraphics;
+
+    // Modules.
+    private LightCannon LightCannon = new LightCannon(this);
 
     /**
      * Constructor.
@@ -37,6 +42,7 @@ public class Frigate extends Enemy implements Drawable {
         frictionCoefficient = 0.04f;
         hitBoxRadius = 15;
         bounceModifier = 0.6f;
+        maxHitPoints = 10;
         currentHitPoints = 10;
         mass = 25;
         collisionDamageToOthers = 2;
@@ -67,6 +73,27 @@ public class Frigate extends Enemy implements Drawable {
         if (currentDefensiveModule != null) {
             currentDefensiveModule.draw();
         }
+
+        // Health bar.
+        guiHandler.pushMatrix();
+        guiHandler.translate((float) this.getPosition().getX() - (healthBarWidth / 2), (float) this.getPosition().getY() + (float) hitBoxRadius + 7);
+
+        float healthPercentage = (float) currentHitPoints / (float) maxHitPoints;
+        if (healthPercentage >= 0.66) {
+            healthBarRGBA = new int[]{20, 200, 20, 255};
+        } else if (healthPercentage < 0.66 && healthPercentage >= 0.33) {
+            healthBarRGBA = new int[]{200, 200, 20, 255};
+        } else {
+            healthBarRGBA = new int[]{200, 20, 20, 255};
+        }
+        guiHandler.stroke(healthBarRGBA[0], healthBarRGBA[1], healthBarRGBA[2]);
+        guiHandler.strokeWeight(1);
+        guiHandler.noFill();
+        guiHandler.rect((float) 0, 0, healthBarWidth, healthBarHeight, 6);
+        guiHandler.fill(healthBarRGBA[0], healthBarRGBA[1], healthBarRGBA[2]);
+        guiHandler.rect(0, 0, healthBarWidth * healthPercentage, healthBarHeight, 3);
+
+        guiHandler.popMatrix();
     }
 
     @Override
