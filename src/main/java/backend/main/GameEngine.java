@@ -263,6 +263,7 @@ public class GameEngine {
      * Creates the currentLevel.
      */
     private void resetLevel() {
+        fadingCanvasItems.clear();
         currentLevel = new LevelTest(this, rocketManager, fadingCanvasItems);
     }
 
