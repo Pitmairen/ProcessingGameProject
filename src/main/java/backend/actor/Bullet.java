@@ -31,16 +31,6 @@ public class Bullet extends Projectile implements Drawable {
     }
 
     @Override
-    public void act(double timePassed) {
-        super.addFriction();
-        super.calcAcceleration();
-        super.calcSpeed(timePassed);
-        super.updatePosition(timePassed);
-        checkWallCollisions(timePassed);
-        checkActorCollisions(timePassed);
-    }
-
-    @Override
     public void draw() {
         guiHandler.strokeWeight(0);
         guiHandler.stroke(bulletRGBA[0], bulletRGBA[1], bulletRGBA[2]);
