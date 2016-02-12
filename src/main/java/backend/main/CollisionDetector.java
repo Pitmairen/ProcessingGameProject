@@ -23,28 +23,31 @@ public class CollisionDetector {
     }
 
     /**
-     * Detects actor vs outer wall collisions.
+     * Detects actor vs outer wall collisions and returns an array list of
+     * strings corresponding to the walls that where hit. Up to 2 walls can be
+     * hit Simultaneously in rare cases. Returns an empty array list if no walls
+     * where hit.
      *
      * @param movingActor The actor to be checked.
-     * @return The wall that was hit.
+     * @return The walls that was hit.
      */
-    public String detectWallCollision(Actor movingActor) {
+    public ArrayList<String> detectWallCollision(Actor movingActor) {
 
-        String wallLocation = null;
+        ArrayList<String> wallCollision = new ArrayList<String>();
 
         if (movingActor.getPosition().getX() + movingActor.getHitBoxRadius() >= (gameEngine.getGuiHandler().getWidth() - gameEngine.getGuiHandler().getOuterWallThickness())) {
-            wallLocation = "east";
+            wallCollision.add("east");
         }
         if (movingActor.getPosition().getY() + (movingActor.getHitBoxRadius()) >= (gameEngine.getGuiHandler().getHeight() - gameEngine.getGuiHandler().getOuterWallThickness())) {
-            wallLocation = "south";
+            wallCollision.add("south");
         }
         if (movingActor.getPosition().getX() - (movingActor.getHitBoxRadius()) <= (0 + gameEngine.getGuiHandler().getOuterWallThickness())) {
-            wallLocation = "west";
+            wallCollision.add("west");
         }
         if (movingActor.getPosition().getY() - (movingActor.getHitBoxRadius()) <= (0 + gameEngine.getGuiHandler().getOuterWallThickness())) {
-            wallLocation = "north";
+            wallCollision.add("north");
         }
-        return wallLocation;
+        return wallCollision;
     }
 
     /**
@@ -62,19 +65,18 @@ public class CollisionDetector {
 
             Actor actorInList = it.next();
 
-            if (actorInList != movingActor) {
+            if (actorInList != movingActor) {  // Actors do not collide with themselves.
+
+                double distanceBetweenActors = movingActor.getPosition().dist(actorInList.getPosition());
 
                 // Detection between to round objects.
-                double dx = Math.abs(actorInList.getPosition().getX() - movingActor.getPosition().getX());
-                double dy = Math.abs(actorInList.getPosition().getY() - movingActor.getPosition().getY());
-                double distanceBetweenActors = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
                 if (distanceBetweenActors < movingActor.getHitBoxRadius() + actorInList.getHitBoxRadius()) {
                     collisions.add(actorInList);
                 }
 
 //                // Detection between two square objects.
-//                if ((Math.abs(movingActor.getPositionX() - actorInList.getPositionX()) < movingActor.getHitBoxRadius() + actorInList.getHitBoxRadius())
-//                        && (Math.abs(movingActor.getPositionY() - actorInList.getPositionY()) < movingActor.getHitBoxRadius() + actorInList.getHitBoxRadius())) {
+//                if ((Math.abs(movingActor.getPosition().getX() - actorInList.getPosition().getX()) < movingActor.getHitBoxRadius() + actorInList.getHitBoxRadius())
+//                        && (Math.abs(movingActor.getPosition().getY() - actorInList.getPosition().getY()) < movingActor.getHitBoxRadius() + actorInList.getHitBoxRadius())) {
 //                    collisions.add(actorInList);
 //                }
             }

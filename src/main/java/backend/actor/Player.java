@@ -49,7 +49,7 @@ public class Player extends Actor implements Drawable {
         engineThrust = 0.2f;
         frictionCoefficient = 0.4;
         hitBoxRadius = 20;
-        bounceModifier = 0.6f;
+        bounceModifier = 0.8f;
         maxHitPoints = 100;
         currentHitPoints = 100;
         maxEnergy = 100;
