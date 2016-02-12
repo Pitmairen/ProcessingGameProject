@@ -63,4 +63,9 @@ public abstract class ShipModule implements Drawable {
         return moduleActive;
     }
 
+    // Setters.
+    public void setOwner(Actor owner) {
+        this.owner = owner;
+    }
+
 }

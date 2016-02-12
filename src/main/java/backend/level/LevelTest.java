@@ -2,7 +2,6 @@ package backend.level;
 
 import backend.main.GameEngine;
 import backend.actor.Player;
-import backend.item.Item;
 import backend.item.ModuleContainer;
 import backend.main.FadingCanvasItemManager;
 import backend.main.RocketManager;
@@ -51,19 +50,23 @@ public class LevelTest extends Level {
 
                 switch (currentWave) {
                     case 1: {
-                        Item moduleContainer = new ModuleContainer(new Vector(200, 400, 0), gameEngine, new RocketLauncher(player, rocketManager));
+                        ModuleContainer moduleContainer = new ModuleContainer(new Vector(200, 400, 0), gameEngine);
+                        moduleContainer.setModule(new RocketLauncher(moduleContainer, rocketManager));
                         items.add(moduleContainer);
                         actors.add(moduleContainer);
 
-                        moduleContainer = new ModuleContainer(new Vector(200, 500, 0), gameEngine, new SeekerCannon(player, fadingCanvasItems));
+                        moduleContainer = new ModuleContainer(new Vector(200, 500, 0), gameEngine);
+                        moduleContainer.setModule(new SeekerCannon(moduleContainer, fadingCanvasItems));
                         items.add(moduleContainer);
                         actors.add(moduleContainer);
 
-                        moduleContainer = new ModuleContainer(new Vector(200, 600, 0), gameEngine, new LaserCannon(player));
+                        moduleContainer = new ModuleContainer(new Vector(200, 600, 0), gameEngine);
+                        moduleContainer.setModule(new LaserCannon(moduleContainer));
                         items.add(moduleContainer);
                         actors.add(moduleContainer);
 
-                        moduleContainer = new ModuleContainer(new Vector(200, 700, 0), gameEngine, new EMPCannon(player, fadingCanvasItems));
+                        moduleContainer = new ModuleContainer(new Vector(200, 700, 0), gameEngine);
+                        moduleContainer.setModule(new EMPCannon(moduleContainer, fadingCanvasItems));
                         items.add(moduleContainer);
                         actors.add(moduleContainer);
 

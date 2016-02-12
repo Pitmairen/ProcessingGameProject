@@ -20,16 +20,14 @@ public class ModuleContainer extends Item implements Drawable {
     // Color.
     private int[] bodyRGBA = new int[]{200, 200, 20, 255};
 
-    private ShipModule shipModule;  // Set in construntor.
+    private ShipModule shipModule = null;
 
     /**
      * Constructor.
      */
-    public ModuleContainer(Vector position, GameEngine gameEngine, ShipModule shipModule) {
+    public ModuleContainer(Vector position, GameEngine gameEngine) {
 
         super(position, gameEngine);
-
-        this.shipModule = shipModule;
 
         hitBoxRadius = 20;
         pullDistance = gameEngine.getCurrentLevel().getPlayer().getHitBoxRadius() * 5;
@@ -37,16 +35,21 @@ public class ModuleContainer extends Item implements Drawable {
 
     @Override
     public void draw() {
-        // Draw main body.
-        guiHandler.strokeWeight(0);
+        // Draw container.
+        guiHandler.strokeWeight(3);
         guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+        guiHandler.noFill();
         guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+        // Draw cargo.
+        if (shipModule != null) {
+            shipModule.draw();
+        }
     }
 
     @Override
     public void pickup(Actor looter) {
         if (currentHitPoints > 0) {  // Only add a module if this container is alive.
+            shipModule.setOwner(looter);
             if (shipModule instanceof OffensiveModule) {
                 looter.getOffensiveModules().add(shipModule);
             }
@@ -63,6 +66,16 @@ public class ModuleContainer extends Item implements Drawable {
     @Override
     public void die() {
         gameEngine.getCurrentLevel().getItems().remove(this);
+    }
+
+    /**
+     * Adds a ship module to this container. Overwrites the previous module if
+     * one was present when a new one was added.
+     *
+     * @param shipModule To be added.
+     */
+    public void setModule(ShipModule shipModule) {
+        this.shipModule = shipModule;
     }
 
 }
