@@ -1,6 +1,8 @@
 package backend.main;
 
 import backend.actor.Actor;
+import backend.collision.BruteForceDetection;
+import backend.collision.CollisionDetection;
 import backend.level.Level;
 import backend.level.LevelTest;
 import backend.resources.Image;
@@ -20,7 +22,7 @@ import java.util.Iterator;
 public class GameEngine {
 
     private GUIHandler guiHandler;
-    private CollisionDetector collisionDetector;
+    private CollisionDetection collisionDetection;
     private Level currentLevel;
     private ExplosionManager explosionManager;
     private RocketManager rocketManager;
@@ -52,7 +54,7 @@ public class GameEngine {
     public GameEngine(GUIHandler guiHandler) {
 
         this.guiHandler = guiHandler;
-        collisionDetector = new CollisionDetector(this);
+        collisionDetection = new BruteForceDetection(this, new CollisionResponse());
 
         resourceManager = new ResourceManager(guiHandler);
         loadResources();
@@ -136,6 +138,8 @@ public class GameEngine {
         }
         // Spawn the next wave if the timer has run out.
         currentLevel.nextWave();
+        
+        collisionDetection.detectCollisions();
     }
 
     /**
@@ -293,8 +297,8 @@ public class GameEngine {
         return currentLevel;
     }
 
-    public CollisionDetector getCollisionDetector() {
-        return collisionDetector;
+    public CollisionDetection getCollisionDetection(){
+        return collisionDetection;
     }
 
     public FadingCanvas getFadingCanvas() {

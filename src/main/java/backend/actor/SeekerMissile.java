@@ -65,13 +65,6 @@ public class SeekerMissile extends Projectile implements FadingCanvasItemManager
     }
     
     @Override
-    protected void checkWallCollisions(double timePassed) {
-        // The seeker can go outside the walls
-    }
-   
-    
-    
-    @Override
     public void draw(PGraphics canvas) {
 
         canvas.tint(0xffff0000);

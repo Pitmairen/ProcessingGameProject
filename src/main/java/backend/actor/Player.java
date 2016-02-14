@@ -1,12 +1,10 @@
 package backend.actor;
 
-import backend.item.Item;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.main.Vector;
 import backend.shipmodule.AutoCannon;
 import backend.shipmodule.Shield;
-import java.util.ArrayList;
 import processing.core.PImage;
 import userinterface.Drawable;
 
@@ -129,42 +127,6 @@ public class Player extends Actor implements Drawable {
     public void die() {
         gameEngine.getExplosionManager().explodePlayer(this);
         gameEngine.setSimulationState("deathScreen");
-    }
-
-    @Override
-    protected void checkActorCollisions(double timePassed) {
-
-        ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
-
-        if (collisions.size() > 0) {
-
-            for (Actor target : collisions) {
-
-                if ((target instanceof Projectile)) {
-                    Projectile projectile = (Projectile) target;
-
-                    if (projectile.getShipModule().getOwner() == this) {
-                        // This player crashed into a projectile fired by itself.
-                        // No damage. Players can't collide with their own projectiles.
-                    } else {
-                        // This actor crashed into an unfriendly projectile.
-                        elasticColision(this, target, timePassed);
-                        this.collision(target);
-                        target.collision(this);
-                        projectile.targetHit();
-                    }
-                } else if (target instanceof Item) {
-                    ((Item) target).pickup(this);
-                } else if (target instanceof Shield.ShieldActor && ((Shield.ShieldActor)target).getOwner() == this){ 
-                    // The player doesn't collide with its own shield
-                } else {
-                    // This player crashed into an actor.
-                    elasticColision(this, target, timePassed);
-                    this.collision(target);
-                    target.collision(this);
-                }
-            }
-        }
     }
 
     /**

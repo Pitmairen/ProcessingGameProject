@@ -1,12 +1,10 @@
 package backend.actor;
 
 import backend.shipmodule.ShipModule;
-import backend.main.CollisionDetector;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.main.Vector;
 import java.util.ArrayList;
-import java.util.Random;
 import userinterface.Drawable;
 import userinterface.GUIHandler;
 
@@ -53,7 +51,6 @@ public abstract class Actor implements Drawable {
     // Simulation.
     protected GameEngine gameEngine;               // From constructor.
     protected GUIHandler guiHandler;               // Set in constructor.
-    protected CollisionDetector collisionDetector; // Set in constructor.
     protected Actor whoHitMeLast = null;
     protected Timer timer = new Timer();
     protected int outOfBoundsCounter = 0;   // Number of consecutive simulation rounds the actor was out of bonds.
@@ -70,7 +67,6 @@ public abstract class Actor implements Drawable {
         this.gameEngine = gameEngine;
 
         guiHandler = gameEngine.getGuiHandler();
-        collisionDetector = gameEngine.getCollisionDetector();
     }
 
     @Override
@@ -93,8 +89,6 @@ public abstract class Actor implements Drawable {
         calcAcceleration();
         calcSpeed(timePassed);
         updatePosition(timePassed);
-        checkWallCollisions(timePassed);
-        checkActorCollisions(timePassed);
     }
 
     /**
@@ -191,134 +185,40 @@ public abstract class Actor implements Drawable {
         }
     }
 
-    /**
-     * Check for wall collisions and react to them.
-     *
-     * @param timePassed Number of milliseconds since the previous simulation
-     * cycle.
-     */
-    protected void checkWallCollisions(double timePassed) {
-
-        ArrayList<String> wallCollisions = gameEngine.getCollisionDetector().detectWallCollision(this);
-
-        if (wallCollisions.isEmpty()) {
-            // Current position is ok.
-            outOfBoundsCounter = 0;
-        } else {
-            // Currently out of bonds.
-            outOfBoundsCounter++;
-        }
-
-        if (outOfBoundsCounter > 2) {
-            // Out of bonds for more than 2 turns in a row.
-            // Assume actor is stuck out of bonds and teleport it back in.
-            this.getSpeedT().set(0, 0, 0);
-
-            Random random = new Random();
-            int randX = random.nextInt(guiHandler.getWidth() - 200) + 100;
-            int randY = random.nextInt(guiHandler.getHeight() - 200) + 100;
-            this.getPosition().set(randX, randY, 0);
-        }
-
-        // Handle wall collisions.
-        for (String wallCollision : wallCollisions) {
-            wallBounce(wallCollision, timePassed);
-        }
-    }
-
-    /**
-     * Changes actor speedT and direction upon collision with an outer wall.
-     *
-     * @param wall The wall that was hit.
-     * @param timePassed Number of milliseconds since the previous simulation
-     * cycle.
-     */
-    protected void wallBounce(String wall, double timePassed) {
-
-        rollbackPosition(timePassed);    // First move the actor out of the wall.
-
-        switch (wall) {
-
-            case "east":
-                if (this.speedT.getX() > 0) {
-                    this.getSpeedT().setX(this.getSpeedT().getX() * (-bounceModifier));
-                    break;
-                }
-
-            case "south":
-                if (this.speedT.getY() > 0) {
-                    this.getSpeedT().setY(this.getSpeedT().getY() * (-bounceModifier));
-                    break;
-                }
-
-            case "west":
-                if (this.speedT.getX() < 0) {
-                    this.getSpeedT().setX(this.getSpeedT().getX() * (-bounceModifier));
-                    break;
-                }
-
-            case "north":
-                if (this.speedT.getY() < 0) {
-                    this.getSpeedT().setY(this.getSpeedT().getY() * (-bounceModifier));
-                    break;
-                }
-
-        }
-        updatePosition(timePassed);  // Update the position so that the actor does not miss a turn.
-    }
-
-    /**
-     * Check for collisions with other actors and react to them.
-     *
-     * @param timePassed Number of milliseconds since the previous simulation
-     * cycle.
-     */
-    protected void checkActorCollisions(double timePassed) {
-        ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
-
-        for (Actor target : collisions) {
-            // This actor ran into another actor.
-            elasticColision(this, target, timePassed);
-            this.collision(target);
-            target.collision(this);
-            break;  // Only calculate for the first actor in the list.
-        }
-    }
-
-    /**
-     * Calculates the resulting speedT and direction after a fully elastic head
-     * on collision between two actors.
-     *
-     * @param a First actor.
-     * @param b Second actor.
-     * @param timePassed Number of milliseconds since the previous simulation
-     * cycle.
-     */
-    protected void elasticColision(Actor a, Actor b, double timePassed) {
-        rollbackPosition(timePassed);
-
-        double speedFinalAx;
-        double speedFinalAy;
-        double speedFinalBx;
-        double speedFinalBy;
-
-        speedFinalAx = (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedT().getX()
-                + (2 * b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedT().getX());
-
-        speedFinalAy = (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedT().getY()
-                + (2 * b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedT().getY());
-
-        speedFinalBx = (2 * a.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedT().getX()
-                - (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedT().getX());
-
-        speedFinalBy = (2 * a.getMass()) / (a.getMass() + b.getMass()) * a.getSpeedT().getY()
-                - (a.getMass() - b.getMass()) / (a.getMass() + b.getMass()) * (b.getSpeedT().getY());
-
-        a.getSpeedT().set(speedFinalAx, speedFinalAy, 0);
-        b.getSpeedT().set(speedFinalBx, speedFinalBy, 0);
-
-        updatePosition(timePassed);
-    }
+//    /**
+//     * Check for wall collisions and react to them.
+//     *
+//     * @param timePassed Number of milliseconds since the previous simulation
+//     * cycle.
+//     */
+//    protected void checkWallCollisions(double timePassed) {
+//
+//        ArrayList<String> wallCollisions = gameEngine.getCollisionDetector().detectWallCollision(this);
+//
+//        if (wallCollisions.isEmpty()) {
+//            // Current position is ok.
+//            outOfBoundsCounter = 0;
+//        } else {
+//            // Currently out of bonds.
+//            outOfBoundsCounter++;
+//        }
+//
+//        if (outOfBoundsCounter > 2) {
+//            // Out of bonds for more than 2 turns in a row.
+//            // Assume actor is stuck out of bonds and teleport it back in.
+//            this.getSpeedT().set(0, 0, 0);
+//
+//            Random random = new Random();
+//            int randX = random.nextInt(guiHandler.getWidth() - 200) + 100;
+//            int randY = random.nextInt(guiHandler.getHeight() - 200) + 100;
+//            this.getPosition().set(randX, randY, 0);
+//        }
+//
+//        // Handle wall collisions.
+//        for (String wallCollision : wallCollisions) {
+//            wallBounce(wallCollision, timePassed);
+//        }
+//    }
 
     /**
      * Increases an actors hit points by an set amount.
@@ -399,10 +299,6 @@ public abstract class Actor implements Drawable {
 
     public GUIHandler getGuiHandler() {
         return guiHandler;
-    }
-
-    public CollisionDetector getCollisionDetector() {
-        return collisionDetector;
     }
 
     public double getCollisionDamageToOthers() {

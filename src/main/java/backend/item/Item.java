@@ -1,10 +1,8 @@
 package backend.item;
 
 import backend.actor.Actor;
-import backend.actor.Player;
 import backend.main.GameEngine;
 import backend.main.Vector;
-import java.util.ArrayList;
 import userinterface.Drawable;
 
 /**
@@ -38,25 +36,6 @@ public abstract class Item extends Actor implements Drawable {
 
     @Override
     public void draw() {
-    }
-
-    @Override
-    protected void checkActorCollisions(double timePassed) {
-        ArrayList<Actor> collisions = collisionDetector.detectActorCollision(this);
-
-        if (collisions.size() > 0) {
-
-            for (Actor target : collisions) {
-
-                if ((target instanceof Player)) {
-                    // This item crashed into a player.
-                    this.pickup(target);
-
-                } else {
-                    // Items does not interact with other actors than the player.
-                }
-            }
-        }
     }
 
     /**

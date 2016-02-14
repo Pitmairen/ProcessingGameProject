@@ -181,7 +181,9 @@ public class GUIHandler extends PApplet {
                 + "\n" + "posY: " + format5.format(gameEngine.getCurrentLevel().getPlayer().getPosition().getY())
                 + "\n" + "speed: " + format10.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().mag())
                 + "\n" + "heading: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getHeading().getAngle2D()) + " rad"
-                + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad", width - 200, 30);
+                + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad"
+                + "\n" + "collision checks: " + format1.format(gameEngine.getCollisionDetection().getCollisionCheckCount()),
+                width - 250, 30);
     }
 
     /**
