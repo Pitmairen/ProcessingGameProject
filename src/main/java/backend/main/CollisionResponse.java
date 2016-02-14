@@ -181,6 +181,15 @@ public class CollisionResponse implements CollisionListener {
      */
     private void elasticColision(Actor a, Actor b) {
 
+        Vector collisionNormal = Vector.sub(a.getPosition(), b.getPosition());
+
+        // If the dot product is positive the objects are moving away from each other,
+        // so we don't do anything. This should prevent objects from sticking 
+        // together
+        if (Vector.sub(a.getSpeedT(), b.getSpeedT()).dot(collisionNormal) > 0) {
+            return;
+        }
+
         double speedFinalAx;
         double speedFinalAy;
         double speedFinalBx;
