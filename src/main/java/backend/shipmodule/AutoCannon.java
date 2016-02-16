@@ -3,6 +3,7 @@ package backend.shipmodule;
 import backend.main.Timer;
 import backend.actor.Actor;
 import backend.actor.Bullet;
+import backend.resources.Sound;
 
 /**
  * Automatic cannon that fires bullets. Rapid fire and small damage.
@@ -47,6 +48,7 @@ public class AutoCannon extends OffensiveModule {
 
         if (timer.timePassed() >= timeBetweenShots) {   // Check fire rate.
 
+            owner.getGameEngine().getSoundManager().play(Sound.AUTO_CANNON, owner.getPosition());
             Bullet bullet = new Bullet(owner.getPosition().copy(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(bullet);

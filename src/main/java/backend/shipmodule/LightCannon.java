@@ -3,6 +3,7 @@ package backend.shipmodule;
 import backend.main.Timer;
 import backend.actor.Actor;
 import backend.actor.Bullet;
+import backend.resources.Sound;
 
 /**
  * Cannon that fires single slow moving bullets.
@@ -47,7 +48,7 @@ public class LightCannon extends OffensiveModule {
     public void activate() {
 
         if (timer.timePassed() >= timeBetweenShots) {   // Check fire rate.
-
+            owner.getGameEngine().getSoundManager().play(Sound.AUTO_CANNON, owner.getPosition());
             Bullet bullet = new Bullet(owner.getPosition().copy(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(bullet);

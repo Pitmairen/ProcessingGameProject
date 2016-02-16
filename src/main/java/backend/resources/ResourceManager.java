@@ -1,5 +1,6 @@
 package backend.resources;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -17,6 +18,7 @@ public class ResourceManager {
     private final PApplet app;
     private final HashMap<Image, PImage> images;
     private final HashMap<Shader, PShader> shaders;
+    private final HashMap<Sound, String> sounds;
     
     /**
      * Constructs the resource manager
@@ -27,6 +29,7 @@ public class ResourceManager {
         this.app = app;
         images = new HashMap<>();
         shaders = new HashMap<>();
+        sounds = new HashMap<>();
     }
 
     /**
@@ -69,4 +72,26 @@ public class ResourceManager {
     public PShader getShader(Shader shaderID) {
         return shaders.get(shaderID);
     }
+    
+    
+    /**
+     * Register a new sound with the manager
+     *
+     * @param soundID the sound id
+     * @param path the sound path
+     */
+    public void add(Sound soundID, String path) {
+        sounds.put(soundID, path);
+    }
+
+    /**
+     * Returns input stream the sound data associated with a specific ID
+     *
+     * @param soundID the id of the sound
+     * @return the input stream of the sound data
+     */
+    public InputStream getSound(Sound soundID) {
+        return getClass().getClassLoader().getResourceAsStream(sounds.get(soundID));
+    }
+    
 }

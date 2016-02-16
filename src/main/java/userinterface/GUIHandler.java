@@ -223,6 +223,7 @@ public class GUIHandler extends PApplet {
                 + "\n" + "Pause: TAB"
                 + "\n" + "Quit: ESC"
                 + "\n"
+                + "\n" + "Toggle Sounds: M"
                 + "\n" + "Debug HUD: Z"
                 + "\n" + "Spawn enemies: Q", width / 2, height / 2 - 100);
     }

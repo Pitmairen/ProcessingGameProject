@@ -6,6 +6,9 @@ import backend.level.LevelTest;
 import backend.resources.Image;
 import backend.resources.ResourceManager;
 import backend.resources.Shader;
+import backend.resources.Sound;
+import backend.sound.OpenAL;
+import backend.sound.SoundManager;
 import userinterface.GUIHandler;
 
 import java.awt.event.KeyEvent;
@@ -28,6 +31,7 @@ public class GameEngine {
     private FadingCanvas fadingCanvas;
     private String simulationState = "menuScreen";
     private ResourceManager resourceManager;
+    private SoundManager soundManager;
 
     // Key states.
     private boolean up = false;
@@ -68,6 +72,15 @@ public class GameEngine {
 
         resetLevel();
 
+        
+        soundManager = new SoundManager(guiHandler, resourceManager);
+        
+        try {
+            loadSounds();
+        } catch (OpenAL.ALError ex) {
+            System.out.println("Failed to load sounds");
+            System.exit(1);
+        }
     }
 
     /**
@@ -182,6 +195,10 @@ public class GameEngine {
         if (keyCode == KeyEvent.VK_Q) {
             spawnEnemies = keyState;
         }
+        if (keyCode == KeyEvent.VK_M && keyState) {
+            System.out.println("MUTE");
+            soundManager.toggleMuted();
+        }
     }
 
     /**
@@ -278,8 +295,19 @@ public class GameEngine {
         resourceManager.add(Image.SHIELD_BACKGROUND, "shield.png");
         
         resourceManager.add(Shader.SHIELD_SHADER, "shield.glsl");
+        
+        resourceManager.add(Sound.EXPLOSION, "audio/sfx/death.wav");
+        resourceManager.add(Sound.AUTO_CANNON, "audio/sfx/shoot01.wav");
+        resourceManager.add(Sound.LASER, "audio/sfx/lazer.wav");
     }
+    
+    private void loadSounds() throws OpenAL.ALError {
 
+        soundManager.addSound(Sound.EXPLOSION, 5);
+        soundManager.addSound(Sound.LASER, 1);
+        soundManager.addSound(Sound.AUTO_CANNON, 5);
+    }
+    
     // Getters.
     public GUIHandler getGuiHandler() {
         return guiHandler;
@@ -308,7 +336,11 @@ public class GameEngine {
     public ResourceManager getResourceManager() {
         return resourceManager;
     }
-
+    
+    public SoundManager getSoundManager() {
+        return soundManager;
+    }
+    
     // Setters.
     public void setSimulationState(String simulationState) {
         this.simulationState = simulationState;

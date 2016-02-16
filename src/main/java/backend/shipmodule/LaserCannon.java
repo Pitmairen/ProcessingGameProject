@@ -4,6 +4,7 @@ import backend.actor.Actor;
 import backend.actor.Enemy;
 import backend.main.Vector;
 import backend.resources.Image;
+import backend.resources.Sound;
 import processing.core.PImage;
 import userinterface.GUIHandler;
 
@@ -67,6 +68,7 @@ public class LaserCannon extends OffensiveModule {
      */
     @Override
     public void activate() {
+        owner.getGameEngine().getSoundManager().play(Sound.LASER, owner.getPosition());
         this.setModuleActive(true);
     }
 
