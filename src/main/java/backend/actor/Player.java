@@ -60,11 +60,16 @@ public class Player extends Actor implements Drawable {
 
         offensiveModules.add(new AutoCannon(this));  // Starting weapon.
         currentOffensiveModule = offensiveModules.get(0);
-        
+
         defensiveModules.add(new Shield(this));
         currentDefensiveModule = defensiveModules.get(0);
-        
+
         playerGraphics = guiHandler.loadImage("drone.png");
+
+        healthBarWidth = (int) hitBoxRadius * 2;
+        healthBarHeight = (int) (healthBarWidth * 0.1);
+        energyBarWidth = (int) hitBoxRadius * 2;
+        energyBarHeight = (int) (healthBarWidth * 0.1);
     }
 
     @Override
@@ -78,10 +83,9 @@ public class Player extends Actor implements Drawable {
 //        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
 //        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
 //        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
-
         guiHandler.tint(255);
         guiHandler.image(playerGraphics, (float) this.getPosition().getX() - 20, (float) this.getPosition().getY() - 20);
-        
+
         // Draw modules.
         if (currentOffensiveModule != null) {
             currentOffensiveModule.draw();
@@ -93,9 +97,9 @@ public class Player extends Actor implements Drawable {
             tacticalModule.draw();
         }
 
-        // Draw small hud below player.
+        // Draw small hud below actor.
         guiHandler.pushMatrix();
-        guiHandler.translate((float) this.getPosition().getX() - (healthBarWidth / 2), (float) this.getPosition().getY() + (float) hitBoxRadius + 7);
+        guiHandler.translate((float) this.getPosition().getX() - (healthBarWidth / 2), (float) this.getPosition().getY() + (float) hitBoxRadius + healthBarHeight / 2);
 
         // Health bar.
         float healthPercentage = (float) currentHitPoints / (float) maxHitPoints;
@@ -107,20 +111,21 @@ public class Player extends Actor implements Drawable {
             healthBarRGBA = new int[]{200, 20, 20, 255};
         }
         guiHandler.stroke(healthBarRGBA[0], healthBarRGBA[1], healthBarRGBA[2]);
-        guiHandler.strokeWeight(2);
+        guiHandler.strokeWeight(1);
         guiHandler.noFill();
         guiHandler.rect((float) 0, 0, healthBarWidth, healthBarHeight, 6);
         guiHandler.fill(healthBarRGBA[0], healthBarRGBA[1], healthBarRGBA[2]);
-        guiHandler.rect(0, 0, healthBarWidth * healthPercentage, healthBarHeight, 6);
+        guiHandler.rect(0, 0, healthBarWidth * healthPercentage, healthBarHeight, 3);
 
         // Energy bar.
         float energyPercentage = (float) currentEnergy / (float) maxEnergy;
+
         guiHandler.stroke(energyBarRGBA[0], energyBarRGBA[1], energyBarRGBA[2]);
-        guiHandler.strokeWeight(2);
+        guiHandler.strokeWeight(1);
         guiHandler.noFill();
-        guiHandler.rect(0, 15, energyBarWidth, energyBarHeight, 6);
+        guiHandler.rect((float) 0, healthBarHeight + 2, energyBarWidth, energyBarHeight, 6);
         guiHandler.fill(energyBarRGBA[0], energyBarRGBA[1], energyBarRGBA[2]);
-        guiHandler.rect(0, 15, energyBarWidth * energyPercentage, energyBarHeight, 6);
+        guiHandler.rect(0, healthBarHeight + 2, energyBarWidth * energyPercentage, energyBarHeight, 3);
 
         guiHandler.popMatrix();
     }
@@ -155,7 +160,7 @@ public class Player extends Actor implements Drawable {
                     }
                 } else if (target instanceof Item) {
                     ((Item) target).pickup(this);
-                } else if (target instanceof Shield.ShieldActor && ((Shield.ShieldActor)target).getOwner() == this){ 
+                } else if (target instanceof Shield.ShieldActor && ((Shield.ShieldActor) target).getOwner() == this) {
                     // The player doesn't collide with its own shield
                 } else {
                     // This player crashed into an actor.
