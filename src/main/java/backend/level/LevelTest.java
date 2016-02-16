@@ -1,7 +1,10 @@
 package backend.level;
 
+import backend.actor.Boss;
+import backend.actor.Enemy;
 import backend.main.GameEngine;
 import backend.actor.Player;
+import backend.actor.SlayerAI;
 import backend.item.ModuleContainer;
 import backend.main.FadingCanvasItemManager;
 import backend.main.RocketManager;
@@ -72,7 +75,13 @@ public class LevelTest extends Level {
 
                         actorSpawner.spawnFrigate(1);
 
-                        initialTimeToNextWave = 5000;
+                        // Add boss enemy.
+                        Enemy enemy = new Boss(new Vector(1000, 200, 0), this.getGameEngine());
+                        enemy.setAI(new SlayerAI(enemy, this.getPlayer()));
+                        this.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
+                        this.getGameEngine().getCurrentLevel().getActors().add(enemy);
+
+                        initialTimeToNextWave = 50000;
                         timer.restart();
                         break;
                     }
@@ -109,7 +118,7 @@ public class LevelTest extends Level {
                         break;
                     }
                     case 7: {
-                        actorSpawner.spawnFrigate(50);
+                        actorSpawner.spawnFrigate(40);
                         onLastWave = true;
                         initialTimeToNextWave = 0;
                         timeToNextWave = 0;
