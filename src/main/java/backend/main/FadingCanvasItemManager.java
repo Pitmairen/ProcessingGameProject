@@ -46,6 +46,12 @@ public class FadingCanvasItemManager implements FadingCanvas.Drawable {
         items = new ArrayList<>();
     }
     
+    /**
+     * Removes all the items managed by the manager
+     */
+    public void clear(){
+        items.clear();
+    }
     
     /** 
      * Adds an item that is to be managed

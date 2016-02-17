@@ -62,8 +62,10 @@ public class GUIHandler extends PApplet {
 
     private GameEngine gameEngine;
     private Timer timer;
+    
+    private Menu mainMenu;
 
-    private boolean debugMode = true;
+    private boolean debugMode = false;
 
     /**
      * Processing initial setup.
@@ -79,6 +81,10 @@ public class GUIHandler extends PApplet {
         cursor(CROSS);
         keyRepeatEnabled = true;   // Needed for enhanced keyboard input reading.
         gameEngine = new GameEngine(this);
+        
+        mainMenu = new Menu("Xeno Blaster 4000", this);
+        createMenuItems();
+        mainMenu.show();
     }
 
     /**
@@ -102,11 +108,17 @@ public class GUIHandler extends PApplet {
         switch (gameEngine.getSimulationState()) {
 
             case "menuScreen": {
-                drawStartScreen();
+                gameEngine.getFadingCanvas().draw();
+                // The menu draws itself.
                 break;
             }
-
+            case "helpScreen": {
+                gameEngine.getFadingCanvas().draw();
+                drawPauseScreen();
+                break;
+            }
             case "gameplay": {
+                gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
                 drawActors();
                 drawHUD();
@@ -114,6 +126,7 @@ public class GUIHandler extends PApplet {
             }
 
             case "pauseScreen": {
+                gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
                 drawActors();
                 drawPauseScreen();
@@ -121,6 +134,7 @@ public class GUIHandler extends PApplet {
             }
 
             case "deathScreen": {
+                gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
                 drawActors();
                 drawDeathScreen();
@@ -132,29 +146,32 @@ public class GUIHandler extends PApplet {
         }
     }
 
+    
+    /**
+     * Show the main menu
+     */
+    public void showMainMenu(){
+        mainMenu.show();
+    }
+    
     /**
      * Draws the outer walls.
      */
     private void drawOuterWalls() {
-        strokeWeight(outerWallThickness);
         stroke(outerWallsRGBA[0], outerWallsRGBA[1], outerWallsRGBA[2]);
-        fill(backgroundRGBA[0], backgroundRGBA[1], backgroundRGBA[2]);
-        rect(0 + outerWallThickness / 2,
-                0 + outerWallThickness / 2,
-                width - outerWallThickness,
-                height - outerWallThickness);
+        strokeWeight(outerWallThickness);
+        noFill();
+        rect(0 + outerWallThickness / 2, 0 + outerWallThickness / 2,
+                width - outerWallThickness, height - outerWallThickness);
     }
 
     /**
      * Draws the HUD.
      */
     private void drawHUD() {
-
-        strokeWeight(1);
-        stroke(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
-
         textFont(hudFont);
+        textAlign(LEFT, TOP);
         text("Level: " + gameEngine.getCurrentLevel().getLevelName()
                 + "\n"
                 + "\n" + "Current Wave: " + gameEngine.getCurrentLevel().getCurrentWave()
@@ -168,12 +185,9 @@ public class GUIHandler extends PApplet {
      * Draws the debugging HUD.
      */
     private void drawDebugHud() {
-
-        strokeWeight(1);
-        stroke(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
         fill(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
-
         textFont(debugHUDFont);
+        textAlign(LEFT, TOP);
         text("FPS: " + format2.format((int) frameRate)
                 + "\n"
                 + "\n" + "Total actors: " + format1.format(gameEngine.getCurrentLevel().getActors().size())
@@ -185,86 +199,78 @@ public class GUIHandler extends PApplet {
                 + "\n" + "posY: " + format5.format(gameEngine.getCurrentLevel().getPlayer().getPosition().getY())
                 + "\n" + "speed: " + format10.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().mag())
                 + "\n" + "heading: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getHeading().getAngle2D()) + " rad"
-                + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad", width - 500, 100);
+                + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad", width - 200, 30);
     }
 
     /**
      * Draws the start screen.
      */
-    private void drawStartScreen() {
-
-        // Background.
-        strokeWeight(mainMenuOuterBoxThickness);
-        stroke(mainMenuOuterBoxRGBA[0], mainMenuOuterBoxRGBA[1], mainMenuOuterBoxRGBA[2]);
-        fill(mainMenuBackgroundRGBA[0], mainMenuBackgroundRGBA[1], mainMenuBackgroundRGBA[2]);
-        rect(0 + mainMenuOuterBoxThickness / 2,
-                0 + mainMenuOuterBoxThickness / 2,
-                width - mainMenuOuterBoxThickness,
-                height - mainMenuOuterBoxThickness);
-
+    private void drawStartMenu() {
+//        // Background.
+//        strokeWeight(mainMenuOuterBoxThickness);
+//        stroke(mainMenuOuterBoxRGBA[0], mainMenuOuterBoxRGBA[1], mainMenuOuterBoxRGBA[2]);
+//        fill(mainMenuBackgroundRGBA[0], mainMenuBackgroundRGBA[1], mainMenuBackgroundRGBA[2]);
+//        rect(0 + mainMenuOuterBoxThickness / 2,
+//                0 + mainMenuOuterBoxThickness / 2,
+//                width - mainMenuOuterBoxThickness,
+//                height - mainMenuOuterBoxThickness);
         // Text.
-        strokeWeight(1);
-        stroke(mainMenuRGBA[0], mainMenuRGBA[1], mainMenuRGBA[2]);
         fill(mainMenuRGBA[0], mainMenuRGBA[1], mainMenuRGBA[2]);
         textFont(menuFont);
-        text("Title Screen"
-                + "\n" + "Press \"LMB\" to start."
+        textAlign(CENTER, CENTER);
+        text("Xeno Blaster 4000"
                 + "\n"
-                + "\n"
-                + "\n" + "Movement: E, S, D, F"
-                + "\n" + "Activate offensive: LMB"
-                + "\n" + "Activate defensive: RMB"
-                + "\n" + "Activate tactical: SPACE"
-                + "\n" + "Cycle primary: W"
-                + "\n" + "Cycle secondary: R"
-                + "\n" + "Pause: TAB"
-                + "\n" + "Quit: ESC"
-                + "\n"
-                + "\n" + "Debug HUD: Z"
-                + "\n" + "Spawn enemies: Q", width / 2 - 300, 300);
+                + "\n" + "Press \"LMB\" to start.", width / 2, height / 2 - 100);
     }
 
     /**
      * Draws the pause screen.
      */
     private void drawPauseScreen() {
-
-        strokeWeight(1);
-        stroke(pauseScreenRGBA[0], pauseScreenRGBA[1], pauseScreenRGBA[2]);
         fill(pauseScreenRGBA[0], pauseScreenRGBA[1], pauseScreenRGBA[2]);
         textFont(menuFont);
+        textAlign(CENTER, CENTER);
         text("PAUSED"
-                + "\n" + "Press \"TAB\" to unpause.", width / 2 - 300, 300);
+                + "\n"
+                + "\n" + "Movement: E, S, D, F"
+                + "\n" + "Activate offensive: LMB"
+                + "\n" + "Activate defensive: RMB"
+                + "\n" + "Activate tactical: SPACE"
+                + "\n" + "Cycle offensive: W"
+                + "\n" + "Cycle defensive: R"
+                + "\n" + "Pause: TAB"
+                + "\n" + "Quit: ESC"
+                + "\n"
+                + "\n" + "Toggle Sounds: M"
+                + "\n" + "Debug HUD: Z"
+                + "\n" + "Spawn enemies: Q", width / 2, height / 2 - 100);
     }
-
+    
     /**
      * Draws the death screen.
      */
     private void drawDeathScreen() {
 
-        strokeWeight(1);
-        stroke(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
-        fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
-        textFont(menuFont);
-        
         String hitByName = "N/A";
         Actor lastHitBy = gameEngine.getCurrentLevel().getPlayer().getWhoHitMeLast();
-        if(lastHitBy != null){
+        if (lastHitBy != null) {
             hitByName = lastHitBy.getName();
         }
-        
+
+        fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
+        textFont(menuFont);
+        textAlign(CENTER, CENTER);
         text("You Were Defeated By " + hitByName
                 + "\n" + "Press \"ENTER\" to return to Start Menu."
                 + "\n"
                 + "\n"
-                + "\n" + "Your score where " + gameEngine.getCurrentLevel().getPlayer().getScore(), width / 2 - 300, 300);
+                + "\n" + "Your score where " + gameEngine.getCurrentLevel().getPlayer().getScore(), width / 2, height / 2 - 100);
     }
 
     /**
      * Draw all actors.
      */
     private void drawActors() {
-        gameEngine.getFadingCanvas().draw();
         for (Actor actor : gameEngine.getCurrentLevel().getActors()) {
             if (actor != null) {
                 actor.draw();
@@ -272,6 +278,24 @@ public class GUIHandler extends PApplet {
         }
     }
 
+    
+    /**
+     * Creates the main menu items
+     */
+    private void createMenuItems(){
+        
+        mainMenu.addItem("New Game", () -> {
+            mainMenu.hide();
+            gameEngine.setSimulationState("gameplay");
+        });
+        mainMenu.addItem("Help", () -> {
+            mainMenu.hide();
+            gameEngine.setSimulationState("helpScreen");
+        });
+        
+    }
+    
+    
     /**
      * Detect key press events.
      */

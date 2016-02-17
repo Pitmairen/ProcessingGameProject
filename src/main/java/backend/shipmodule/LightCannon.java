@@ -3,6 +3,7 @@ package backend.shipmodule;
 import backend.main.Timer;
 import backend.actor.Actor;
 import backend.actor.Bullet;
+import backend.resources.Sound;
 
 /**
  * Cannon that fires single slow moving bullets.
@@ -24,20 +25,25 @@ public class LightCannon extends OffensiveModule {
      */
     public LightCannon(Actor owner) {
         super("Auto Cannon", owner);
-
+        
         launchVelocity = 0.8;
         projectileDamage = 3;
+        setOffensiveModule("lightCannon.png");
     }
 
-    @Override
+    //@Override
     public void draw() {
-        // Draw turret.
+        // Draw turret with vectors.
         owner.getGuiHandler().strokeWeight(turretWidth);
         owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
         owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
         owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
                 (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
                 (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
+        
+        // Draw Image with graphics (rotation not implemented)
+        //owner.getGuiHandler().image(getWeapon(), (float) owner.getPosition().getX()-10, (float) owner.getPosition().getY()-10);
+        
     }
 
     /**
@@ -47,7 +53,7 @@ public class LightCannon extends OffensiveModule {
     public void activate() {
 
         if (timer.timePassed() >= timeBetweenShots) {   // Check fire rate.
-
+            owner.getGameEngine().getSoundManager().play(Sound.AUTO_CANNON, owner.getPosition());
             Bullet bullet = new Bullet(owner.getPosition().copy(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(bullet);

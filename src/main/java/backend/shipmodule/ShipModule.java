@@ -32,6 +32,16 @@ public abstract class ShipModule implements Drawable {
      */
     public abstract void activate();
 
+    /**
+     * Sets the flag which indicates whether the module is currently active or
+     * not.
+     *
+     * @param mode If the module is currently active or not.
+     */
+    public void setModuleActive(boolean mode) {
+        this.moduleActive = mode;
+    }
+
     // Getters.
     public String getName() {
         return name;
@@ -53,9 +63,9 @@ public abstract class ShipModule implements Drawable {
         return moduleActive;
     }
 
-    // Setter.
-    public void setModuleActive(boolean moduleActive) {
-        this.moduleActive = moduleActive;
+    // Setters.
+    public void setOwner(Actor owner) {
+        this.owner = owner;
     }
 
 }

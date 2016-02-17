@@ -1,8 +1,10 @@
 package backend.level;
 
+import backend.actor.Boss;
+import backend.actor.Enemy;
 import backend.main.GameEngine;
 import backend.actor.Player;
-import backend.item.Item;
+import backend.actor.SlayerAI;
 import backend.item.ModuleContainer;
 import backend.main.FadingCanvasItemManager;
 import backend.main.RocketManager;
@@ -51,25 +53,35 @@ public class LevelTest extends Level {
 
                 switch (currentWave) {
                     case 1: {
-                        Item moduleContainer = new ModuleContainer(new Vector(200, 400, 0), gameEngine, new RocketLauncher(player, rocketManager));
+                        ModuleContainer moduleContainer = new ModuleContainer(new Vector(200, 400, 0), gameEngine);
+                        moduleContainer.setModule(new RocketLauncher(moduleContainer, rocketManager));
                         items.add(moduleContainer);
                         actors.add(moduleContainer);
 
-                        moduleContainer = new ModuleContainer(new Vector(200, 500, 0), gameEngine, new SeekerCannon(player, fadingCanvasItems));
+                        moduleContainer = new ModuleContainer(new Vector(200, 500, 0), gameEngine);
+                        moduleContainer.setModule(new SeekerCannon(moduleContainer, fadingCanvasItems));
                         items.add(moduleContainer);
                         actors.add(moduleContainer);
 
-                        moduleContainer = new ModuleContainer(new Vector(200, 600, 0), gameEngine, new LaserCannon(player));
+                        moduleContainer = new ModuleContainer(new Vector(200, 600, 0), gameEngine);
+                        moduleContainer.setModule(new LaserCannon(moduleContainer));
                         items.add(moduleContainer);
                         actors.add(moduleContainer);
 
-                        moduleContainer = new ModuleContainer(new Vector(200, 700, 0), gameEngine, new EMPCannon(player, fadingCanvasItems));
+                        moduleContainer = new ModuleContainer(new Vector(200, 700, 0), gameEngine);
+                        moduleContainer.setModule(new EMPCannon(moduleContainer, fadingCanvasItems));
                         items.add(moduleContainer);
                         actors.add(moduleContainer);
 
                         actorSpawner.spawnFrigate(1);
 
-                        initialTimeToNextWave = 5000;
+                        // Add boss enemy.
+                        Enemy enemy = new Boss(new Vector(1000, 200, 0), this.getGameEngine());
+                        enemy.setAI(new SlayerAI(enemy, this.getPlayer()));
+                        this.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
+                        this.getGameEngine().getCurrentLevel().getActors().add(enemy);
+
+                        initialTimeToNextWave = 50000;
                         timer.restart();
                         break;
                     }
@@ -106,7 +118,7 @@ public class LevelTest extends Level {
                         break;
                     }
                     case 7: {
-                        actorSpawner.spawnFrigate(50);
+                        actorSpawner.spawnFrigate(40);
                         onLastWave = true;
                         initialTimeToNextWave = 0;
                         timeToNextWave = 0;

@@ -4,56 +4,56 @@ import backend.item.Item;
 import backend.item.Parts;
 import backend.main.GameEngine;
 import backend.main.Vector;
-import backend.resources.Sound;
-import backend.shipmodule.LightCannon;
+import backend.shipmodule.DroneLauncher;
 import java.util.ArrayList;
 import processing.core.PImage;
 import userinterface.Drawable;
 
 /**
- * A frigate. Small and fast.
+ * A boss NPC. Big and dangerous. Has several attack patterns and a a lot of hit
+ * points.
  *
  * @author Kristian Honningsvag.
  */
-public class Frigate extends Enemy implements Drawable {
+public class Boss extends Enemy implements Drawable {
 
     // Color.
     private int[] bodyRGBA = new int[]{200, 30, 30, 255};
     private int[] healthBarRGBA = new int[]{20, 200, 20, 255};
 
     // Shape.
-    private int healthBarWidth = 30;
-    private int healthBarHeight = 7;
+    private int healthBarWidth = 0;
+    private int healthBarHeight = 0;
 
     //Image
     private final PImage enemyGraphics;
 
     // Modules.
-    private LightCannon LightCannon = new LightCannon(this);
+    private DroneLauncher DroneLauncher = new DroneLauncher(this);
 
     /**
      * Constructor.
      */
-    public Frigate(Vector position, GameEngine gameEngine) {
+    public Boss(Vector position, GameEngine gameEngine) {
 
         super(position, gameEngine);
 
-        name = "Frigate";
-        engineThrust = 0.02f;
+        name = "Boss";
+        engineThrust = 0.15f;
         frictionCoefficient = 0.04f;
-        hitBoxRadius = 25;
-        bounceModifier = 0.6f;
-        maxHitPoints = 10;
-        currentHitPoints = 10;
-        mass = 50;
-        collisionDamageToOthers = 10;
-        attackDelay = 2000;
+        hitBoxRadius = 75;
+        bounceModifier = 0.4f;
+        maxHitPoints = 300;
+        currentHitPoints = 300;
+        mass = 400;
+        collisionDamageToOthers = 25;
+        attackDelay = 200;
         killValue = 1;
 
-        offensiveModules.add(LightCannon);
-        currentOffensiveModule = LightCannon;
+        offensiveModules.add(DroneLauncher);
+        currentOffensiveModule = DroneLauncher;
 
-        enemyGraphics = guiHandler.loadImage("multishotDroneMedium.png");
+        enemyGraphics = guiHandler.loadImage("multishotDroneLarge.png");
 
         healthBarWidth = (int) hitBoxRadius * 2;
         healthBarHeight = (int) (healthBarWidth * 0.1);
@@ -68,7 +68,7 @@ public class Frigate extends Enemy implements Drawable {
 //        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
 //        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
         guiHandler.tint(255);
-        guiHandler.image(enemyGraphics, (float) this.getPosition().getX() - 25, (float) this.getPosition().getY() - 25);
+        guiHandler.image(enemyGraphics, (float) this.getPosition().getX() - 75, (float) this.getPosition().getY() - 75);
 
         // Draw modules.
         if (currentOffensiveModule != null) {
@@ -103,7 +103,6 @@ public class Frigate extends Enemy implements Drawable {
 
     @Override
     public void die() {
-        gameEngine.getSoundManager().play(Sound.EXPLOSION, getPosition());
         gameEngine.getExplosionManager().explodeEnemy(this);
         gameEngine.getCurrentLevel().getPlayer().increaseScore(this.killValue);
         gameEngine.getCurrentLevel().getPlayer().increaseKillChain(1);

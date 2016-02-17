@@ -45,14 +45,6 @@ public class Rocket extends Projectile {
     }
 
     @Override
-    public void act(double timePassed) {
-        super.addFriction();
-        super.updatePosition(timePassed);
-        checkWallCollisions(timePassed);
-        checkActorCollisions(timePassed);
-    }
-
-    @Override
     public void draw() {
         // Do nothing. The rockets are managed by the rocket manager and are
         // drawn to the fading canvas. 
@@ -72,7 +64,7 @@ public class Rocket extends Projectile {
     }
 
     /**
-     * Draws the ball
+     * Draws the rocket
      *
      * @param canvas the graphics object to draw to
      * @param image the background image to use for the rocket
@@ -88,8 +80,8 @@ public class Rocket extends Projectile {
         canvas.fill(this.backgroundColor, 200);
 
         canvas.image(image,
-                        (float) this.getPosition().getX(), (float) this.getPosition().getY(),
-                        (float) this.radius * 2, (float) this.radius * 2);
+                (float) this.getPosition().getX(), (float) this.getPosition().getY(),
+                (float) this.radius * 2, (float) this.radius * 2);
         canvas.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(),
                 (float) this.radius / 2, (float) this.radius / 2);
     }

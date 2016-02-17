@@ -32,8 +32,8 @@ public abstract class Projectile extends Actor implements Drawable {
     @Override
     protected void checkWallCollisions(double timePassed) {
         // Projectiles does not bounce off walls.
-        String wallCollision = gameEngine.getCollisionDetector().detectWallCollision(this);
-        if (wallCollision != null) {
+        ArrayList<String> wallCollisions = gameEngine.getCollisionDetector().detectWallCollision(this);
+        if (!wallCollisions.isEmpty()) {  // A wall was hit.
             this.targetHit();
         }
     }

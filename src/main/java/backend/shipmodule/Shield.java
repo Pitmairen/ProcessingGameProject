@@ -44,7 +44,8 @@ public class Shield extends DefensiveModule {
         // Else reset the shield if it has died
         else if(shield.getCurrentHitPoints() <= 0){
             shield.reset();
-            owner.getGameEngine().getCurrentLevel().getActors().add(shield);
+            if(!owner.getGameEngine().getCurrentLevel().getActors().contains(shield))
+                owner.getGameEngine().getCurrentLevel().getActors().add(shield);
         }
     }
     
