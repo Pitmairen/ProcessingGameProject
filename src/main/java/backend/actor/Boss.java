@@ -4,6 +4,7 @@ import backend.item.Item;
 import backend.item.Parts;
 import backend.main.GameEngine;
 import backend.main.Vector;
+import backend.resources.Sound;
 import backend.shipmodule.DroneLauncher;
 import java.util.ArrayList;
 import processing.core.PImage;
@@ -103,6 +104,7 @@ public class Boss extends Enemy implements Drawable {
 
     @Override
     public void die() {
+        gameEngine.getSoundManager().play(Sound.EXPLOSION, getPosition());
         gameEngine.getExplosionManager().explodeEnemy(this);
         gameEngine.getCurrentLevel().getPlayer().increaseScore(this.killValue);
         gameEngine.getCurrentLevel().getPlayer().increaseKillChain(1);

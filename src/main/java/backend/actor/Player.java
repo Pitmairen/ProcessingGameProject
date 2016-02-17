@@ -4,6 +4,7 @@ import backend.item.Item;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.main.Vector;
+import backend.resources.Sound;
 import backend.shipmodule.AutoCannon;
 import backend.shipmodule.Shield;
 import java.util.ArrayList;
@@ -132,6 +133,7 @@ public class Player extends Actor implements Drawable {
 
     @Override
     public void die() {
+        gameEngine.getSoundManager().play(Sound.EXPLOSION, getPosition());
         gameEngine.getExplosionManager().explodePlayer(this);
         gameEngine.setSimulationState("deathScreen");
     }

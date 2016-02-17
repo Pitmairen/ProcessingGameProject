@@ -70,7 +70,7 @@ public class Menu {
         items = new ArrayList<>();
         this.app = app;
         titleFont = app.createFont("titleFont.ttf", titleSize);
-        itemFont = app.createFont("menuItemFont.ttf", 40);
+        itemFont = app.createFont("commando.ttf", 40);
         currentItem = 0;
         this.menuTitle = title;
         init();
