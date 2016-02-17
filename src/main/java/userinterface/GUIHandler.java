@@ -62,6 +62,8 @@ public class GUIHandler extends PApplet {
 
     private GameEngine gameEngine;
     private Timer timer;
+    
+    private Menu mainMenu;
 
     private boolean debugMode = false;
 
@@ -79,6 +81,10 @@ public class GUIHandler extends PApplet {
         cursor(CROSS);
         keyRepeatEnabled = true;   // Needed for enhanced keyboard input reading.
         gameEngine = new GameEngine(this);
+        
+        mainMenu = new Menu("Xeno Blaster 4000", this);
+        createMenuItems();
+        mainMenu.show();
     }
 
     /**
@@ -103,10 +109,14 @@ public class GUIHandler extends PApplet {
 
             case "menuScreen": {
                 gameEngine.getFadingCanvas().draw();
-                drawStartMenu();
+                // The menu draws itself.
                 break;
             }
-
+            case "helpScreen": {
+                gameEngine.getFadingCanvas().draw();
+                drawPauseScreen();
+                break;
+            }
             case "gameplay": {
                 gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
@@ -136,6 +146,14 @@ public class GUIHandler extends PApplet {
         }
     }
 
+    
+    /**
+     * Show the main menu
+     */
+    public void showMainMenu(){
+        mainMenu.show();
+    }
+    
     /**
      * Draws the outer walls.
      */
@@ -227,7 +245,7 @@ public class GUIHandler extends PApplet {
                 + "\n" + "Debug HUD: Z"
                 + "\n" + "Spawn enemies: Q", width / 2, height / 2 - 100);
     }
-
+    
     /**
      * Draws the death screen.
      */
@@ -260,6 +278,24 @@ public class GUIHandler extends PApplet {
         }
     }
 
+    
+    /**
+     * Creates the main menu items
+     */
+    private void createMenuItems(){
+        
+        mainMenu.addItem("New Game", () -> {
+            mainMenu.hide();
+            gameEngine.setSimulationState("gameplay");
+        });
+        mainMenu.addItem("Help", () -> {
+            mainMenu.hide();
+            gameEngine.setSimulationState("helpScreen");
+        });
+        
+    }
+    
+    
     /**
      * Detect key press events.
      */

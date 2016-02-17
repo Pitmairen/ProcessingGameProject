@@ -94,7 +94,12 @@ public class GameEngine {
                 checkUserInput(timePassed);
                 break;
             }
-
+            
+            case "helpScreen": {
+                checkUserInput(timePassed);
+                break;
+            }
+            
             case "gameplay": {
                 checkUserInput(timePassed);
                 cleanup(timePassed);
@@ -209,9 +214,6 @@ public class GameEngine {
         switch (simulationState) {
 
             case "menuScreen": {
-                if (offensiveModule) {
-                    simulationState = "gameplay";
-                }
                 break;
             }
 
@@ -269,10 +271,17 @@ public class GameEngine {
                 if (enter) {
                     resetLevel();
                     simulationState = "menuScreen";
+                    guiHandler.showMainMenu();
                 }
                 break;
             }
-
+            case "helpScreen": {
+                if (enter) {
+                    simulationState = "menuScreen";
+                    guiHandler.showMainMenu();
+                }
+                break;
+            }
         }
     }
 
