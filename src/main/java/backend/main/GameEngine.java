@@ -201,7 +201,6 @@ public class GameEngine {
             spawnEnemies = keyState;
         }
         if (keyCode == KeyEvent.VK_M && keyState) {
-            System.out.println("MUTE");
             soundManager.toggleMuted();
         }
     }
