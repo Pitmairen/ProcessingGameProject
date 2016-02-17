@@ -1,6 +1,7 @@
 package backend.shipmodule;
 
 import backend.actor.Actor;
+import processing.core.PImage;
 import userinterface.Drawable;
 
 /**
@@ -15,6 +16,8 @@ public abstract class ShipModule implements Drawable {
     protected double launchVelocity = 0;
     protected double projectileDamage = 0;
     protected boolean moduleActive = false;
+
+    private PImage image;
 
     /**
      * Constructor.
@@ -42,6 +45,15 @@ public abstract class ShipModule implements Drawable {
         this.moduleActive = mode;
     }
 
+    /**
+     * Method for setting the graphics for the module.
+     *
+     * @param image File path to the image that should be loaded.
+     */
+    public void setImage(String image) {
+        this.image = owner.getGuiHandler().loadImage(image);
+    }
+
     // Getters.
     public String getName() {
         return name;
@@ -61,6 +73,10 @@ public abstract class ShipModule implements Drawable {
 
     public boolean isModuleActive() {
         return moduleActive;
+    }
+
+    public PImage getImage() {
+        return image;
     }
 
     // Setters.
