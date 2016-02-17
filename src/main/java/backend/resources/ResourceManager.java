@@ -57,7 +57,7 @@ public class ResourceManager {
      * Register a new shader with the manager
      *
      * @param shaderID the shader id
-     * @param path the image path
+     * @param path the shader path
      */
     public void add(Shader shaderID, String path) {
         shaders.put(shaderID, app.loadShader(path));
@@ -67,7 +67,7 @@ public class ResourceManager {
      * returns the shader associated with a specific ID
      *
      * @param shaderID the id of the shader
-     * @return the image object
+     * @return the shader object
      */
     public PShader getShader(Shader shaderID) {
         return shaders.get(shaderID);
