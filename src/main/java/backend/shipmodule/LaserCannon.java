@@ -29,7 +29,7 @@ public class LaserCannon extends OffensiveModule {
         super("Laser Cannon", owner);
 
         bgImage = owner.getGameEngine().getResourceManager().getImage(Image.LASER_BEAM);
-        projectileDamage = 100;
+        projectileDamage = 0.5f;
     }
 
     @Override
@@ -112,10 +112,7 @@ public class LaserCannon extends OffensiveModule {
         // the two parallel lines apart.
         Vector normal = laserHeading.copy().rotate(Math.PI/2);
 
-        // Start position of the two parallel lines shifted ±15 units in the 
-        // normal direction.
-        Vector line1Pos = Vector.add(laserPos, normal.copy().mult(15));
-        Vector line2Pos = Vector.add(laserPos, normal.copy().mult(-15));
+
 
         // The calculation of the line positions can be moved into the actor 
         // loop below and then use the target actors hitbox radius as the number 
@@ -131,8 +128,14 @@ public class LaserCannon extends OffensiveModule {
 
             // Only check agains the enemies
             if (act == owner || !(act instanceof Enemy)) {
+                
                 continue;
             }
+
+            // Start position of the two parallel lines shifted ±15 units in the 
+            // normal direction.
+            Vector line1Pos = Vector.add(laserPos, normal.copy().mult(act.getHitBoxRadius()));
+            Vector line2Pos = Vector.add(laserPos, normal.copy().mult(-act.getHitBoxRadius()));
 
             Vector targetPos = act.getPosition().copy();
             Vector laserToTarget = Vector.sub(targetPos, laserPos);  

@@ -29,7 +29,7 @@ public class EMPCannon extends TacticalModule {
         super("EMP Cannon", owner);
 
         this.fadingCanvasItems = itemManager;
-        projectileDamage = 1000;
+        projectileDamage = 6;
     }
 
     @Override

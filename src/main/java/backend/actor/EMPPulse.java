@@ -14,7 +14,7 @@ import processing.core.PGraphics;
 public class EMPPulse extends Projectile implements FadingCanvasItemManager.Item {
 
     // How fast the pulse radius grows
-    private final int pulseStepSize = 2;
+    private final int pulseStepSize = 8;
     private final int pulseRadiusLimit = 200;
     
     public EMPPulse(Vector position, ShipModule shipModule){

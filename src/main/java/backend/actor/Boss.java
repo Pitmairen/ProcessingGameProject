@@ -40,13 +40,13 @@ public class Boss extends Enemy implements Drawable {
         super(position, gameEngine);
 
         name = "Boss";
-        engineThrust = 0.15f;
-        frictionCoefficient = 0.04f;
+        engineThrust = 0.2f;
+        frictionCoefficient = 0.29f;
         hitBoxRadius = 75;
         bounceModifier = 0.4f;
         maxHitPoints = 300;
         currentHitPoints = 300;
-        mass = 400;
+        mass = 300;
         collisionDamageToOthers = 25;
         attackDelay = 200;
         killValue = 1;

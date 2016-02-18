@@ -282,7 +282,7 @@ public class GUIHandler extends PApplet {
                 + "\n" + "Press \"ENTER\" to return to Start Menu."
                 + "\n"
                 + "\n"
-                + "\n" + "Your score where " + gameEngine.getCurrentLevel().getPlayer().getScore(), width / 2, height / 2 - 100);
+                + "\n" + "Your score: " + gameEngine.getCurrentLevel().getPlayer().getScore(), width / 2, height / 2 - 100);
     }
 
     /**

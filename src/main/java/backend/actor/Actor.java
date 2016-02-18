@@ -295,6 +295,16 @@ public abstract class Actor implements Drawable {
      * cycle.
      */
     protected void elasticColision(Actor a, Actor b, double timePassed) {
+
+        Vector collisionNormal = Vector.sub(a.getPosition(), b.getPosition());
+
+        // If the dot product is positive the objects are moving away from each other,
+        // so we don't do anything. This should prevent objects from sticking 
+        // together
+        if (Vector.sub(a.getSpeedT(), b.getSpeedT()).dot(collisionNormal) > 0) {
+            return;
+        }
+
         rollbackPosition(timePassed);
 
         double speedFinalAx;
