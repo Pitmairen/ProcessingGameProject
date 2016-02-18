@@ -307,7 +307,7 @@ public class GameEngine {
         resourceManager.add(Shader.BG_SHADER, "background.glsl");
 
         resourceManager.add(Sound.EXPLOSION, "audio/sfx/death.wav");
-        resourceManager.add(Sound.AUTO_CANNON, "audio/sfx/shoot01.wav");
+        resourceManager.add(Sound.AUTO_CANNON, "audio/sfx/fire.wav");
         resourceManager.add(Sound.LASER, "audio/sfx/lazer.wav");
 
     }
