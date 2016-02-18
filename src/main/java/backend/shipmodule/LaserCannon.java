@@ -29,7 +29,7 @@ public class LaserCannon extends OffensiveModule {
         super("Laser Cannon", owner);
 
         bgImage = owner.getGameEngine().getResourceManager().getImage(Image.LASER_BEAM);
-        projectileDamage = 0.5f;
+        projectileDamage = 0.04f;
     }
 
     @Override

@@ -26,7 +26,7 @@ public class AutoCannon extends OffensiveModule {
     public AutoCannon(Actor owner) {
         super("Auto Cannon", owner);
 
-        launchVelocity = 1.8;
+        launchVelocity = 1.6;
         projectileDamage = 1.6;
     }
 

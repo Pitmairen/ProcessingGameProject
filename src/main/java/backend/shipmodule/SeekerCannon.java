@@ -20,15 +20,15 @@ public class SeekerCannon extends OffensiveModule {
     private final int turretRGBA = 0xff441599;
     
     private final Timer timer = new Timer();
-    private final double timeBetweenShots = 1000;
+    private final double timeBetweenShots = 700;
     private final FadingCanvasItemManager fadingCanvasItems;
     private TargetSelector selector;
     
     
     public SeekerCannon(Actor owner, FadingCanvasItemManager itemManager) {
         super("SeekerCannon", owner);
-        
-         projectileDamage = 12;
+
+        projectileDamage = 10;
         fadingCanvasItems = itemManager;
     }
 

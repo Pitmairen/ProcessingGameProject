@@ -10,12 +10,11 @@ import processing.core.PImage;
 import userinterface.Drawable;
 
 /**
- * A simple drone. Attempts to crash into the player while simultaneously
- * shooting at it.
+ * A simple drone that attempts to crash into the player while shooting at it.
  *
  * @author Kristian Honningsvag.
  */
-public class Drone extends Enemy implements Drawable {
+public class KamikazeDrone extends Enemy implements Drawable {
 
     //Image
     private final PImage enemyGraphics;
@@ -26,19 +25,19 @@ public class Drone extends Enemy implements Drawable {
     /**
      * Constructor.
      */
-    public Drone(Vector position, GameEngine gameEngine) {
+    public KamikazeDrone(Vector position, GameEngine gameEngine) {
 
         super(position, gameEngine);
 
-        name = "Drone";
+        name = "Kamikaze Drone";
         engineThrust = 0.02f;
         frictionCoefficient = 0.04f;
         hitBoxRadius = 15;
         bounceModifier = 0.6f;
-        maxHitPoints = 3;
-        currentHitPoints = 3;
-        mass = 10;
-        collisionDamageToOthers = 4;
+        maxHitPoints = 0.01;
+        currentHitPoints = 0.01;
+        mass = 8;
+        collisionDamageToOthers = 15;
         attackDelay = 1000;
         killValue = 1;
 

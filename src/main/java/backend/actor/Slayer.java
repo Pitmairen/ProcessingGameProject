@@ -11,11 +11,11 @@ import processing.core.PImage;
 import userinterface.Drawable;
 
 /**
- * A frigate. Small and fast.
+ * Small and fast.
  *
  * @author Kristian Honningsvag.
  */
-public class Frigate extends Enemy implements Drawable {
+public class Slayer extends Enemy implements Drawable {
 
     // Color.
     private int[] bodyRGBA = new int[]{200, 30, 30, 255};
@@ -34,11 +34,11 @@ public class Frigate extends Enemy implements Drawable {
     /**
      * Constructor.
      */
-    public Frigate(Vector position, GameEngine gameEngine) {
+    public Slayer(Vector position, GameEngine gameEngine) {
 
         super(position, gameEngine);
 
-        name = "Frigate";
+        name = "Slayer";
         engineThrust = 0.02f;
         frictionCoefficient = 0.04f;
         hitBoxRadius = 25;
@@ -140,7 +140,7 @@ public class Frigate extends Enemy implements Drawable {
                 } else if (target instanceof Item) {
                     // No interaction with items.
                 } else if (target instanceof Enemy) {
-                    if (target instanceof Drone) {
+                    if (target instanceof KamikazeDrone) {
                         // No interaction with drones.    
                     } else {
                         // Crashed into some other enemy.

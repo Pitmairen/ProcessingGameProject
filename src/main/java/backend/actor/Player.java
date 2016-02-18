@@ -51,8 +51,8 @@ public class Player extends Actor implements Drawable {
         frictionCoefficient = 0.4;
         hitBoxRadius = 20;
         bounceModifier = 0.8f;
-        maxHitPoints = 100;
-        currentHitPoints = 100;
+        maxHitPoints = 60;
+        currentHitPoints = 60;
         maxEnergy = 100;
         currentEnergy = 100;
         mass = 100;
@@ -68,9 +68,9 @@ public class Player extends Actor implements Drawable {
         playerGraphics = guiHandler.loadImage("drone.png");
 
         healthBarWidth = (int) hitBoxRadius * 2;
-        healthBarHeight = (int) (healthBarWidth * 0.1);
+        healthBarHeight = (int) (healthBarWidth * 0.2);
         energyBarWidth = (int) hitBoxRadius * 2;
-        energyBarHeight = (int) (healthBarWidth * 0.1);
+        energyBarHeight = (int) (healthBarWidth * 0.2);
     }
 
     @Override

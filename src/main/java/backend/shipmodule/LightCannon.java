@@ -27,7 +27,7 @@ public class LightCannon extends OffensiveModule {
         super("Auto Cannon", owner);
 
         launchVelocity = 0.8;
-        projectileDamage = 3;
+        projectileDamage = 10;
         setImage("lightCannon.png");
     }
 
