@@ -309,6 +309,10 @@ public class GUIHandler extends PApplet {
             mainMenu.hide();
             gameEngine.setSimulationState("helpScreen");
         });
+        
+        mainMenu.addItem("Quit", () -> {
+            exit();
+        });
 
     }
 
