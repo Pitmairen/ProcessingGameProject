@@ -8,6 +8,7 @@ import static java.awt.event.KeyEvent.*;
 import java.text.DecimalFormat;
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PImage;
 
 /**
  * Handles rendering the GUI. Also listens for user input and sends it to the
@@ -66,6 +67,8 @@ public class GUIHandler extends PApplet {
     private Menu mainMenu;
 
     private boolean debugMode = false;
+    
+    private PImage titleScreenImage;
 
     /**
      * Processing initial setup.
@@ -85,6 +88,7 @@ public class GUIHandler extends PApplet {
         mainMenu = new Menu("Xeno Blaster 4000", this);
         createMenuItems();
         mainMenu.show();
+        titleScreenImage = loadImage("titleScreen.png");
     }
 
     /**
@@ -93,7 +97,7 @@ public class GUIHandler extends PApplet {
     @Override
     public void settings() {
         fullScreen(P3D);
-        // size(1920, 1080, P3D);
+        //size(1920, 1080, P3D);
     }
 
     /**
@@ -110,6 +114,7 @@ public class GUIHandler extends PApplet {
             case "menuScreen": {
                 gameEngine.getFadingCanvas().draw();
                 // The menu draws itself.
+                drawTitleScreenImage();
                 break;
             }
             case "helpScreen": {
@@ -228,7 +233,14 @@ public class GUIHandler extends PApplet {
                 + "\n"
                 + "\n" + "Press \"LMB\" to start.", width / 2, height / 2 - 100);
     }
-
+    
+    /**
+     * Draws the image for the start screen
+     */
+    private void drawTitleScreenImage(){
+        image(titleScreenImage, 0, 0, width, height);
+    }
+    
     /**
      * Draws the help screen.
      */
