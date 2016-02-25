@@ -308,13 +308,13 @@ public class GameEngine {
 
         resourceManager.add(Sound.EXPLOSION, "audio/sfx/death.wav");
         resourceManager.add(Sound.AUTO_CANNON, "audio/sfx/fire.wav");
-        resourceManager.add(Sound.LASER, "audio/sfx/lazer.wav");
+        resourceManager.add(Sound.LASER, "audio/sfx/laser.wav");
         resourceManager.add(Sound.COLLISION, "audio/sfx/collision.wav");
         resourceManager.add(Sound.CURSOR, "audio/sfx/cursor.wav");
         resourceManager.add(Sound.CURSOR2, "audio/sfx/cursor2.wav");
-        resourceManager.add(Sound.EMP, "audio/sfx/emp02.wav");
-        resourceManager.add(Sound.DEATH, "audio/sfx/death.wav");
-        resourceManager.add(Sound.GAMEOVER, "audio/sfx/lose.wav");
+//        resourceManager.add(Sound.EMP, "audio/sfx/emp02.wav");
+//        resourceManager.add(Sound.DEATH, "audio/sfx/death.wav");
+//        resourceManager.add(Sound.GAMEOVER, "audio/sfx/lose.wav");
 
       
     }
@@ -327,11 +327,23 @@ public class GameEngine {
         soundManager.addSound(Sound.COLLISION, 1);
         soundManager.addSound(Sound.CURSOR, 5);
         soundManager.addSound(Sound.CURSOR2, 5);
-        soundManager.addSound(Sound.EMP, 5);
-        soundManager.addSound(Sound.DEATH, 5);
-        soundManager.addSound(Sound.GAMEOVER, 5);
+//        soundManager.addSound(Sound.EMP, 5);
+//        soundManager.addSound(Sound.DEATH, 5);
+//        soundManager.addSound(Sound.GAMEOVER, 5);
+//        soundManager.addSound(Sound.MISSILE_LAUNCH, 5);
+//        soundManager.addSound(Sound.MISSILEMOD_LOAD, 5);
+//        soundManager.addSound(Sound.GAMEOVER, 5);
+//        soundManager.addSound(Sound.MISSILE_LAUNCH, 5);
+//        soundManager.addSound(Sound.MISSILE_EXPLOSION, 5);
+//        soundManager.addSound(Sound.ENEMY_SPAWN, 5);
+//        soundManager.addSound(Sound.CANNONMOD_LOAD, 5);
+//        soundManager.addSound(Sound.LASERMOD_LOAD, 5);
+//        soundManager.addSound(Sound.BULLET_IMPACT, 5);
+//        soundManager.addSound(Sound.MISSILE_IMPACT, 5);
+//        soundManager.addSound(Sound.MODULE_PICKUP, 5);
+//        soundManager.addSound(Sound.TACTICALMOD_LOAD, 5);
 
-    
+   
     }
     
     // Getters.

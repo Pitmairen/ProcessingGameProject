@@ -14,6 +14,10 @@ public enum Sound {
     
     EXPLOSION,
     AUTO_CANNON,
-    LASER, COLLISION,
+    LASER, 
+    COLLISION, 
+    CURSOR, 
+    CURSOR2,
+//    EMP, DEATH, GAMEOVER,
     
 }
