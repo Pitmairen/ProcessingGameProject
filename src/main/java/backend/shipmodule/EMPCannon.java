@@ -18,7 +18,7 @@ public class EMPCannon extends TacticalModule {
     private int weaponWidth = 4;
     private int[] weaponRGBA = new int[]{10, 10, 140, 255};
 
-    private double timeBetweenShots = 3000;
+    private double timeBetweenShots = 200;
     private Timer timer = new Timer();
     private FadingCanvasItemManager fadingCanvasItems;
 
@@ -29,7 +29,7 @@ public class EMPCannon extends TacticalModule {
         super("EMP Cannon", owner);
 
         this.fadingCanvasItems = itemManager;
-        projectileDamage = 6;
+        projectileDamage = 2;
     }
 
     @Override

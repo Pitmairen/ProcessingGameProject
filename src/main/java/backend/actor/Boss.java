@@ -47,7 +47,7 @@ public class Boss extends Enemy implements Drawable {
         maxHitPoints = 300;
         currentHitPoints = 300;
         mass = 300;
-        collisionDamageToOthers = 25;
+        collisionDamageToOthers = 20;
         attackDelay = 200;
         killValue = 1;
 
@@ -141,7 +141,7 @@ public class Boss extends Enemy implements Drawable {
                 } else if (target instanceof Item) {
                     // No interaction with items.
                 } else if (target instanceof Enemy) {
-                    if (target instanceof Drone) {
+                    if (target instanceof KamikazeDrone) {
                         // No interaction with drones.    
                     } else {
                         // Crashed into some other enemy.

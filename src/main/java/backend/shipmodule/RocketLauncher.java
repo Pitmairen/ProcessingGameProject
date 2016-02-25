@@ -24,9 +24,9 @@ public class RocketLauncher extends OffensiveModule {
     private int turretWidth = 7;
     private int[] turretRGBA = new int[]{100, 100, 100, 255};
 
-    private double timeBetweenShots = 600;
+    private double timeBetweenShots = 900;
     private Timer timer = new Timer();
-    
+
     private RocketManager rocketManager;
 
     /**
@@ -38,8 +38,8 @@ public class RocketLauncher extends OffensiveModule {
 
         this.rocketManager = rocketManager;
 
-        launchVelocity = 0.8;
-        projectileDamage = 12;
+        launchVelocity = 0.6;
+        projectileDamage = 22;
     }
 
     @Override
