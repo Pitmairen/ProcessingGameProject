@@ -14,7 +14,7 @@ import userinterface.GUIHandler;
 public class SoundManager {
 
     private final OpenAL al;
-    private final HashMap<Sound, SourcePool> sounds;
+    private final HashMap<Sound, Source> sounds;
     private final ResourceManager resources;
     private final GUIHandler gui;
     private boolean muted;
@@ -51,7 +51,25 @@ public class SoundManager {
         float y = (2 * (float) pos.getY() - gui.height) / gui.height;
         sounds.get(soundID).play(x, y, 0f);
     }
-
+    
+    /**
+     * Stops the specified sound
+     *
+     * @param soundID the sound ID
+     */
+    public void stop(Sound soundID) {
+        sounds.get(soundID).stop();
+    }
+    
+    /**
+     * Stops the specified sound
+     *
+     * @param soundID the sound ID
+     */
+    public void pause(Sound soundID) {
+        sounds.get(soundID).pause();
+    }
+    
     /**
      * Add a new sound to the manager
      *
@@ -66,7 +84,20 @@ public class SoundManager {
         SourcePool pool = new SourcePool(bufferID, numSimultaneousPlays, al);
         sounds.put(soundID, pool);
     }
-
+    
+    /**
+     * Add a new sound to the manager
+     *
+     * @param soundID the sound ID
+     *
+     * @throws backend.sound.OpenAL.ALError
+     */
+    public void addLoopingSound(Sound soundID) throws OpenAL.ALError {
+        int bufferID = al.createBuffer(resources.getSound(soundID));
+        Source src = new LoopingSound(bufferID, al);
+        sounds.put(soundID, src);
+    }
+    
     /**
      * Set the muted state of the sound manager
      *

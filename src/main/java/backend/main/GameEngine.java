@@ -246,7 +246,7 @@ public class GameEngine {
                 }
                 if (pause) {
                     if (pauseTimer.timePassed() >= 200) {
-                        simulationState = "pauseScreen";
+                        setSimulationState("pauseScreen");
                         pauseTimer.restart();
                     }
                 }
@@ -259,7 +259,7 @@ public class GameEngine {
             case "pauseScreen": {
                 if (pause) {
                     if (pauseTimer.timePassed() >= 200) {
-                        simulationState = "gameplay";
+                        setSimulationState("gameplay");
                         pauseTimer.restart();
                     }
                 }
@@ -269,14 +269,14 @@ public class GameEngine {
             case "deathScreen": {
                 if (enter) {
                     resetLevel();
-                    simulationState = "menuScreen";
+                    setSimulationState("menuScreen");
                     guiHandler.showMainMenu();
                 }
                 break;
             }
             case "helpScreen": {
                 if (enter) {
-                    simulationState = "menuScreen";
+                    setSimulationState("menuScreen");
                     guiHandler.showMainMenu();
                 }
                 break;
@@ -316,6 +316,7 @@ public class GameEngine {
 //        resourceManager.add(Sound.DEATH, "audio/sfx/death.wav");
 //        resourceManager.add(Sound.GAMEOVER, "audio/sfx/lose.wav");
 
+        resourceManager.add(Sound.GAME_MUSIC, "audio/sfx/placeholdertune.WAV");
       
     }
     
@@ -327,6 +328,8 @@ public class GameEngine {
         soundManager.addSound(Sound.COLLISION, 1);
         soundManager.addSound(Sound.CURSOR, 5);
         soundManager.addSound(Sound.CURSOR2, 5);
+        soundManager.addLoopingSound(Sound.GAME_MUSIC);
+        
 //        soundManager.addSound(Sound.EMP, 5);
 //        soundManager.addSound(Sound.DEATH, 5);
 //        soundManager.addSound(Sound.GAMEOVER, 5);
@@ -382,5 +385,23 @@ public class GameEngine {
     // Setters.
     public void setSimulationState(String simulationState) {
         this.simulationState = simulationState;
+        updateMusic(simulationState);
+    }
+    
+    private void updateMusic(String newState){
+
+        switch(newState){
+            
+            case "gameplay":
+                soundManager.play(Sound.GAME_MUSIC, new Vector(guiHandler.width/2, guiHandler.height/2, 0));
+                break;
+            case "pauseScreen":
+                soundManager.pause(Sound.GAME_MUSIC);
+                break;
+           case "deathScreen":
+                soundManager.stop(Sound.GAME_MUSIC);
+                break;
+        }
+        
     }
 }

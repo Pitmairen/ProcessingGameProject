@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author pitmairen
  */
-public class SourcePool {
+public class SourcePool implements Source {
 
     private final OpenAL al;
     private final ArrayList<Integer> sources;
@@ -33,7 +33,7 @@ public class SourcePool {
         sources = new ArrayList<>(sourceCount);
         createPool(bufferID, sourceCount);
     }
-
+    
     /**
      * Play the next available source at the specified position.
      *
@@ -41,16 +41,37 @@ public class SourcePool {
      * @param y y-position (range: -1.0 - 1.0)
      * @param z z-position (range: -1.0 - 1.0)
      */
+    @Override
     public void play(float x, float y, float z) {
         al.setPosision(sources.get(currentPosition), x, y, z);
         al.play(sources.get(currentPosition));
         currentPosition = (currentPosition + 1) % sources.size();
     }
-
-    private void createPool(int bufferID, int count) throws OpenAL.ALError {
-        for (int i = 0; i < count; i++) {
-            sources.add(al.addSource(bufferID));
+    
+    /**
+     * Stops all the sounds in the pool
+     */
+    @Override
+    public void stop() {
+        for(int i : sources){
+            al.stop(i);
         }
     }
+    
+    /**
+     * The pool does not support pausing
+     */
+    @Override
+    public void pause() {
+        // Not supported
+    }
+
+    
+    private void createPool(int bufferID, int count) throws OpenAL.ALError {
+        for (int i = 0; i < count; i++) {
+            sources.add(al.addSource(bufferID, false));
+        }
+    }
+
 
 }

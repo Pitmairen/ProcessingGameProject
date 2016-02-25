@@ -20,4 +20,5 @@ public enum Sound {
     CURSOR2,
 //    EMP, DEATH, GAMEOVER,
     
+    GAME_MUSIC,
 }

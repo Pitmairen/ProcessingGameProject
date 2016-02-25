@@ -55,7 +55,25 @@ public class OpenAL {
     public void play(int sourceId) {
         al.alSourcePlay(sourceId);
     }
-
+    
+    /**
+     * Stop the source with the given ID
+     *
+     * @param sourceId the ID of the source
+     */
+    public void stop(int sourceId) {
+        al.alSourceStop(sourceId);
+    }
+    
+    /**
+     * Pause the source with the given ID
+     *
+     * @param sourceId the ID of the source
+     */
+    public void pause(int sourceId) {
+        al.alSourcePause(sourceId);
+    }
+    
     /**
      * Set the position of the source
      *
@@ -118,12 +136,28 @@ public class OpenAL {
     /**
      * Add a new source.
      *
+     * The source is not looping
+     * 
      * @param bufferID the buffer ID to connect the source to
      * @return the source ID
      *
      * @throws backend.sound.OpenAL.ALError
      */
     public int addSource(int bufferID) throws ALError {
+        return addSource(bufferID, false);
+    }
+
+    
+      /**
+     * Add a new source.
+     *
+     * @param bufferID the buffer ID to connect the source to
+     * @param loop true if the source should loop
+     * @return the source ID
+     *
+     * @throws backend.sound.OpenAL.ALError
+     */
+    public int addSource(int bufferID, boolean loop) throws ALError {
         int[] source = new int[1];
 
         al.alGenSources(1, source, 0);
@@ -136,13 +170,18 @@ public class OpenAL {
         al.alSourcei(source[0], AL.AL_BUFFER, bufferID);
         al.alSourcef(source[0], AL.AL_PITCH, 1.0f);
         al.alSourcef(source[0], AL.AL_GAIN, 1.0f);
-        al.alSourcei(source[0], AL.AL_LOOPING, AL.AL_FALSE);
+        if(loop){
+            al.alSourcei(source[0], AL.AL_LOOPING, AL.AL_TRUE);
+        }else{
+            al.alSourcei(source[0], AL.AL_LOOPING, AL.AL_FALSE);
+        }
         al.alSourcefv(source[0], AL.AL_VELOCITY, sourceVel, 0);
 
         sources.add(source[0]);
         return source[0];
+    
     }
-
+    
     /**
      * Generic error that id thrown when a error happens.
      */
