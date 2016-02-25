@@ -43,10 +43,6 @@ public class SoundManager {
      */
     public void play(Sound soundID, Vector pos) {
 
-        if (muted) {
-            return;
-        }
-
         float x = (2 * (float) pos.getX() - gui.width) / gui.width;
         float y = (2 * (float) pos.getY() - gui.height) / gui.height;
         sounds.get(soundID).play(x, y, 0f);
@@ -105,12 +101,17 @@ public class SoundManager {
      */
     public void setMuted(boolean muted) {
         this.muted = muted;
+        if(muted){
+            al.setGlobalGain(0f);
+        }else{
+            al.setGlobalGain(1.0f);
+        }
     }
 
     /**
      * Toggle the muted state of the sound manager
      */
     public void toggleMuted() {
-        muted = !muted;
+        setMuted(!muted);
     }
 }

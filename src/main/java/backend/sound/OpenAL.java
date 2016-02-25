@@ -38,6 +38,8 @@ public class OpenAL {
 
     // Default velocity of the source.
     private static final float[] sourceVel = {0.0f, 0.0f, 0.0f};
+    
+    private float globalGain = 1.0f;
 
     /**
      * Initiates the sound system
@@ -169,7 +171,7 @@ public class OpenAL {
         // Set default values
         al.alSourcei(source[0], AL.AL_BUFFER, bufferID);
         al.alSourcef(source[0], AL.AL_PITCH, 1.0f);
-        al.alSourcef(source[0], AL.AL_GAIN, 1.0f);
+        al.alSourcef(source[0], AL.AL_GAIN, globalGain);
         if(loop){
             al.alSourcei(source[0], AL.AL_LOOPING, AL.AL_TRUE);
         }else{
@@ -180,6 +182,18 @@ public class OpenAL {
         sources.add(source[0]);
         return source[0];
     
+    }
+    
+    /**
+     * Set the gain of all the sources.
+     * 
+     * @param value the gain values
+     */
+    public void setGlobalGain(float value){
+        globalGain = value;
+        for(int i : sources){
+            al.alSourcef(i, AL.AL_GAIN, value);
+        }
     }
     
     /**
