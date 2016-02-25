@@ -117,14 +117,6 @@ public class LaserCannon extends OffensiveModule {
         // The unit vector normal to the laser's heading used to move 
         // the two parallel lines apart.
         Vector normal = laserHeading.copy().rotate(Math.PI/2);
-
-
-
-        // The calculation of the line positions can be moved into the actor 
-        // loop below and then use the target actors hitbox radius as the number 
-        // of units to move the two positions. This will make the laser more 
-        // accurate if there are targets with different hitbox sizes.
-        
         
         // The current shortes distance to a target. We start at infinity.
         double shortestDistance = Double.POSITIVE_INFINITY;
@@ -138,11 +130,6 @@ public class LaserCannon extends OffensiveModule {
                 continue;
             }
 
-            // Start position of the two parallel lines shifted ±15 units in the 
-            // normal direction.
-            Vector line1Pos = Vector.add(laserPos, normal.copy().mult(act.getHitBoxRadius()));
-            Vector line2Pos = Vector.add(laserPos, normal.copy().mult(-act.getHitBoxRadius()));
-
             Vector targetPos = act.getPosition().copy();
             Vector laserToTarget = Vector.sub(targetPos, laserPos);  
             
@@ -153,6 +140,11 @@ public class LaserCannon extends OffensiveModule {
             if(laserHeading.dot(laserToTarget) < 0){
                 continue;
             }
+            
+            // Start position of the two parallel lines shifted ± the target hitbox radius
+            // units in the normal direction.
+            Vector line1Pos = Vector.add(laserPos, normal.copy().mult(act.getHitBoxRadius()));
+            Vector line2Pos = Vector.add(laserPos, normal.copy().mult(-act.getHitBoxRadius()));
             
             // The cross product between the laserHeading and the vector from
             // each parallel position to the target.
