@@ -14,6 +14,6 @@ public enum Sound {
     
     EXPLOSION,
     AUTO_CANNON,
-    LASER,
+    LASER, COLLISION,
     
 }

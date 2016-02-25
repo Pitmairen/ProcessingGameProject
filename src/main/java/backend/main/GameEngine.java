@@ -309,7 +309,14 @@ public class GameEngine {
         resourceManager.add(Sound.EXPLOSION, "audio/sfx/death.wav");
         resourceManager.add(Sound.AUTO_CANNON, "audio/sfx/fire.wav");
         resourceManager.add(Sound.LASER, "audio/sfx/lazer.wav");
+        resourceManager.add(Sound.COLLISION, "audio/sfx/collision.wav");
+        resourceManager.add(Sound.CURSOR, "audio/sfx/cursor.wav");
+        resourceManager.add(Sound.CURSOR2, "audio/sfx/cursor2.wav");
+        resourceManager.add(Sound.EMP, "audio/sfx/emp02.wav");
+        resourceManager.add(Sound.DEATH, "audio/sfx/death.wav");
+        resourceManager.add(Sound.GAMEOVER, "audio/sfx/lose.wav");
 
+      
     }
     
     private void loadSounds() throws OpenAL.ALError {
@@ -317,6 +324,14 @@ public class GameEngine {
         soundManager.addSound(Sound.EXPLOSION, 5);
         soundManager.addSound(Sound.LASER, 1);
         soundManager.addSound(Sound.AUTO_CANNON, 5);
+        soundManager.addSound(Sound.COLLISION, 1);
+        soundManager.addSound(Sound.CURSOR, 5);
+        soundManager.addSound(Sound.CURSOR2, 5);
+        soundManager.addSound(Sound.EMP, 5);
+        soundManager.addSound(Sound.DEATH, 5);
+        soundManager.addSound(Sound.GAMEOVER, 5);
+
+    
     }
     
     // Getters.

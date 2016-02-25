@@ -10,5 +10,10 @@ package backend.actor;
  * @author dogsh
  */
 public interface AI {
+
+    /**
+     *
+     * @param timePassed
+     */
     public void updateBehaviour(double timePassed);
 } 
