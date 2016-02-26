@@ -35,7 +35,7 @@ public class DroneLauncher extends OffensiveModule {
     public DroneLauncher(Actor owner) {
         super("Drone Launcher", owner);
         updateVectors();
-        laucherImg = owner.getGameEngine().getResourceManager().getImage(Image.DRONE_LAUCHER);
+        laucherImg = owner.getGameEngine().getResourceManager().getImage(Image.DRONE_LAUNCHER);
     }
 
     @Override
