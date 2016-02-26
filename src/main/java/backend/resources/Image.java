@@ -16,4 +16,5 @@ public enum Image {
     SHIELD_NOISE,
     SHIELD_BACKGROUND,
     DRONE_LAUNCHER,
+    ROCKET_LAUNCHER,
 }

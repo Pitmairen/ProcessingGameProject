@@ -4,6 +4,9 @@ import backend.actor.Actor;
 import backend.actor.Rocket;
 import backend.main.RocketManager;
 import backend.main.Timer;
+import backend.resources.Image;
+import processing.core.PApplet;
+import processing.core.PImage;
 
 /**
  * Fires rockets. Slow rate of fire and large damage.
@@ -19,15 +22,11 @@ import backend.main.Timer;
  */
 public class RocketLauncher extends OffensiveModule {
 
-    // Shape and color.
-    private int turretLength = 22;
-    private int turretWidth = 7;
-    private int[] turretRGBA = new int[]{100, 100, 100, 255};
-
     private double timeBetweenShots = 900;
     private Timer timer = new Timer();
 
     private RocketManager rocketManager;
+    private final PImage rocketImg;
 
     /**
      * Constructor.
@@ -37,19 +36,21 @@ public class RocketLauncher extends OffensiveModule {
         super("Rocket Launcher", owner);
 
         this.rocketManager = rocketManager;
-
+        rocketImg = owner.getGameEngine().getResourceManager().getImage(Image.ROCKET_LAUNCHER);
         launchVelocity = 0.6;
         projectileDamage = 22;
     }
 
     @Override
     public void draw() {
-        owner.getGuiHandler().strokeWeight(turretWidth);
-        owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-        owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-        owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
-                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
-                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
+        PApplet gui = owner.getGuiHandler();
+        gui.pushMatrix();
+        gui.translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
+        gui.rotate((float)(owner.getHeading().getAngle2D()));
+        gui.imageMode(PImage.CENTER);
+        gui.image(rocketImg, 0, 0, 46.29f, 23.92f);
+        gui.imageMode(PImage.CORNER);
+        gui.popMatrix();
     }
 
     /**
