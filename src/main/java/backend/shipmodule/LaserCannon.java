@@ -21,6 +21,7 @@ public class LaserCannon extends OffensiveModule {
     private int[] turretRGBA = new int[]{200, 30, 30, 255};
 
     private PImage bgImage;
+    private boolean soundActive = false;
 
     /**
      * Constructor.
@@ -66,6 +67,18 @@ public class LaserCannon extends OffensiveModule {
             gui.popMatrix();
 
             this.setModuleActive(false);
+            
+            if(!soundActive){
+                soundActive = true;
+                owner.getGameEngine().getSoundManager().play(Sound.LASER, owner.getPosition());
+            }else{
+                owner.getGameEngine().getSoundManager().setPosition(Sound.LASER, owner.getPosition());
+
+            }
+        }
+        else if(soundActive){
+            owner.getGameEngine().getSoundManager().stop(Sound.LASER);
+            soundActive = false;
         }
     }
 
@@ -74,7 +87,6 @@ public class LaserCannon extends OffensiveModule {
      */
     @Override
     public void activate() {
-        owner.getGameEngine().getSoundManager().play(Sound.LASER, owner.getPosition());
         this.setModuleActive(true);
     }
 
