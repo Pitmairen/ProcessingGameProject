@@ -10,11 +10,9 @@ public interface Source {
     /**
      * Plays the source at the given position.
      *
-     * @param x x-position (range: -1.0 - 1.0)
-     * @param y y-position (range: -1.0 - 1.0)
-     * @param z z-position (range: -1.0 - 1.0)
+
      */
-    public void play(float x, float y, float z);
+    public void play();
 
     /**
      * Stops the sound.
@@ -25,4 +23,14 @@ public interface Source {
      * Pause the sound.
      */
     public void pause();
+    
+    
+    /**
+     * Set the position of the source
+     * 
+     * @param x x-position (range: -1.0 - 1.0)
+     * @param y y-position (range: -1.0 - 1.0)
+     * @param z z-position (range: -1.0 - 1.0)
+     */
+    public void setPosition(float x, float y, float z);
 }

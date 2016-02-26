@@ -25,14 +25,9 @@ public class LoopingSound implements Source {
 
     /**
      * Play the source at the specified position.
-     *
-     * @param x x-position (range: -1.0 - 1.0)
-     * @param y y-position (range: -1.0 - 1.0)
-     * @param z z-position (range: -1.0 - 1.0)
      */
     @Override
-    public void play(float x, float y, float z) {
-        al.setPosision(sourceID, x, y, z);
+    public void play() {
         al.play(sourceID);
     }
 
@@ -50,6 +45,18 @@ public class LoopingSound implements Source {
     @Override
     public void pause() {
         al.pause(sourceID);
+    }
+    
+    /**
+     * Set the position of the sound
+     * 
+     * @param x x-position (range: -1.0 - 1.0)
+     * @param y y-position (range: -1.0 - 1.0)
+     * @param z z-position (range: -1.0 - 1.0)
+     */
+    @Override
+    public void setPosition(float x, float y, float z) {
+        al.setPosision(sourceID, x, y, z);
     }
 
 }

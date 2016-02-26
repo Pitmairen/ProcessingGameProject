@@ -39,13 +39,11 @@ public class SoundManager {
      * Plays the sound at the specified position
      *
      * @param soundID the sound ID
-     * @param pos the position in normal coordinates (e.g: actor.getPosition())
+     * @param pos the position of the sound (e.g: actor.getPosition())
      */
     public void play(Sound soundID, Vector pos) {
-
-        float x = (2 * (float) pos.getX() - gui.width) / gui.width;
-        float y = (2 * (float) pos.getY() - gui.height) / gui.height;
-        sounds.get(soundID).play(x, y, 0f);
+        setPosition(soundID, pos);
+        sounds.get(soundID).play();
     }
     
     /**
@@ -64,6 +62,19 @@ public class SoundManager {
      */
     public void pause(Sound soundID) {
         sounds.get(soundID).pause();
+    }
+    
+    /**
+     * Sets the specified sound's position.
+     *
+     * @param soundID the sound ID
+     * @param pos the position of the sound
+     */
+    public void setPosition(Sound soundID, Vector pos) {
+        // Convert the position into the coordinates used by openal.
+        float x = (2 * (float) pos.getX() - gui.width) / gui.width;
+        float y = (2 * (float) pos.getY() - gui.height) / gui.height;
+        sounds.get(soundID).setPosition(x, y, 0f);
     }
     
     /**

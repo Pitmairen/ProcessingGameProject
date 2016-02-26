@@ -35,15 +35,10 @@ public class SourcePool implements Source {
     }
     
     /**
-     * Play the next available source at the specified position.
-     *
-     * @param x x-position (range: -1.0 - 1.0)
-     * @param y y-position (range: -1.0 - 1.0)
-     * @param z z-position (range: -1.0 - 1.0)
+     * Play the next available source.
      */
     @Override
-    public void play(float x, float y, float z) {
-        al.setPosision(sources.get(currentPosition), x, y, z);
+    public void play() {
         al.play(sources.get(currentPosition));
         currentPosition = (currentPosition + 1) % sources.size();
     }
@@ -65,7 +60,18 @@ public class SourcePool implements Source {
     public void pause() {
         // Not supported
     }
-
+    
+    /**
+     * Set the position of the current source
+     * 
+     * @param x x-position (range: -1.0 - 1.0)
+     * @param y y-position (range: -1.0 - 1.0)
+     * @param z z-position (range: -1.0 - 1.0)
+     */
+    @Override
+    public void setPosition(float x, float y, float z) {
+        al.setPosision(sources.get(currentPosition), x, y, z);
+    }
     
     private void createPool(int bufferID, int count) throws OpenAL.ALError {
         for (int i = 0; i < count; i++) {
