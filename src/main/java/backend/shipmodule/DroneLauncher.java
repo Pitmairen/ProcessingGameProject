@@ -5,6 +5,8 @@ import backend.actor.Actor;
 import backend.actor.KamikazeDrone;
 import backend.actor.DroneAI;
 import backend.main.Vector;
+import backend.resources.Image;
+import processing.core.PImage;
 
 /**
  * Launches drones.
@@ -22,11 +24,10 @@ public class DroneLauncher extends OffensiveModule {
     private Timer timer = new Timer();
 
     private double spawnAngle = Math.PI / 4;
-    private Vector spawnDirection1 = null;
-    private Vector spawnDirection2 = null;
     private Vector spawnPosition1 = null;
     private Vector spawnPosition2 = null;
     private KamikazeDrone drone = null;
+    private final PImage laucherImg;
 
     /**
      * Constructor.
@@ -34,6 +35,7 @@ public class DroneLauncher extends OffensiveModule {
     public DroneLauncher(Actor owner) {
         super("Drone Launcher", owner);
         updateVectors();
+        laucherImg = owner.getGameEngine().getResourceManager().getImage(Image.DRONE_LAUCHER);
     }
 
     @Override
@@ -47,14 +49,10 @@ public class DroneLauncher extends OffensiveModule {
 
         owner.getGuiHandler().pushMatrix();
         owner.getGuiHandler().translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
-        owner.getGuiHandler().rotate((float) spawnDirection1.getAngle2D());
-        owner.getGuiHandler().line(0, 0, turretLength, 0);
-        owner.getGuiHandler().popMatrix();
-
-        owner.getGuiHandler().pushMatrix();
-        owner.getGuiHandler().translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
-        owner.getGuiHandler().rotate((float) spawnDirection2.getAngle2D());
-        owner.getGuiHandler().line(0, 0, turretLength, 0);
+        owner.getGuiHandler().rotate((float) (owner.getHeading().getAngle2D() + Math.PI / 2));
+        owner.getGuiHandler().imageMode(PImage.CENTER);
+        owner.getGuiHandler().image(laucherImg, 0, 0, 181.4f, 84.0f);
+        owner.getGuiHandler().imageMode(PImage.CORNER);
         owner.getGuiHandler().popMatrix();
     }
 
@@ -62,8 +60,8 @@ public class DroneLauncher extends OffensiveModule {
      * Updates vectors.
      */
     private void updateVectors() {
-        spawnDirection1 = owner.getHeading().copy().normalize().rotate(spawnAngle);
-        spawnDirection2 = owner.getHeading().copy().normalize().rotate(-spawnAngle);
+        Vector spawnDirection1 = owner.getHeading().copy().normalize().rotate(spawnAngle);
+        Vector spawnDirection2 = owner.getHeading().copy().normalize().rotate(-spawnAngle);
         spawnPosition1 = owner.getPosition().copy().add(spawnDirection1.mult(owner.getHitBoxRadius()));
         spawnPosition2 = owner.getPosition().copy().add(spawnDirection2.mult(owner.getHitBoxRadius()));
     }

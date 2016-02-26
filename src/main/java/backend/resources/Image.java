@@ -15,4 +15,5 @@ public enum Image {
     BACKGROUND_IMAGE,
     SHIELD_NOISE,
     SHIELD_BACKGROUND,
+    DRONE_LAUCHER,
 }
