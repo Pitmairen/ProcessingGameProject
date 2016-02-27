@@ -82,7 +82,14 @@ public class GUIHandler extends PApplet {
         menuFont = createFont("Arial", 28, true);
         frameRate(60);
         cursor(CROSS);
+        
         keyRepeatEnabled = true;   // Needed for enhanced keyboard input reading.
+        
+        String OS = System.getProperty("os.name");
+        if(OS.startsWith("Windows")){
+            keyRepeatEnabled = false; //Needed to fix input error on windows
+        }
+        
         gameEngine = new GameEngine(this);
 
         mainMenu = new Menu("Xeno Blaster 4000", this);
