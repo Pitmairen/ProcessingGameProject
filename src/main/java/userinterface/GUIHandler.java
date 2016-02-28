@@ -42,7 +42,7 @@ public class GUIHandler extends PApplet {
     private int[] pauseScreenRGBA = new int[]{40, 160, 30, 255};
 
     // Death screen.
-    private int[] deathScreenRGBA = new int[]{200, 50, 40, 255};
+    private int[] deathScreenRGBA = new int[]{255, 50, 40, 255};
 
     // Decimal formats.
     private DecimalFormat format1 = new DecimalFormat("0");
@@ -77,9 +77,9 @@ public class GUIHandler extends PApplet {
     public void setup() {
         timer = new Timer();
         // Font sizes.
-        hudFont = createFont("Arial", 22, true);
-        debugHUDFont = createFont("Arial", 16, true);
-        menuFont = createFont("Arial", 28, true);
+        hudFont = createFont("hudFont.otf", 20, true);
+        debugHUDFont = createFont("hudFont.otf", 16, true);
+        menuFont = createFont("hudFont.otf", 28, true);
         frameRate(60);
         cursor(CROSS);
         
@@ -180,6 +180,7 @@ public class GUIHandler extends PApplet {
     private void drawHUD() {
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         textFont(hudFont);
+        textLeading(22);
         textAlign(LEFT, TOP);
         text("Level: " + gameEngine.getCurrentLevel().getLevelName()
                 + "\n"
@@ -187,16 +188,8 @@ public class GUIHandler extends PApplet {
                 + "\n" + "Next Wave: " + format4.format(gameEngine.getCurrentLevel().getTimeToNextWave() / 1000)
                 + "\n"
                 + "\n" + "Kill chain: " + gameEngine.getCurrentLevel().getPlayer().getKillChain()
-                + "\n" + "Score: " + format1.format(gameEngine.getCurrentLevel().getPlayer().getScore()), 14, 40);
-
-        textAlign(LEFT, TOP);
-        text("Level: " + gameEngine.getCurrentLevel().getLevelName()
-                + "\n"
-                + "\n" + "Current Wave: " + gameEngine.getCurrentLevel().getCurrentWave()
-                + "\n" + "Next Wave: " + format4.format(gameEngine.getCurrentLevel().getTimeToNextWave() / 1000)
-                + "\n"
-                + "\n" + "Kill chain: " + gameEngine.getCurrentLevel().getPlayer().getKillChain()
-                + "\n" + "Score: " + format1.format(gameEngine.getCurrentLevel().getPlayer().getScore()), 14, 40);
+                + "\n" + "Score: " + format1.format(gameEngine.getCurrentLevel().getPlayer().getScore()), 20, 20);
+        
     }
 
     /**
@@ -205,6 +198,7 @@ public class GUIHandler extends PApplet {
     private void drawDebugHud() {
         fill(debugHudRGBA[0], debugHudRGBA[1], debugHudRGBA[2]);
         textFont(debugHUDFont);
+        textLeading(18);
         textAlign(LEFT, TOP);
         text("FPS: " + format2.format((int) frameRate)
                 + "\n"
@@ -217,7 +211,7 @@ public class GUIHandler extends PApplet {
                 + "\n" + "posY: " + format5.format(gameEngine.getCurrentLevel().getPlayer().getPosition().getY())
                 + "\n" + "speed: " + format10.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().mag())
                 + "\n" + "heading: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getHeading().getAngle2D()) + " rad"
-                + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad", width - 200, 30);
+                + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad", width - 200, 20);
     }
 
     /**
@@ -302,13 +296,15 @@ public class GUIHandler extends PApplet {
         if (lastHitBy != null) {
             hitByName = lastHitBy.getName();
         }
-
+        
+        //stroke(255);
+        //fill(0);
+        //rect(width / 4, height / 3, width / 2, height / 7 + height / 100 );
         fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
         textFont(menuFont);
         textAlign(CENTER, CENTER);
         text("You Were Defeated By " + hitByName
                 + "\n" + "Press \"ENTER\" to return to Start Menu."
-                + "\n"
                 + "\n"
                 + "\n" + "Your score: " + gameEngine.getCurrentLevel().getPlayer().getScore(), width / 2, height / 2 - 100);
     }
