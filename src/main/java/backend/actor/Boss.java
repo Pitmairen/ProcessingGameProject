@@ -54,7 +54,7 @@ public class Boss extends Enemy implements Drawable {
         offensiveModules.add(DroneLauncher);
         currentOffensiveModule = DroneLauncher;
 
-        enemyGraphics = guiHandler.loadImage("multishotDroneLarge.png");
+        enemyGraphics = guiHandler.loadImage("Actors/DroneV2Lrg.png");
 
         healthBarWidth = (int) hitBoxRadius * 2;
         healthBarHeight = (int) (healthBarWidth * 0.1);
