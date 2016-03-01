@@ -3,7 +3,9 @@ package backend.shipmodule;
 import backend.main.Timer;
 import backend.actor.Actor;
 import backend.actor.Bullet;
+import backend.resources.Image;
 import backend.resources.Sound;
+import processing.core.PImage;
 
 /**
  * Cannon that fires single slow moving bullets.
@@ -20,6 +22,7 @@ public class LightCannon extends OffensiveModule {
     private double timeBetweenShots = 100;
     private Timer timer = new Timer();
 
+    private final PImage lightCannon;
     /**
      * Constructor.
      */
@@ -28,7 +31,8 @@ public class LightCannon extends OffensiveModule {
 
         launchVelocity = 0.8;
         projectileDamage = 10;
-        setImage("lightCannon.png");
+        
+        lightCannon = owner.getGameEngine().getResourceManager().getImage(Image.LIGHT_CANNON);
     }
 
     //@Override
@@ -40,11 +44,14 @@ public class LightCannon extends OffensiveModule {
 //        owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
 //                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
 //                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
-        owner.getGuiHandler().pushMatrix();
-        owner.getGuiHandler().translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
-        owner.getGuiHandler().rotate((float) owner.getHeading().getAngle2D());
-        owner.getGuiHandler().image(getImage(), - 10, - 10);
-        owner.getGuiHandler().popMatrix();
+
+//        owner.getGuiHandler().pushMatrix();
+//        owner.getGuiHandler().translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
+//        owner.getGuiHandler().rotate((float) owner.getHeading().getAngle2D());
+//        owner.getGuiHandler().image(getImage(), - 10, - 10);
+//        owner.getGuiHandler().popMatrix();
+
+        drawModule(lightCannon, 0, 0, defaultModuleWidth, defaultModuleHeight);
     }
 
     /**

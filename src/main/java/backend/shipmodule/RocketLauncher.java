@@ -43,14 +43,7 @@ public class RocketLauncher extends OffensiveModule {
 
     @Override
     public void draw() {
-        PApplet gui = owner.getGuiHandler();
-        gui.pushMatrix();
-        gui.translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
-        gui.rotate((float)(owner.getHeading().getAngle2D()));
-        gui.imageMode(PImage.CENTER);
-        gui.image(rocketImg, 0, 0, 46.29f, 23.92f);
-        gui.imageMode(PImage.CORNER);
-        gui.popMatrix();
+        drawModule(rocketImg, 0, 0, defaultModuleWidth, defaultModuleHeight);
     }
 
     /**

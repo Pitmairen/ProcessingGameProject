@@ -1,6 +1,8 @@
 package backend.shipmodule;
 
 import backend.actor.Actor;
+import backend.resources.Image;
+import processing.core.PApplet;
 import processing.core.PImage;
 import userinterface.Drawable;
 
@@ -16,7 +18,11 @@ public abstract class ShipModule implements Drawable {
     protected double launchVelocity = 0;
     protected double projectileDamage = 0;
     protected boolean moduleActive = false;
-
+    
+    protected float defaultModuleWidth = 46.29f;
+    protected float defaultModuleHeight = 23.92f;
+    
+    
     private PImage image;
 
     /**
@@ -52,6 +58,26 @@ public abstract class ShipModule implements Drawable {
      */
     public void setImage(String image) {
         this.image = owner.getGuiHandler().loadImage(image);
+    }
+
+    /**
+     * Draws the module on the player 
+     * 
+     * @param moduleImage 
+     * @param posX int X-Position from the center of the player
+     * @param posY int Y-Position from the center of the player
+     * @param width float Width of the module
+     * @param height float Width of the module
+     */
+    public void drawModule(PImage moduleImage, int posX, int posY, float width, float height) {
+        PApplet gui = owner.getGuiHandler();
+        gui.pushMatrix();
+        gui.translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
+        gui.rotate((float) (owner.getHeading().getAngle2D()));
+        gui.imageMode(PImage.CENTER);
+        gui.image(moduleImage, posX, posY, width, height);
+        gui.imageMode(PImage.CORNER);
+        gui.popMatrix();
     }
 
     // Getters.

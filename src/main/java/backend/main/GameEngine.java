@@ -304,6 +304,10 @@ public class GameEngine {
         resourceManager.add(Image.SHIELD_BACKGROUND, "shield.png");
         resourceManager.add(Image.DRONE_LAUNCHER, "HighResAssets/DroneLauncher.png");
         resourceManager.add(Image.ROCKET_LAUNCHER, "HighResAssets/RocketLauncherV2.png");
+        resourceManager.add(Image.SEEKER_CANNON, "ResizedImages/BombLauncherRed.png");
+        resourceManager.add(Image.EMP_CANNON, "ResizedImages/ShieldModuleV2.png");
+        resourceManager.add(Image.LIGHT_CANNON, "ResizedImages/LightCannonV2.png");
+        resourceManager.add(Image.LASER_CANNON, "ResizedImages/Laser.png");
 
         resourceManager.add(Shader.SHIELD_SHADER, "shield.glsl");
         resourceManager.add(Shader.BG_SHADER, "background.glsl");

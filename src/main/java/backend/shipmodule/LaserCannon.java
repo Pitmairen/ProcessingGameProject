@@ -22,6 +22,7 @@ public class LaserCannon extends OffensiveModule {
 
     private PImage bgImage;
     private boolean soundActive = false;
+    private PImage laserCannonImg;
 
     /**
      * Constructor.
@@ -31,24 +32,28 @@ public class LaserCannon extends OffensiveModule {
 
         bgImage = owner.getGameEngine().getResourceManager().getImage(Image.LASER_BEAM);
         projectileDamage = 0.04f;
-        setImage("laserWeapon.png");
+        laserCannonImg = owner.getGameEngine().getResourceManager().getImage(Image.LASER_CANNON);
     }
 
     @Override
     public void draw() {
 
         // Draw the cannon.
+        drawModule(laserCannonImg, 5, 0, defaultModuleWidth, defaultModuleHeight);
+        
+        //Old processing modules
 //        owner.getGuiHandler().strokeWeight(turretWidth);
 //        owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
 //        owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
 //        owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
 //                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
 //                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
-        owner.getGuiHandler().pushMatrix();
-        owner.getGuiHandler().translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
-        owner.getGuiHandler().rotate((float) owner.getHeading().getAngle2D());
-        owner.getGuiHandler().image(getImage(), - 10, - 10);
-        owner.getGuiHandler().popMatrix();
+
+//        owner.getGuiHandler().pushMatrix();
+//        owner.getGuiHandler().translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
+//        owner.getGuiHandler().rotate((float) owner.getHeading().getAngle2D());
+//        owner.getGuiHandler().image(getImage(), - 10, - 10);
+//        owner.getGuiHandler().popMatrix();
 
         // Draw the laser beam.
         if (this.moduleActive) {
@@ -56,27 +61,26 @@ public class LaserCannon extends OffensiveModule {
             double screenHeight = owner.getGameEngine().getGuiHandler().getHeight();
             double screenDiagonalLength = Math.sqrt(Math.pow(screenWidth, 2) + Math.pow(screenHeight, 2));
 
-            float laserLength = Math.min(findLaserLength(), (float)screenDiagonalLength);
+            float laserLength = Math.min(findLaserLength(), (float) screenDiagonalLength);
 
             GUIHandler gui = owner.getGuiHandler();
             gui.pushMatrix();
             gui.tint(0xffff0000);
             gui.translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
-            gui.rotate((float)owner.getHeading().getAngle2D());
-            gui.image(bgImage, 25, -5, (float)laserLength - 25, 10);
+            gui.rotate((float) owner.getHeading().getAngle2D());
+            gui.image(bgImage, 25, -5, (float) laserLength - 25, 10);
             gui.popMatrix();
 
             this.setModuleActive(false);
-            
-            if(!soundActive){
+
+            if (!soundActive) {
                 soundActive = true;
                 owner.getGameEngine().getSoundManager().play(Sound.LASER, owner.getPosition());
-            }else{
+            } else {
                 owner.getGameEngine().getSoundManager().setPosition(Sound.LASER, owner.getPosition());
 
             }
-        }
-        else if(soundActive){
+        } else if (soundActive) {
             owner.getGameEngine().getSoundManager().stop(Sound.LASER);
             soundActive = false;
         }
@@ -90,7 +94,6 @@ public class LaserCannon extends OffensiveModule {
         this.setModuleActive(true);
     }
 
-    
     /**
      * Finds and calculates the distance to the nearest target that the laser is
      * hitting.
@@ -98,9 +101,7 @@ public class LaserCannon extends OffensiveModule {
      *
      * This is done by calculating the determinant of the matrix that is created
      * by the heading vector of the laser (LH) and the vector from the laser to
-     * the target actor (LT) like so:
-     * [LH.x LT.x]
-     * [LH.y LT.y]
+     * the target actor (LT) like so: [LH.x LT.x] [LH.y LT.y]
      *
      * d = (LH.x*LT.y) - (LH.x*LT.y)
      *
@@ -122,14 +123,14 @@ public class LaserCannon extends OffensiveModule {
      * @return the distance to the target that is being hit by the laser
      */
     private float findLaserLength() {
-        
+
         Vector laserPos = owner.getPosition().copy();
         Vector laserHeading = owner.getHeading().copy().normalize();
 
         // The unit vector normal to the laser's heading used to move 
         // the two parallel lines apart.
-        Vector normal = laserHeading.copy().rotate(Math.PI/2);
-        
+        Vector normal = laserHeading.copy().rotate(Math.PI / 2);
+
         // The current shortes distance to a target. We start at infinity.
         double shortestDistance = Double.POSITIVE_INFINITY;
         Actor closest = null;
@@ -138,26 +139,26 @@ public class LaserCannon extends OffensiveModule {
 
             // Only check agains the enemies
             if (act == owner || !(act instanceof Enemy)) {
-                
+
                 continue;
             }
 
             Vector targetPos = act.getPosition().copy();
-            Vector laserToTarget = Vector.sub(targetPos, laserPos);  
-            
+            Vector laserToTarget = Vector.sub(targetPos, laserPos);
+
             // We only want to hit targets that are in front of the player, 
             // so we check the dot product between the laser heading and the
             // vector from the player to the target. If the result is negative
             // the target is behind the player so we skip this actor.
-            if(laserHeading.dot(laserToTarget) < 0){
+            if (laserHeading.dot(laserToTarget) < 0) {
                 continue;
             }
-            
+
             // Start position of the two parallel lines shifted ± the target hitbox radius
             // units in the normal direction.
             Vector line1Pos = Vector.add(laserPos, normal.copy().mult(act.getHitBoxRadius()));
             Vector line2Pos = Vector.add(laserPos, normal.copy().mult(-act.getHitBoxRadius()));
-            
+
             // The cross product between the laserHeading and the vector from
             // each parallel position to the target.
             double d1 = Vector.cross(laserHeading, Vector.sub(targetPos, line1Pos)).getZ();

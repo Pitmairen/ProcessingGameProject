@@ -4,6 +4,9 @@ import backend.actor.Actor;
 import backend.actor.EMPPulse;
 import backend.main.FadingCanvasItemManager;
 import backend.main.Timer;
+import backend.resources.Image;
+import processing.core.PApplet;
+import processing.core.PImage;
 import userinterface.GUIHandler;
 
 /**
@@ -22,6 +25,8 @@ public class EMPCannon extends TacticalModule {
     private Timer timer = new Timer();
     private FadingCanvasItemManager fadingCanvasItems;
 
+    private final PImage empCannonImg;
+
     /**
      * Constructor.
      */
@@ -30,21 +35,15 @@ public class EMPCannon extends TacticalModule {
 
         this.fadingCanvasItems = itemManager;
         projectileDamage = 2;
+
+        empCannonImg = owner.getGameEngine().getResourceManager().getImage(Image.EMP_CANNON);
+
     }
 
     @Override
     public void draw() {
-        GUIHandler gui = owner.getGuiHandler();
-        gui.pushMatrix();
-        gui.tint(0xffff0000);
-        gui.translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
-        gui.rotate((float) owner.getHeading().getAngle2D());
-
-        owner.getGuiHandler().strokeWeight(weaponWidth);
-        owner.getGuiHandler().stroke(weaponRGBA[0], weaponRGBA[1], weaponRGBA[2]);
-        owner.getGuiHandler().fill(weaponRGBA[0], weaponRGBA[1], weaponRGBA[2]);
-        owner.getGuiHandler().rect((float) -owner.getHitBoxRadius() / 2, -weaponLength / 2, weaponWidth, weaponLength, 2);
-        gui.popMatrix();
+        drawModule(empCannonImg, 0, 15, 20f, 10f);
+        drawModule(empCannonImg, 0, -15, 20f, 10f);
     }
 
     /**
