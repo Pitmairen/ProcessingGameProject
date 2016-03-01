@@ -53,7 +53,7 @@ public class Slayer extends Enemy implements Drawable {
         offensiveModules.add(LightCannon);
         currentOffensiveModule = LightCannon;
 
-        enemyGraphics = guiHandler.loadImage("multishotDroneMedium.png");
+        enemyGraphics = guiHandler.loadImage("Actors/DroneV3Sml.png");
 
         healthBarWidth = (int) hitBoxRadius * 2;
         healthBarHeight = (int) (healthBarWidth * 0.1);
