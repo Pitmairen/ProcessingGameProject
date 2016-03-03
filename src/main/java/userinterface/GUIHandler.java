@@ -66,6 +66,7 @@ public class GUIHandler extends PApplet {
     private Timer timer;
 
     private Menu mainMenu;
+    private Menu pauseMenu;
 
     private boolean debugMode = false;
     
@@ -94,6 +95,7 @@ public class GUIHandler extends PApplet {
         gameEngine = new GameEngine(this);
 
         mainMenu = new Menu("Xeno Blaster 4000", this);
+        pauseMenu = new Menu("Paused", this);
         createMenuItems();
         mainMenu.show();
         titleScreenImage = loadImage("titleScreen.png");
@@ -125,6 +127,7 @@ public class GUIHandler extends PApplet {
                 drawTitleScreenImage();
                 break;
             }
+            case HELP_SCREEN_PAUSED:
             case HELP_SCREEN: {
                 gameEngine.getFadingCanvas().draw();
                 drawHelpScreen();
@@ -141,7 +144,6 @@ public class GUIHandler extends PApplet {
                 gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
                 drawActors();
-                drawPauseScreen();
                 break;
             }
             case DEATH_SCREEN: {
@@ -162,6 +164,13 @@ public class GUIHandler extends PApplet {
      */
     public void showMainMenu() {
         mainMenu.show();
+    }
+    
+    /**
+     * Show the main menu
+     */
+    public void showPauseMenu() {
+        pauseMenu.show();
     }
 
     /**
@@ -339,6 +348,22 @@ public class GUIHandler extends PApplet {
             exit();
         });
 
+        
+        pauseMenu.addItem("Resume Game", () -> {
+            pauseMenu.hide();
+            gameEngine.setSimulationState(SimulationState.GAMEPLAY);
+        });
+        pauseMenu.addItem("Help", () -> {
+            pauseMenu.hide();
+            gameEngine.setSimulationState(SimulationState.HELP_SCREEN_PAUSED);
+        });
+        pauseMenu.addItem("End Game", () -> {
+            pauseMenu.hide();
+            gameEngine.endCurrentGame();
+            gameEngine.setSimulationState(SimulationState.MENU_SCREEN);
+            showMainMenu();
+        });
+        
     }
 
     /**

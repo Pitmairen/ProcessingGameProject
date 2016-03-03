@@ -82,38 +82,28 @@ public class GameEngine {
             System.exit(1);
         }
     }
+    
+    /**
+     * Ends the current game and resets the level.
+     */
+    public void endCurrentGame(){
+        resetLevel();
+    }
 
     /**
      * The main loop of the simulation.
      */
     public void run(double timePassed) {
 
+        checkUserInput(timePassed);
+        
         switch (simulationState) {
-
-            case MENU_SCREEN: {
-                checkUserInput(timePassed);
-                break;
-            }
-            
-            case HELP_SCREEN: {
-                checkUserInput(timePassed);
-                break;
-            }
-            
             case GAMEPLAY: {
-                checkUserInput(timePassed);
                 cleanup(timePassed);
                 actAll(timePassed);
                 break;
             }
-
-            case PAUSE_SCREEN: {
-                checkUserInput(timePassed);
-                break;
-            }
-
             case DEATH_SCREEN: {
-                checkUserInput(timePassed);
                 cleanup(timePassed);
                 actAll(timePassed);
                 break;
@@ -212,10 +202,6 @@ public class GameEngine {
 
         switch (simulationState) {
 
-            case MENU_SCREEN: {
-                break;
-            }
-
             case GAMEPLAY: {
                 if (up) {
                     currentLevel.getPlayer().accelerate("up", timePassed);
@@ -247,21 +233,12 @@ public class GameEngine {
                 if (pause) {
                     if (pauseTimer.timePassed() >= 200) {
                         setSimulationState(SimulationState.PAUSE_SCREEN);
+                        guiHandler.showPauseMenu();
                         pauseTimer.restart();
                     }
                 }
                 if (spawnEnemies) {
                     currentLevel.getActorSpawner().spawnFrigate(1);
-                }
-                break;
-            }
-
-            case PAUSE_SCREEN: {
-                if (pause) {
-                    if (pauseTimer.timePassed() >= 200) {
-                        setSimulationState(SimulationState.GAMEPLAY);
-                        pauseTimer.restart();
-                    }
                 }
                 break;
             }
@@ -278,6 +255,13 @@ public class GameEngine {
                 if (enter) {
                     setSimulationState(SimulationState.MENU_SCREEN);
                     guiHandler.showMainMenu();
+                }
+                break;
+            }
+            case HELP_SCREEN_PAUSED: {
+                if (enter) {
+                    setSimulationState(SimulationState.PAUSE_SCREEN);
+                    guiHandler.showPauseMenu();
                 }
                 break;
             }
@@ -403,7 +387,7 @@ public class GameEngine {
             case PAUSE_SCREEN:
                 soundManager.pause(Sound.GAME_MUSIC);
                 break;
-           case DEATH_SCREEN:
+            case DEATH_SCREEN:
                 soundManager.stop(Sound.GAME_MUSIC);
                 break;
         }
