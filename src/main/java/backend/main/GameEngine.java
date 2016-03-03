@@ -154,28 +154,28 @@ public class GameEngine {
      */
     public void userInput(int keyCode, boolean keyState) {
 
-        if (keyCode == KeyEvent.VK_E) {
+        if (keyCode == KeyEvent.VK_W) {
             up = keyState;
         }
-        if (keyCode == KeyEvent.VK_D) {
+        if (keyCode == KeyEvent.VK_S) {
             down = keyState;
         }
-        if (keyCode == KeyEvent.VK_S) {
+        if (keyCode == KeyEvent.VK_A) {
             left = keyState;
         }
-        if (keyCode == KeyEvent.VK_F) {
+        if (keyCode == KeyEvent.VK_D) {
             right = keyState;
         }
         if (keyCode == 37) {
             offensiveModule = keyState;
         }
-        if (keyCode == 39) {
+        if (keyCode == KeyEvent.VK_E) {
             defensiveModule = keyState;
         }
         if (keyCode == KeyEvent.VK_SPACE) {
             tacticalModule = keyState;
         }
-        if (keyCode == KeyEvent.VK_W) {
+        if (keyCode == KeyEvent.VK_Q) {
             swapOffensive = keyState;
         }
         if (keyCode == KeyEvent.VK_R) {
@@ -187,7 +187,7 @@ public class GameEngine {
         if (keyCode == KeyEvent.VK_ENTER) {
             enter = keyState;
         }
-        if (keyCode == KeyEvent.VK_Q) {
+        if (keyCode == KeyEvent.VK_I) {
             spawnEnemies = keyState;
         }
         if (keyCode == KeyEvent.VK_M && keyState) {
@@ -284,12 +284,13 @@ public class GameEngine {
         resourceManager.add(Image.SEEKER_MISSILE, "particle.png");
         resourceManager.add(Image.BACKGROUND_IMAGE, "background.png");
         resourceManager.add(Image.BG_SHADER_NOISE, "shader_noise.png");
+        resourceManager.add(Image.SHIELD_MODULE, "ResizedImages/ShieldModuleV2.png");
         resourceManager.add(Image.SHIELD_NOISE, "shieldNoise.png");
         resourceManager.add(Image.SHIELD_BACKGROUND, "shield.png");
         resourceManager.add(Image.DRONE_LAUNCHER, "HighResAssets/DroneLauncher.png");
         resourceManager.add(Image.ROCKET_LAUNCHER, "HighResAssets/RocketLauncherV2.png");
         resourceManager.add(Image.SEEKER_CANNON, "ResizedImages/BombLauncherRed.png");
-        resourceManager.add(Image.EMP_CANNON, "ResizedImages/ShieldModuleV2.png");
+        resourceManager.add(Image.EMP_CANNON, "ResizedImages/BombLauncherV2.png");
         resourceManager.add(Image.LIGHT_CANNON, "ResizedImages/LightCannonV2.png");
         resourceManager.add(Image.LASER_CANNON, "ResizedImages/Laser.png");
 

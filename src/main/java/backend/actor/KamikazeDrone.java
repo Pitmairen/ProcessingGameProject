@@ -10,7 +10,7 @@ import processing.core.PImage;
 import userinterface.Drawable;
 
 /**
- * A simple drone that attempts to crash into the player while shooting at it.
+ * A simple drone that attempts to crash into the player.
  *
  * @author Kristian Honningsvag.
  */
@@ -19,9 +19,8 @@ public class KamikazeDrone extends Enemy implements Drawable {
     //Image
     private final PImage enemyGraphics;
 
-    // Modules.
-    private LightCannon LightCannon = new LightCannon(this);
-
+//    // Modules.
+//    private LightCannon LightCannon = new LightCannon(this);
     /**
      * Constructor.
      */
@@ -41,9 +40,8 @@ public class KamikazeDrone extends Enemy implements Drawable {
         attackDelay = 1000;
         killValue = 1;
 
-        offensiveModules.add(LightCannon);
-        currentOffensiveModule = LightCannon;
-
+//        offensiveModules.add(LightCannon);
+//        currentOffensiveModule = LightCannon;
         enemyGraphics = guiHandler.loadImage("multishotDrone.png");
     }
 
