@@ -50,7 +50,7 @@ public class DroneAI implements AI {
 
         if (System.currentTimeMillis() - lastTimeFired > attackDelay * attackDelayFactor) {
 
-            if (false) {
+            if (enemy.getCurrentOffensiveModule() != null) {
                 enemy.getCurrentOffensiveModule().activate();
                 lastTimeFired = System.currentTimeMillis();
                 attackDelayFactor = random.nextFloat() + 1;

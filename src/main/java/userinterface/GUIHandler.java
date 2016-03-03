@@ -292,25 +292,28 @@ public class GUIHandler extends PApplet {
             mainMenu.hide();
             gameEngine.setSimulationState(SimulationState.GAMEPLAY);
         });
-        mainMenu.addItem("Help", () -> {
+        mainMenu.addItem("Key Bindings", () -> {
             mainMenu.hide();
             gameEngine.setSimulationState(SimulationState.HELP_SCREEN);
         });
-        
         mainMenu.addItem("Quit", () -> {
             exit();
         });
 
-        
-        pauseMenu.addItem("Resume Game", () -> {
+        pauseMenu.addItem("Restart", () -> {
+            pauseMenu.hide();
+            gameEngine.endCurrentGame();
+            gameEngine.setSimulationState(SimulationState.GAMEPLAY);
+        });
+        pauseMenu.addItem("Resume", () -> {
             pauseMenu.hide();
             gameEngine.setSimulationState(SimulationState.GAMEPLAY);
         });
-        pauseMenu.addItem("Help", () -> {
+        pauseMenu.addItem("Key Bindings", () -> {
             pauseMenu.hide();
             gameEngine.setSimulationState(SimulationState.HELP_SCREEN_PAUSED);
         });
-        pauseMenu.addItem("End Game", () -> {
+        pauseMenu.addItem("Quit to Main Menu", () -> {
             pauseMenu.hide();
             gameEngine.endCurrentGame();
             gameEngine.setSimulationState(SimulationState.MENU_SCREEN);
