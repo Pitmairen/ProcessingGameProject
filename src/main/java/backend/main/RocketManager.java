@@ -45,7 +45,14 @@ public class RocketManager implements FadingCanvas.Drawable {
     public void addRocket(Rocket rocket) {
         rockets.add(rocket);
     }
-
+    
+    /**
+     * Removes all the rockets managed by the rocket manager
+     */
+    public void clear(){
+        rockets.clear();
+    }
+    
     @Override
     public void draw(PGraphics canvas) {
 
