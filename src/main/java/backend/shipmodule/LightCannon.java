@@ -21,37 +21,22 @@ public class LightCannon extends OffensiveModule {
 
     private double timeBetweenShots = 100;
     private Timer timer = new Timer();
-
-    private final PImage lightCannon;
+    
     /**
      * Constructor.
      */
     public LightCannon(Actor owner) {
         super("Auto Cannon", owner);
-
+        
         launchVelocity = 0.8;
         projectileDamage = 10;
         
-        lightCannon = owner.getGameEngine().getResourceManager().getImage(Image.LIGHT_CANNON);
+        moduleImage = getImageFromResourceManager(Image.LIGHT_CANNON);
     }
 
     //@Override
     public void draw() {
-        // Draw turret.
-//        owner.getGuiHandler().strokeWeight(turretWidth);
-//        owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-//        owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-//        owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
-//                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
-//                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
-
-//        owner.getGuiHandler().pushMatrix();
-//        owner.getGuiHandler().translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
-//        owner.getGuiHandler().rotate((float) owner.getHeading().getAngle2D());
-//        owner.getGuiHandler().image(getImage(), - 10, - 10);
-//        owner.getGuiHandler().popMatrix();
-
-        drawModule(lightCannon, 0, 0, defaultModuleWidth, defaultModuleHeight);
+        drawModule(moduleImage, 0, 0, defaultModuleWidth, defaultModuleHeight);
     }
 
     /**

@@ -22,7 +22,6 @@ public class LaserCannon extends OffensiveModule {
 
     private PImage bgImage;
     private boolean soundActive = false;
-    private PImage laserCannonImg;
 
     /**
      * Constructor.
@@ -32,28 +31,14 @@ public class LaserCannon extends OffensiveModule {
 
         bgImage = owner.getGameEngine().getResourceManager().getImage(Image.LASER_BEAM);
         projectileDamage = 0.04f;
-        laserCannonImg = owner.getGameEngine().getResourceManager().getImage(Image.LASER_CANNON);
+        moduleImage = getImageFromResourceManager(Image.LASER_CANNON);
     }
 
     @Override
     public void draw() {
 
         // Draw the cannon.
-        drawModule(laserCannonImg, 5, 0, defaultModuleWidth, defaultModuleHeight);
-        
-        //Old processing modules
-//        owner.getGuiHandler().strokeWeight(turretWidth);
-//        owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-//        owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-//        owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
-//                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
-//                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
-
-//        owner.getGuiHandler().pushMatrix();
-//        owner.getGuiHandler().translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
-//        owner.getGuiHandler().rotate((float) owner.getHeading().getAngle2D());
-//        owner.getGuiHandler().image(getImage(), - 10, - 10);
-//        owner.getGuiHandler().popMatrix();
+        drawModule(moduleImage, 5, 0, defaultModuleWidth, defaultModuleHeight);
 
         // Draw the laser beam.
         if (this.moduleActive) {

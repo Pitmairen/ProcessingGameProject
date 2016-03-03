@@ -21,8 +21,6 @@ public class AutoCannon extends OffensiveModule {
 
     private double timeBetweenShots = 130;
     private Timer timer = new Timer();
-
-    private final PImage autoCannon;
     /**
      * Constructor.
      */
@@ -32,20 +30,12 @@ public class AutoCannon extends OffensiveModule {
         launchVelocity = 1.6;
         projectileDamage = 1.6;
         
-        autoCannon = owner.getGameEngine().getResourceManager().getImage(Image.LIGHT_CANNON);
+        moduleImage = getImageFromResourceManager(Image.LIGHT_CANNON);
     }
 
     @Override
     public void draw() {
-        drawModule(autoCannon, 0, 0, defaultModuleWidth, defaultModuleHeight);
-        
-        //Old processing modules
-//        owner.getGuiHandler().strokeWeight(turretWidth);
-//        owner.getGuiHandler().stroke(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-//        owner.getGuiHandler().fill(turretRGBA[0], turretRGBA[1], turretRGBA[2]);
-//        owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
-//                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
-//                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
+        drawModule(moduleImage, 0, 0, defaultModuleWidth, defaultModuleHeight);
     }
 
     /**

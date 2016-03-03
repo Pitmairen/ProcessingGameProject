@@ -22,8 +22,7 @@ public abstract class ShipModule implements Drawable {
     protected float defaultModuleWidth = 46.29f;
     protected float defaultModuleHeight = 23.92f;
     
-    
-    private PImage image;
+    protected PImage moduleImage;
 
     /**
      * Constructor.
@@ -57,7 +56,7 @@ public abstract class ShipModule implements Drawable {
      * @param image File path to the image that should be loaded.
      */
     public void setImage(String image) {
-        this.image = owner.getGuiHandler().loadImage(image);
+        this.moduleImage = owner.getGuiHandler().loadImage(image);
     }
 
     /**
@@ -71,6 +70,7 @@ public abstract class ShipModule implements Drawable {
      */
     public void drawModule(PImage moduleImage, int posX, int posY, float width, float height) {
         PApplet gui = owner.getGuiHandler();
+        gui.tint(255);
         gui.pushMatrix();
         gui.translate((float) owner.getPosition().getX(), (float) owner.getPosition().getY());
         gui.rotate((float) (owner.getHeading().getAngle2D()));
@@ -78,6 +78,10 @@ public abstract class ShipModule implements Drawable {
         gui.image(moduleImage, posX, posY, width, height);
         gui.imageMode(PImage.CORNER);
         gui.popMatrix();
+    }
+    
+    public PImage getImageFromResourceManager(Image img){
+        return owner.getGameEngine().getResourceManager().getImage(img);
     }
 
     // Getters.
@@ -102,7 +106,7 @@ public abstract class ShipModule implements Drawable {
     }
 
     public PImage getImage() {
-        return image;
+        return moduleImage;
     }
 
     // Setters.
