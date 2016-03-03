@@ -2,6 +2,7 @@ package backend.actor;
 
 import backend.item.Item;
 import backend.main.GameEngine;
+import backend.main.SimulationState;
 import backend.main.Timer;
 import backend.main.Vector;
 import backend.resources.Sound;
@@ -135,7 +136,7 @@ public class Player extends Actor implements Drawable {
     public void die() {
         gameEngine.getSoundManager().play(Sound.EXPLOSION, getPosition());
         gameEngine.getExplosionManager().explodePlayer(this);
-        gameEngine.setSimulationState("deathScreen");
+        gameEngine.setSimulationState(SimulationState.DEATH_SCREEN);
     }
 
     @Override
