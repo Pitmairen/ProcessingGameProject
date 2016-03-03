@@ -388,6 +388,7 @@ public class GameEngine {
             case PAUSE_SCREEN:
                 soundManager.pause(Sound.GAME_MUSIC);
                 break;
+            case MENU_SCREEN:
             case DEATH_SCREEN:
                 soundManager.stop(Sound.GAME_MUSIC);
                 break;
