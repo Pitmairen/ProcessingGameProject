@@ -22,7 +22,6 @@ public class GUIHandler extends PApplet {
     // Game field.
     private int outerWallThickness = 0;
     private int[] outerWallsRGBA = new int[]{153, 153, 253, 255};
-    private int[] backgroundRGBA = new int[]{0, 0, 0, 255};
 
     // Player HUD.
     private int[] hudRGBA = new int[]{80, 150, 40, 255};
@@ -32,11 +31,7 @@ public class GUIHandler extends PApplet {
     private int[] debugHudRGBA = new int[]{255, 255, 255, 255};
     private PFont debugHUDFont;
 
-    // Main menu.
-    private int mainMenuOuterBoxThickness = 5;
-    private int[] mainMenuOuterBoxRGBA = new int[]{153, 153, 253, 255};
-    private int[] mainMenuBackgroundRGBA = new int[]{0, 0, 0, 255};
-    private int[] mainMenuRGBA = new int[]{153, 153, 253, 255};
+    // Main menu
     private PFont menuFont;
 
     // Pause screen.
@@ -223,27 +218,6 @@ public class GUIHandler extends PApplet {
                 + "\n" + "heading: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getHeading().getAngle2D()) + " rad"
                 + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad", width - 200, 20);
     }
-
-    /**
-     * Draws the start screen.
-     */
-    private void drawStartMenu() {
-//        // Background.
-//        strokeWeight(mainMenuOuterBoxThickness);
-//        stroke(mainMenuOuterBoxRGBA[0], mainMenuOuterBoxRGBA[1], mainMenuOuterBoxRGBA[2]);
-//        fill(mainMenuBackgroundRGBA[0], mainMenuBackgroundRGBA[1], mainMenuBackgroundRGBA[2]);
-//        rect(0 + mainMenuOuterBoxThickness / 2,
-//                0 + mainMenuOuterBoxThickness / 2,
-//                width - mainMenuOuterBoxThickness,
-//                height - mainMenuOuterBoxThickness);
-        // Text.
-        fill(mainMenuRGBA[0], mainMenuRGBA[1], mainMenuRGBA[2]);
-        textFont(menuFont);
-        textAlign(CENTER, CENTER);
-        text("Xeno Blaster 4000"
-                + "\n"
-                + "\n" + "Press \"LMB\" to start.", width / 2, height / 2 - 100);
-    }
     
     /**
      * Draws the image for the start screen
@@ -274,18 +248,6 @@ public class GUIHandler extends PApplet {
                 + "\n" + "Spawn ekstra enemies: I", width / 2, height / 2 - 100);
     }
 
-    /**
-     * Draws the pause screen.
-     */
-    private void drawPauseScreen() {
-        fill(pauseScreenRGBA[0], pauseScreenRGBA[1], pauseScreenRGBA[2]);
-        textFont(menuFont);
-        textAlign(CENTER, CENTER);
-        text("PAUSED"
-                + "\n"
-                + "\n" + "\"Enter\" to resume"
-                + "\n" + "\"Escape\" to Quit", width / 2, height / 2 - 100);
-    }
 
     /**
      * Draws the death screen.
