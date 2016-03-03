@@ -8,6 +8,7 @@ import backend.main.Vector;
 import backend.resources.Sound;
 import backend.shipmodule.AutoCannon;
 import backend.shipmodule.Shield;
+import backend.shipmodule.ShipModule;
 import java.util.ArrayList;
 import processing.core.PImage;
 import userinterface.Drawable;
@@ -61,10 +62,10 @@ public class Player extends Actor implements Drawable {
         collisionDamageToOthers = 4;
 
         offensiveModules.add(new AutoCannon(this));  // Starting weapon.
-        currentOffensiveModule = offensiveModules.get(0);
+        setCurrentOffensiveModule(offensiveModules.get(0));
 
         defensiveModules.add(new Shield(this));
-        currentDefensiveModule = defensiveModules.get(0);
+        setCurrentDefensiveModule(defensiveModules.get(0));
 
         playerGraphics = guiHandler.loadImage("drone.png");
 
@@ -208,7 +209,8 @@ public class Player extends Actor implements Drawable {
     public void swapOffensiveModule() {
         // Wait for timer for each swap.
         if (offensiveModuleTimer.timePassed() >= offensiveModuleSwapDelay) {
-            currentOffensiveModule = offensiveModules.get((offensiveModules.indexOf(currentOffensiveModule) + 1) % offensiveModules.size());
+            ShipModule module = offensiveModules.get((offensiveModules.indexOf(currentOffensiveModule) + 1) % offensiveModules.size());
+            setCurrentOffensiveModule(module);
             offensiveModuleTimer.restart();
         }
     }
@@ -219,7 +221,8 @@ public class Player extends Actor implements Drawable {
     public void swapDefensiveModule() {
         // Wait for timer for each swap.
         if (defensiveModuleTimer.timePassed() >= defensiveModuleSwapDelay) {
-            currentDefensiveModule = defensiveModules.get((defensiveModules.indexOf(currentDefensiveModule) + 1) % defensiveModules.size());
+            ShipModule module = defensiveModules.get((defensiveModules.indexOf(currentDefensiveModule) + 1) % defensiveModules.size());
+            setCurrentDefensiveModule(module);
             defensiveModuleTimer.restart();
         }
     }
@@ -227,5 +230,5 @@ public class Player extends Actor implements Drawable {
     public int getBackgroundColor() {
         return backgroundColor;
     }
-
+    
 }

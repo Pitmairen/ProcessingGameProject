@@ -514,7 +514,27 @@ public abstract class Actor implements Drawable {
     }
 
     public void setTacticalModule(ShipModule tacticalModule) {
-        this.tacticalModule = tacticalModule;
+        setCurrentTacticalModule(tacticalModule);
     }
-
+    
+    protected void setCurrentOffensiveModule(ShipModule module) {
+        if(currentOffensiveModule != null) {
+            currentOffensiveModule.deactivated();
+        }
+        currentOffensiveModule = module;
+    }
+    
+    protected void setCurrentDefensiveModule(ShipModule module) {
+        if(currentDefensiveModule != null) {
+            currentDefensiveModule.deactivated();
+        }
+        currentDefensiveModule = module;
+    }
+    
+    protected void setCurrentTacticalModule(ShipModule module) {
+        if(tacticalModule != null) {
+            tacticalModule.deactivated();
+        }
+        tacticalModule = module;
+    }
 }

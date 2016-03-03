@@ -79,7 +79,17 @@ public abstract class ShipModule implements Drawable {
         gui.imageMode(PImage.CORNER);
         gui.popMatrix();
     }
-
+    
+    /**
+     * Should when the module is no longer the currently loaded module. 
+     * 
+     * The module can do any cleanup that is needed when it is unloaded in 
+     * this method.
+     */
+    public void deactivated(){
+        
+    }
+    
     // Getters.
     public String getName() {
         return name;
@@ -110,4 +120,5 @@ public abstract class ShipModule implements Drawable {
         this.owner = owner;
     }
 
+    
 }
