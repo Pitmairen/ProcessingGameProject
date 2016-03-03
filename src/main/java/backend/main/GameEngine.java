@@ -70,9 +70,6 @@ public class GameEngine {
         fadingCanvas.add(rocketManager);
         fadingCanvas.add(fadingCanvasItems);
 
-        resetLevel();
-
-        
         soundManager = new SoundManager(guiHandler, resourceManager);
         
         try {
@@ -81,6 +78,7 @@ public class GameEngine {
             System.out.println("Failed to load sounds");
             System.exit(1);
         }
+        resetLevel();
     }
     
     /**
@@ -275,6 +273,7 @@ public class GameEngine {
         fadingCanvasItems.clear();
         rocketManager.clear();
         currentLevel = new LevelTest(this, rocketManager, fadingCanvasItems);
+        soundManager.stop(Sound.GAME_MUSIC);
     }
 
     private void loadResources() {
