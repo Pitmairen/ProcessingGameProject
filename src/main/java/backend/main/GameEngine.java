@@ -181,7 +181,7 @@ public class GameEngine {
         if (keyCode == KeyEvent.VK_R) {
             swapDefensive = keyState;
         }
-        if (keyCode == KeyEvent.VK_TAB) {
+        if (keyCode == KeyEvent.VK_ESCAPE) {
             pause = keyState;
         }
         if (keyCode == KeyEvent.VK_ENTER) {

@@ -324,6 +324,9 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void keyPressed() {
+        if (key == ESC) {
+            key = 0;  // Hack to prevent ESC from quitting the application
+        }        
         gameEngine.userInput(keyCode, true);
         if (keyCode == VK_K) {
             this.toggleDebugMode();
