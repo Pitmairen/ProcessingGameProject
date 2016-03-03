@@ -66,17 +66,26 @@ public class LaserCannon extends OffensiveModule {
 
             }
         } else if (soundActive) {
-            owner.getGameEngine().getSoundManager().stop(Sound.LASER);
-            soundActive = false;
+            stopSound();
         }
     }
 
+    @Override
+    public void deactivated(){
+        stopSound();
+    }
+    
     /**
      * Fires the laser from the actor towards the current heading.
      */
     @Override
     public void activate() {
         this.setModuleActive(true);
+    }
+    
+    private void stopSound(){
+        owner.getGameEngine().getSoundManager().stop(Sound.LASER);
+        soundActive = false;
     }
 
     /**

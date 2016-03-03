@@ -29,7 +29,7 @@ public class GameEngine {
     private RocketManager rocketManager;
     private FadingCanvasItemManager fadingCanvasItems;
     private FadingCanvas fadingCanvas;
-    private String simulationState = "menuScreen";
+    private SimulationState simulationState = SimulationState.MENU_SCREEN;
     private ResourceManager resourceManager;
     private SoundManager soundManager;
 
@@ -90,29 +90,29 @@ public class GameEngine {
 
         switch (simulationState) {
 
-            case "menuScreen": {
+            case MENU_SCREEN: {
                 checkUserInput(timePassed);
                 break;
             }
             
-            case "helpScreen": {
+            case HELP_SCREEN: {
                 checkUserInput(timePassed);
                 break;
             }
             
-            case "gameplay": {
+            case GAMEPLAY: {
                 checkUserInput(timePassed);
                 cleanup(timePassed);
                 actAll(timePassed);
                 break;
             }
 
-            case "pauseScreen": {
+            case PAUSE_SCREEN: {
                 checkUserInput(timePassed);
                 break;
             }
 
-            case "deathScreen": {
+            case DEATH_SCREEN: {
                 checkUserInput(timePassed);
                 cleanup(timePassed);
                 actAll(timePassed);
@@ -212,11 +212,11 @@ public class GameEngine {
 
         switch (simulationState) {
 
-            case "menuScreen": {
+            case MENU_SCREEN: {
                 break;
             }
 
-            case "gameplay": {
+            case GAMEPLAY: {
                 if (up) {
                     currentLevel.getPlayer().accelerate("up", timePassed);
                 }
@@ -246,7 +246,7 @@ public class GameEngine {
                 }
                 if (pause) {
                     if (pauseTimer.timePassed() >= 200) {
-                        setSimulationState("pauseScreen");
+                        setSimulationState(SimulationState.PAUSE_SCREEN);
                         pauseTimer.restart();
                     }
                 }
@@ -256,27 +256,27 @@ public class GameEngine {
                 break;
             }
 
-            case "pauseScreen": {
+            case PAUSE_SCREEN: {
                 if (pause) {
                     if (pauseTimer.timePassed() >= 200) {
-                        setSimulationState("gameplay");
+                        setSimulationState(SimulationState.GAMEPLAY);
                         pauseTimer.restart();
                     }
                 }
                 break;
             }
 
-            case "deathScreen": {
+            case DEATH_SCREEN: {
                 if (enter) {
                     resetLevel();
-                    setSimulationState("menuScreen");
+                    setSimulationState(SimulationState.MENU_SCREEN);
                     guiHandler.showMainMenu();
                 }
                 break;
             }
-            case "helpScreen": {
+            case HELP_SCREEN: {
                 if (enter) {
-                    setSimulationState("menuScreen");
+                    setSimulationState(SimulationState.MENU_SCREEN);
                     guiHandler.showMainMenu();
                 }
                 break;
@@ -360,7 +360,7 @@ public class GameEngine {
         return guiHandler;
     }
 
-    public String getSimulationState() {
+    public SimulationState getSimulationState() {
         return simulationState;
     }
 
@@ -389,22 +389,22 @@ public class GameEngine {
     }
     
     // Setters.
-    public void setSimulationState(String simulationState) {
+    public void setSimulationState(SimulationState simulationState) {
         this.simulationState = simulationState;
         updateMusic(simulationState);
     }
     
-    private void updateMusic(String newState){
+    private void updateMusic(SimulationState newState){
 
         switch(newState){
             
-            case "gameplay":
+            case GAMEPLAY:
                 soundManager.play(Sound.GAME_MUSIC, new Vector(guiHandler.width/2, guiHandler.height/2, 0));
                 break;
-            case "pauseScreen":
+            case PAUSE_SCREEN:
                 soundManager.pause(Sound.GAME_MUSIC);
                 break;
-           case "deathScreen":
+           case DEATH_SCREEN:
                 soundManager.stop(Sound.GAME_MUSIC);
                 break;
         }

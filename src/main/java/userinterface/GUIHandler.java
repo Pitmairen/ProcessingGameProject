@@ -3,6 +3,7 @@ package userinterface;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.actor.Actor;
+import backend.main.SimulationState;
 import static java.awt.event.KeyEvent.*;
 
 import java.text.DecimalFormat;
@@ -112,38 +113,38 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void draw() {
-
+        
         gameEngine.run(timer.timePassed());
         timer.restart();
 
         switch (gameEngine.getSimulationState()) {
 
-            case "menuScreen": {
+            case MENU_SCREEN: {
                 gameEngine.getFadingCanvas().draw();
                 // The menu draws itself.
                 drawTitleScreenImage();
                 break;
             }
-            case "helpScreen": {
+            case HELP_SCREEN: {
                 gameEngine.getFadingCanvas().draw();
                 drawHelpScreen();
                 break;
             }
-            case "gameplay": {
+            case GAMEPLAY: {
                 gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
                 drawActors();
                 drawHUD();
                 break;
             }
-            case "pauseScreen": {
+            case PAUSE_SCREEN: {
                 gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
                 drawActors();
                 drawPauseScreen();
                 break;
             }
-            case "deathScreen": {
+            case DEATH_SCREEN: {
                 gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
                 drawActors();
@@ -327,11 +328,11 @@ public class GUIHandler extends PApplet {
 
         mainMenu.addItem("New Game", () -> {
             mainMenu.hide();
-            gameEngine.setSimulationState("gameplay");
+            gameEngine.setSimulationState(SimulationState.GAMEPLAY);
         });
         mainMenu.addItem("Help", () -> {
             mainMenu.hide();
-            gameEngine.setSimulationState("helpScreen");
+            gameEngine.setSimulationState(SimulationState.HELP_SCREEN);
         });
         
         mainMenu.addItem("Quit", () -> {
