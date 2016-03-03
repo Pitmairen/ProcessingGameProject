@@ -250,18 +250,19 @@ public class GUIHandler extends PApplet {
         fill(pauseScreenRGBA[0], pauseScreenRGBA[1], pauseScreenRGBA[2]);
         textFont(menuFont);
         textAlign(CENTER, CENTER);
-        text("Movement: E, S, D, F"
-                + "\n" + "Activate offensive: LMB"
-                + "\n" + "Activate defensive: RMB"
-                + "\n" + "Activate tactical: SPACE"
-                + "\n" + "Cycle offensive: W"
-                + "\n" + "Cycle defensive: R"
+        text("Movement: W, A, S, D"
+                + "\n" + "Aiming: Mouse"
+                + "\n" + "Fire: LMB"
+                + "\n" + "Shield: E"
+                + "\n" + "EMP Bomb: SPACE"
+                + "\n" + "Change weapon: Q"
+                + "\n"
                 + "\n" + "Pause: TAB"
                 + "\n" + "Quit: ESC"
                 + "\n"
                 + "\n" + "Toggle Sounds: M"
-                + "\n" + "Debug HUD: Z"
-                + "\n" + "Spawn enemies: Q", width / 2, height / 2 - 100);
+                + "\n" + "Debug HUD: K"
+                + "\n" + "Spawn ekstra enemies: I", width / 2, height / 2 - 100);
     }
 
     /**
@@ -273,18 +274,8 @@ public class GUIHandler extends PApplet {
         textAlign(CENTER, CENTER);
         text("PAUSED"
                 + "\n"
-                + "\n" + "Movement: E, S, D, F"
-                + "\n" + "Activate offensive: LMB"
-                + "\n" + "Activate defensive: RMB"
-                + "\n" + "Activate tactical: SPACE"
-                + "\n" + "Cycle offensive: W"
-                + "\n" + "Cycle defensive: R"
-                + "\n" + "Pause: TAB"
-                + "\n" + "Quit: ESC"
-                + "\n"
-                + "\n" + "Toggle Sounds: M"
-                + "\n" + "Debug HUD: Z"
-                + "\n" + "Spawn enemies: Q", width / 2, height / 2 - 100);
+                + "\n" + "\"Enter\" to resume"
+                + "\n" + "\"Escape\" to Quit", width / 2, height / 2 - 100);
     }
 
     /**
@@ -347,7 +338,7 @@ public class GUIHandler extends PApplet {
     @Override
     public void keyPressed() {
         gameEngine.userInput(keyCode, true);
-        if (keyCode == VK_Z) {
+        if (keyCode == VK_K) {
             this.toggleDebugMode();
         }
     }

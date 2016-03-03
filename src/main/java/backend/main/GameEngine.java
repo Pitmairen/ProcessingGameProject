@@ -164,28 +164,28 @@ public class GameEngine {
      */
     public void userInput(int keyCode, boolean keyState) {
 
-        if (keyCode == KeyEvent.VK_E) {
+        if (keyCode == KeyEvent.VK_W) {
             up = keyState;
         }
-        if (keyCode == KeyEvent.VK_D) {
+        if (keyCode == KeyEvent.VK_S) {
             down = keyState;
         }
-        if (keyCode == KeyEvent.VK_S) {
+        if (keyCode == KeyEvent.VK_A) {
             left = keyState;
         }
-        if (keyCode == KeyEvent.VK_F) {
+        if (keyCode == KeyEvent.VK_D) {
             right = keyState;
         }
         if (keyCode == 37) {
             offensiveModule = keyState;
         }
-        if (keyCode == 39) {
+        if (keyCode == KeyEvent.VK_E) {
             defensiveModule = keyState;
         }
         if (keyCode == KeyEvent.VK_SPACE) {
             tacticalModule = keyState;
         }
-        if (keyCode == KeyEvent.VK_W) {
+        if (keyCode == KeyEvent.VK_Q) {
             swapOffensive = keyState;
         }
         if (keyCode == KeyEvent.VK_R) {
@@ -197,7 +197,7 @@ public class GameEngine {
         if (keyCode == KeyEvent.VK_ENTER) {
             enter = keyState;
         }
-        if (keyCode == KeyEvent.VK_Q) {
+        if (keyCode == KeyEvent.VK_I) {
             spawnEnemies = keyState;
         }
         if (keyCode == KeyEvent.VK_M && keyState) {
