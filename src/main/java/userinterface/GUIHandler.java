@@ -300,13 +300,13 @@ public class GUIHandler extends PApplet {
             exit();
         });
 
+        pauseMenu.addItem("Resume", () -> {
+            pauseMenu.hide();
+            gameEngine.setSimulationState(SimulationState.GAMEPLAY);
+        });
         pauseMenu.addItem("Restart", () -> {
             pauseMenu.hide();
             gameEngine.endCurrentGame();
-            gameEngine.setSimulationState(SimulationState.GAMEPLAY);
-        });
-        pauseMenu.addItem("Resume", () -> {
-            pauseMenu.hide();
             gameEngine.setSimulationState(SimulationState.GAMEPLAY);
         });
         pauseMenu.addItem("Key Bindings", () -> {
@@ -319,7 +319,6 @@ public class GUIHandler extends PApplet {
             gameEngine.setSimulationState(SimulationState.MENU_SCREEN);
             showMainMenu();
         });
-        
     }
 
     /**

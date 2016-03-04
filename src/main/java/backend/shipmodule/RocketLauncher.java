@@ -37,7 +37,7 @@ public class RocketLauncher extends OffensiveModule {
         this.rocketManager = rocketManager;
         
         launchVelocity = 0.6;
-        projectileDamage = 22;
+        projectileDamage = 25;
         
         moduleImage = getImageFromResourceManager(Image.ROCKET_LAUNCHER);
     }

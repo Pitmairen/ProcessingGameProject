@@ -1,6 +1,7 @@
 package backend.actor;
 
 import backend.main.Vector;
+import backend.resources.Image;
 import backend.shipmodule.ShipModule;
 import processing.core.PGraphics;
 import processing.core.PConstants;
@@ -23,6 +24,9 @@ public class Rocket extends Projectile {
 
     Player playerOwner;
 
+    // Color of rocket.
+    private int[] bodyRGBA = new int[]{255, 255, 255, 255};
+
     /**
      * Constructor.
      */
@@ -32,8 +36,7 @@ public class Rocket extends Projectile {
 
         this.playerOwner = (Player) shipModule.getOwner();
 
-        backgroundColor = guiHandler.color(guiHandler.random(10, 255),
-                guiHandler.random(10, 255), guiHandler.random(10, 255), 255);
+        backgroundColor = guiHandler.color(230,200,30);
 
         name = "Rocket";
         hitBoxRadius = 8;
@@ -46,6 +49,23 @@ public class Rocket extends Projectile {
 
     @Override
     public void draw() {
+        // Draw the body of the rocket.
+//        guiHandler.strokeWeight(0);
+//        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2], bodyRGBA[3]);
+//        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2], bodyRGBA[3]);
+//        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+//        guiHandler.noFill();
+
+        PImage image = this.getGameEngine().getResourceManager().getImage(Image.ROCKET);
+
+        guiHandler.tint(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2], bodyRGBA[3]);
+        guiHandler.imageMode(PImage.CENTER);
+        guiHandler.image(image,
+                (float) this.getPosition().getX(), (float) this.getPosition().getY(),
+                (float) this.radius * 2, (float) this.radius * 2);
+       
+        guiHandler.imageMode(PImage.CORNER);
+
         // Do nothing. The rockets are managed by the rocket manager and are
         // drawn to the fading canvas. 
     }
@@ -76,7 +96,7 @@ public class Rocket extends Projectile {
 
         canvas.imageMode(PConstants.CENTER);
         canvas.ellipseMode(PConstants.CENTER);
-        canvas.tint(this.backgroundColor, 255);
+        canvas.tint(this.backgroundColor, 155);
         canvas.fill(this.backgroundColor, 200);
 
         canvas.image(image,
