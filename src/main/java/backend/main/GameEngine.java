@@ -2,6 +2,7 @@ package backend.main;
 
 import backend.actor.Actor;
 import backend.level.Level;
+import backend.level.Level1;
 import backend.level.LevelTest;
 import backend.resources.Image;
 import backend.resources.ResourceManager;
@@ -272,7 +273,7 @@ public class GameEngine {
     private void resetLevel() {
         fadingCanvasItems.clear();
         rocketManager.clear();
-        currentLevel = new LevelTest(this, rocketManager, fadingCanvasItems);
+        currentLevel = new Level1(this, rocketManager, fadingCanvasItems);
         soundManager.stop(Sound.GAME_MUSIC);
     }
 
