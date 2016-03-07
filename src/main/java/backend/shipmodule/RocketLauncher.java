@@ -1,7 +1,7 @@
 package backend.shipmodule;
 
 import backend.actor.Actor;
-import backend.actor.Rocket;
+import backend.actor.projectile.Rocket;
 import backend.main.RocketManager;
 import backend.main.Timer;
 import backend.resources.Image;

@@ -1,10 +1,10 @@
 package backend.level;
 
-import backend.actor.Boss;
-import backend.actor.Enemy;
+import backend.actor.enemy.Boss;
+import backend.actor.enemy.Enemy;
 import backend.main.GameEngine;
 import backend.actor.Player;
-import backend.actor.SlayerAI;
+import backend.actor.ai.SlayerAI;
 import backend.item.ModuleContainer;
 import backend.main.FadingCanvasItemManager;
 import backend.main.RocketManager;

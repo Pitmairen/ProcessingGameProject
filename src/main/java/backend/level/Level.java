@@ -2,9 +2,9 @@ package backend.level;
 
 import backend.main.GameEngine;
 import backend.actor.Actor;
-import backend.actor.Enemy;
+import backend.actor.enemy.Enemy;
 import backend.actor.Player;
-import backend.actor.Projectile;
+import backend.actor.projectile.Projectile;
 import backend.item.Item;
 import backend.main.Timer;
 import java.util.ArrayList;

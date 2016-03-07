@@ -1,4 +1,4 @@
-package backend.actor;
+package backend.actor.projectile;
 
 import backend.main.FadingCanvasItemManager;
 import backend.main.Vector;

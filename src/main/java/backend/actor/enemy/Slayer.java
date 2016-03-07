@@ -1,60 +1,61 @@
-package backend.actor;
+package backend.actor.enemy;
 
+import backend.actor.Actor;
+import backend.actor.projectile.Projectile;
 import backend.item.Item;
 import backend.item.Parts;
 import backend.main.GameEngine;
 import backend.main.Vector;
 import backend.resources.Sound;
-import backend.shipmodule.DroneLauncher;
+import backend.shipmodule.LightCannon;
 import java.util.ArrayList;
 import processing.core.PImage;
 import userinterface.Drawable;
 
 /**
- * A boss NPC. Big and dangerous. Has several attack patterns and a a lot of hit
- * points.
+ * Small and fast.
  *
  * @author Kristian Honningsvag.
  */
-public class Boss extends Enemy implements Drawable {
+public class Slayer extends Enemy implements Drawable {
 
     // Color.
     private int[] bodyRGBA = new int[]{200, 30, 30, 255};
     private int[] healthBarRGBA = new int[]{20, 200, 20, 255};
 
     // Shape.
-    private int healthBarWidth = 0;
-    private int healthBarHeight = 0;
+    private int healthBarWidth = 30;
+    private int healthBarHeight = 7;
 
     //Image
     private final PImage enemyGraphics;
 
     // Modules.
-    private DroneLauncher DroneLauncher = new DroneLauncher(this);
+    private LightCannon LightCannon = new LightCannon(this);
 
     /**
      * Constructor.
      */
-    public Boss(Vector position, GameEngine gameEngine) {
+    public Slayer(Vector position, GameEngine gameEngine) {
 
         super(position, gameEngine);
 
-        name = "Boss";
-        engineThrust = 0.2f;
-        frictionCoefficient = 0.29f;
-        hitBoxRadius = 75;
-        bounceModifier = 0.4f;
-        maxHitPoints = 300;
-        currentHitPoints = 300;
-        mass = 300;
-        collisionDamageToOthers = 20;
-        attackDelay = 200;
+        name = "Slayer";
+        engineThrust = 0.02f;
+        frictionCoefficient = 0.04f;
+        hitBoxRadius = 25;
+        bounceModifier = 0.6f;
+        maxHitPoints = 10;
+        currentHitPoints = 10;
+        mass = 50;
+        collisionDamageToOthers = 10;
+        attackDelay = 2000;
         killValue = 1;
 
-        offensiveModules.add(DroneLauncher);
-        currentOffensiveModule = DroneLauncher;
+        offensiveModules.add(LightCannon);
+        currentOffensiveModule = LightCannon;
 
-        enemyGraphics = guiHandler.loadImage("Actors/DroneV2Lrg.png");
+        enemyGraphics = guiHandler.loadImage("Actors/DroneV3Sml.png");
 
         healthBarWidth = (int) hitBoxRadius * 2;
         healthBarHeight = (int) (healthBarWidth * 0.1);
@@ -69,7 +70,7 @@ public class Boss extends Enemy implements Drawable {
 //        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
 //        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
         guiHandler.tint(255);
-        guiHandler.image(enemyGraphics, (float) this.getPosition().getX() - 75, (float) this.getPosition().getY() - 75);
+        guiHandler.image(enemyGraphics, (float) this.getPosition().getX() - 25, (float) this.getPosition().getY() - 25);
 
         // Draw modules.
         if (currentOffensiveModule != null) {

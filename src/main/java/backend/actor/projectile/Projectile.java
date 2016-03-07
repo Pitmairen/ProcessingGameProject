@@ -1,5 +1,7 @@
-package backend.actor;
+package backend.actor.projectile;
 
+import backend.actor.Actor;
+import backend.actor.enemy.Enemy;
 import backend.item.Item;
 import backend.main.Vector;
 import backend.shipmodule.Shield;

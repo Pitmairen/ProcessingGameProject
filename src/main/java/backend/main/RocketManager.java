@@ -5,7 +5,7 @@
  */
 package backend.main;
 
-import backend.actor.Rocket;
+import backend.actor.projectile.Rocket;
 import backend.resources.Image;
 import backend.resources.ResourceManager;
 import java.util.ArrayList;

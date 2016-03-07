@@ -1,8 +1,8 @@
 package backend.shipmodule;
 
 import backend.actor.Actor;
-import backend.actor.Enemy;
-import backend.actor.SeekerMissile;
+import backend.actor.enemy.Enemy;
+import backend.actor.projectile.SeekerMissile;
 import backend.main.FadingCanvasItemManager;
 import backend.main.Timer;
 import backend.main.Vector;

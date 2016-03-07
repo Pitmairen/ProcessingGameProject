@@ -1,7 +1,7 @@
 package backend.shipmodule;
 
 import backend.actor.Actor;
-import backend.actor.EMPPulse;
+import backend.actor.projectile.EMPPulse;
 import backend.main.FadingCanvasItemManager;
 import backend.main.Timer;
 import backend.resources.Image;

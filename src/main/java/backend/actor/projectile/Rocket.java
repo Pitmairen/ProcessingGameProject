@@ -1,5 +1,6 @@
-package backend.actor;
+package backend.actor.projectile;
 
+import backend.actor.Player;
 import backend.main.Vector;
 import backend.resources.Image;
 import backend.shipmodule.ShipModule;

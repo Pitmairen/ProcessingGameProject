@@ -1,5 +1,7 @@
-package backend.actor;
+package backend.actor.enemy;
 
+import backend.actor.Actor;
+import backend.actor.projectile.Projectile;
 import backend.item.Item;
 import backend.main.GameEngine;
 import backend.main.Vector;

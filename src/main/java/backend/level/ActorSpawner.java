@@ -1,17 +1,13 @@
 package backend.level;
 
-import backend.actor.Boss;
-import backend.actor.Enemy;
-import backend.actor.KamikazeDrone;
+import backend.actor.enemy.Boss;
+import backend.actor.enemy.Enemy;
 import backend.actor.Player;
-import backend.actor.Slayer;
-import backend.actor.SlayerAI;
+import backend.actor.enemy.Slayer;
+import backend.actor.ai.SlayerAI;
 import backend.main.GameEngine;
 import backend.main.Vector;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
-import java.util.logging.Logger;
-import jdk.nashorn.internal.objects.annotations.Constructor;
 
 /**
  * Handles spawning enemies.

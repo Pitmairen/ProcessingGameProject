@@ -1,4 +1,4 @@
-package backend.actor;
+package backend.actor.projectile;
 
 import backend.main.Vector;
 import backend.shipmodule.ShipModule;

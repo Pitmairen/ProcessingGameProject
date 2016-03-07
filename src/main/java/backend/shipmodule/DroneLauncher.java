@@ -2,8 +2,8 @@ package backend.shipmodule;
 
 import backend.main.Timer;
 import backend.actor.Actor;
-import backend.actor.KamikazeDrone;
-import backend.actor.DroneAI;
+import backend.actor.enemy.KamikazeDrone;
+import backend.actor.ai.DroneAI;
 import backend.main.Vector;
 import backend.resources.Image;
 import processing.core.PImage;

@@ -2,7 +2,7 @@ package backend.shipmodule;
 
 import backend.main.Timer;
 import backend.actor.Actor;
-import backend.actor.Bullet;
+import backend.actor.projectile.Bullet;
 import backend.resources.Image;
 import backend.resources.Sound;
 import processing.core.PImage;

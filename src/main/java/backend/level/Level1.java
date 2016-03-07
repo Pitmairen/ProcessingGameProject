@@ -1,17 +1,18 @@
 package backend.level;
 
-import backend.actor.Boss;
-import backend.actor.Enemy;
+import backend.actor.enemy.Boss;
+import backend.actor.enemy.Enemy;
 import backend.main.GameEngine;
 import backend.actor.Player;
-import backend.actor.Slayer;
+import backend.actor.enemy.Slayer;
 import backend.main.FadingCanvasItemManager;
 import backend.main.RocketManager;
 import backend.main.Vector;
 
 /**
- * First offical game level.
- *
+ * First official game level. 
+ * The waves increment when all of the enemies from the previous wave are defeated.
+ * 
  * @author dogsh
  */
 public class Level1 extends Level {
@@ -23,14 +24,14 @@ public class Level1 extends Level {
 
     /**
      * Constructor.
+     * @param gameEngine 
+     * @param rocketManager
+     * @param itemManager
      */
     public Level1(GameEngine gameEngine, RocketManager rocketManager, FadingCanvasItemManager itemManager) {
-
         super(gameEngine);
         
-        levelName = "Test level";
-        initialTimeToNextWave = 0;  // Time to the first wave spawns.
-
+        levelName = "Level 1";
         player = new Player(new Vector(300, 250, 0), gameEngine);
         actors.add(player);
         this.moduleSpawner = new ModuleSpawner(gameEngine, rocketManager, itemManager);
@@ -40,8 +41,7 @@ public class Level1 extends Level {
     public void nextWave() {
 
         if (!onLastWave) {
-
-            //timeToNextWave = initialTimeToNextWave - timer.timePassed();
+            
             int enemiesLeft = gameEngine.getCurrentLevel().getEnemies().size();
             if (enemiesLeft == 0) {
 
@@ -51,42 +51,30 @@ public class Level1 extends Level {
                     case 1: {
                         spawnRandomModule();
                         spawn(slayer, 10);
-//                        initialTimeToNextWave = 15000;
-//                        timer.restart();
                         break;
                     }
                     case 2: {
                         spawn(slayer, 15);
-//                        initialTimeToNextWave = 15000;
-//                        timer.restart();
                         break;
                     }
                     case 3: {
                         spawnRandomModule();
                         spawn(boss,1);
                         spawn(slayer, 5);
-//                        initialTimeToNextWave = 35000;
-//                        timer.restart();
                         break;
                     }
                     case 4: {
                         spawn(boss,3);
-//                        initialTimeToNextWave = 35000;
-//                        timer.restart();
                         break;
                     }
                     case 5: {
                         spawnRandomModule();
                         spawn(slayer, 30);
-//                        initialTimeToNextWave = 35000;
-//                        timer.restart();
                         break;
                     }
                     case 6: {
                         spawn(boss, 2);
                         spawn(slayer, 25);
-//                        initialTimeToNextWave = 35000;
-//                        timer.restart();
                         break;
                     }
                     case 7: {
@@ -94,9 +82,6 @@ public class Level1 extends Level {
                         spawn(boss,2);
                         spawn(slayer, 30);
                         onLastWave = true;
-//                        initialTimeToNextWave = 0;
-//                        timeToNextWave = 0;
-//                        timer.restart();
                         break;
                     }
                 }
@@ -104,14 +89,19 @@ public class Level1 extends Level {
         }
     }
     
+    /**
+     * 
+     * @param enemy Decides what enemy type should be spawned.
+     * @param amount Decides how many of the specified enemy to spawn.
+     */
     private void spawn(Enemy enemy, int amount){
         actorSpawner.spawn(enemy, amount);
     }
     
+    /**
+     * Spawns a random module somewhere on screen.
+     */
     private void spawnRandomModule(){
         moduleSpawner.spawnRandomModule();
     }
-    
-
-
 }

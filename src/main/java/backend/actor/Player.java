@@ -1,5 +1,6 @@
 package backend.actor;
 
+import backend.actor.projectile.Projectile;
 import backend.item.Item;
 import backend.main.GameEngine;
 import backend.main.SimulationState;

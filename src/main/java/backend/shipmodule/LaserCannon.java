@@ -1,7 +1,7 @@
 package backend.shipmodule;
 
 import backend.actor.Actor;
-import backend.actor.Enemy;
+import backend.actor.enemy.Enemy;
 import backend.main.Vector;
 import backend.resources.Image;
 import backend.resources.Sound;
