@@ -36,6 +36,8 @@ public class FadingCanvas {
     private final ArrayList<Drawable> items;
     private final PShader bgShader;
     private final PImage bgNoise;
+    private int bgShaderCounter = 0; // Used to make the bg shader move with time
+    private int bgShaderDirection = 1; // The movement direction (1 or -1)
     
     // The background image
     private final PImage background; 
@@ -78,7 +80,17 @@ public class FadingCanvas {
      */
     public void draw() {
         
-        bgShader.set("currentTime", gui.millis()/1000.0f);
+        // Quick hack to prevent the vertical lines that was appearing on the background
+        // after a certain time has passed. The counter cycles in the range
+        // 0 - 50000 and makes the shader animation change direction after a
+        // certain time. 
+        if(bgShaderCounter < 0 || bgShaderCounter >= 50000){
+            bgShaderDirection = bgShaderDirection*-1;
+        }
+        bgShaderCounter += bgShaderDirection*10;
+        bgShader.set("currentTime", (3000 + bgShaderCounter)/600.0f);
+
+
         gui.imageMode(PGraphics.CORNER);
         gui.shader(bgShader);
         gui.image(bgNoise, 0, 0, gui.width, gui.height);
