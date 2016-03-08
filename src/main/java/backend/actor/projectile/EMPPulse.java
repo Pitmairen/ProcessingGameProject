@@ -1,5 +1,6 @@
 package backend.actor.projectile;
 
+import backend.actor.Actor;
 import backend.main.FadingCanvasItemManager;
 import backend.main.Vector;
 import backend.shipmodule.ShipModule;
@@ -54,9 +55,14 @@ public class EMPPulse extends Projectile implements FadingCanvasItemManager.Item
 
     @Override
     public void targetHit() {
-        setCurrentHitPoints(100); // We don't take any hits.
+        // The emp doesn't take any hits.
     }
-
+    
+    @Override
+    public void collision(Actor actor) {
+        // The emp doesn't take any hits.
+    }
+    
     /**
      * Implements the fading canvas item manager interface.
      * 
