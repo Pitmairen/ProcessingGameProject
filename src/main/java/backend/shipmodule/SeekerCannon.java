@@ -1,8 +1,8 @@
 package backend.shipmodule;
 
 import backend.actor.Actor;
-import backend.actor.Enemy;
-import backend.actor.SeekerMissile;
+import backend.actor.enemy.Enemy;
+import backend.actor.projectile.SeekerMissile;
 import backend.main.FadingCanvasItemManager;
 import backend.main.Timer;
 import backend.main.Vector;
@@ -26,8 +26,6 @@ public class SeekerCannon extends OffensiveModule {
     private final double timeBetweenShots = 700;
     private final FadingCanvasItemManager fadingCanvasItems;
     private TargetSelector selector;
-    
-    private final PImage seekerCannonImg;
 
     public SeekerCannon(Actor owner, FadingCanvasItemManager itemManager) {
         super("SeekerCannon", owner);
@@ -35,7 +33,14 @@ public class SeekerCannon extends OffensiveModule {
         projectileDamage = 10;
         fadingCanvasItems = itemManager;
 
-        seekerCannonImg = owner.getGameEngine().getResourceManager().getImage(Image.SEEKER_CANNON);
+        moduleImage = getImageFromResourceManager(Image.SEEKER_CANNON);
+    }
+
+    @Override
+    public void draw() {
+        drawModule(moduleImage, 0, 0, defaultModuleWidth, defaultModuleHeight);
+
+        updateSelector();
     }
 
     @Override
@@ -46,20 +51,6 @@ public class SeekerCannon extends OffensiveModule {
                 timer.restart();
             }
         }
-    }
-
-    @Override
-    public void draw() {
-//        owner.getGuiHandler().strokeWeight(turretWidth);
-//        owner.getGuiHandler().stroke(turretRGBA);
-//        owner.getGuiHandler().fill(turretRGBA);
-//        owner.getGuiHandler().line((float) owner.getPosition().getX(), (float) owner.getPosition().getY(),
-//                (float) owner.getPosition().getX() + (float) (turretLength * Math.cos(owner.getHeading().getAngle2D())),
-//                (float) owner.getPosition().getY() + (float) (turretLength * Math.sin(owner.getHeading().getAngle2D())));
-
-        drawModule(seekerCannonImg, 0, 0, defaultModuleWidth, defaultModuleHeight);
-
-        updateSelector();
     }
 
     private void updateSelector() {

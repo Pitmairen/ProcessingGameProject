@@ -1,7 +1,7 @@
 package backend.shipmodule;
 
 import backend.actor.Actor;
-import backend.actor.EMPPulse;
+import backend.actor.projectile.EMPPulse;
 import backend.main.FadingCanvasItemManager;
 import backend.main.Timer;
 import backend.resources.Image;
@@ -24,9 +24,7 @@ public class EMPCannon extends TacticalModule {
     private double timeBetweenShots = 200;
     private Timer timer = new Timer();
     private FadingCanvasItemManager fadingCanvasItems;
-
-    private final PImage empCannonImg;
-
+    
     /**
      * Constructor.
      */
@@ -36,14 +34,14 @@ public class EMPCannon extends TacticalModule {
         this.fadingCanvasItems = itemManager;
         projectileDamage = 2;
 
-        empCannonImg = owner.getGameEngine().getResourceManager().getImage(Image.EMP_CANNON);
+        moduleImage = getImageFromResourceManager(Image.EMP_CANNON);
 
     }
 
     @Override
     public void draw() {
-        drawModule(empCannonImg, 0, 15, 20f, 10f);
-        drawModule(empCannonImg, 0, -15, 20f, 10f);
+        drawModule(moduleImage, 0, 15, defaultModuleWidth/2, defaultModuleHeight/2);
+        drawModule(moduleImage, 0, -15, defaultModuleWidth/2, defaultModuleHeight/2);
     }
 
     /**

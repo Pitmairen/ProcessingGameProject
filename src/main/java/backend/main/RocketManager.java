@@ -5,7 +5,7 @@
  */
 package backend.main;
 
-import backend.actor.Rocket;
+import backend.actor.projectile.Rocket;
 import backend.resources.Image;
 import backend.resources.ResourceManager;
 import java.util.ArrayList;
@@ -45,7 +45,14 @@ public class RocketManager implements FadingCanvas.Drawable {
     public void addRocket(Rocket rocket) {
         rockets.add(rocket);
     }
-
+    
+    /**
+     * Removes all the rockets managed by the rocket manager
+     */
+    public void clear(){
+        rockets.clear();
+    }
+    
     @Override
     public void draw(PGraphics canvas) {
 

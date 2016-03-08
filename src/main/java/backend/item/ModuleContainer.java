@@ -18,7 +18,7 @@ import userinterface.Drawable;
 public class ModuleContainer extends Item implements Drawable {
 
     // Color.
-    private int[] bodyRGBA = new int[]{200, 200, 20, 255};
+    private int[] bodyRGBA = new int[]{200, 200, 20, 55};
 
     private ShipModule shipModule = null;
 
@@ -28,24 +28,25 @@ public class ModuleContainer extends Item implements Drawable {
     public ModuleContainer(Vector position, GameEngine gameEngine) {
 
         super(position, gameEngine);
-
+        
         hitBoxRadius = 20;
         pullDistance = gameEngine.getCurrentLevel().getPlayer().getHitBoxRadius() * 5;
     }
-
+    
     @Override
     public void draw() {
         // Draw container.
-        guiHandler.strokeWeight(3);
-        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.noFill();
+        guiHandler.strokeWeight(1);
+        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2], bodyRGBA[3]);
+        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2], bodyRGBA[3]);
         guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+        guiHandler.noFill();
         // Draw cargo.
         if (shipModule != null) {
             shipModule.draw();
         }
     }
-
+    
     @Override
     public void pickup(Actor looter) {
         if (currentHitPoints > 0) {  // Only add a module if this container is alive.

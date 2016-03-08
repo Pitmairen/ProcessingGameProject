@@ -1,11 +1,11 @@
 package backend.main;
 
-import backend.actor.Boss;
-import backend.actor.KamikazeDrone;
-import backend.actor.Enemy;
-import backend.actor.Slayer;
+import backend.actor.enemy.Boss;
+import backend.actor.enemy.KamikazeDrone;
+import backend.actor.enemy.Enemy;
+import backend.actor.enemy.Slayer;
 import backend.actor.Player;
-import backend.actor.Rocket;
+import backend.actor.projectile.Rocket;
 import processing.core.PGraphics;
 import processing.core.PVector;
 

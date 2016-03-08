@@ -1,5 +1,6 @@
 package backend.actor;
 
+import backend.actor.projectile.Projectile;
 import backend.item.Item;
 import backend.main.GameEngine;
 import backend.main.SimulationState;
@@ -138,6 +139,11 @@ public class Player extends Actor implements Drawable {
         gameEngine.getSoundManager().play(Sound.EXPLOSION, getPosition());
         gameEngine.getExplosionManager().explodePlayer(this);
         gameEngine.setSimulationState(SimulationState.DEATH_SCREEN);
+        
+        // Quick fix to stop laser sound when the player dies
+        if(currentOffensiveModule != null){
+            currentOffensiveModule.deactivated();
+        }
     }
 
     @Override

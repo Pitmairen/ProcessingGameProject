@@ -1,5 +1,7 @@
-package backend.actor;
+package backend.actor.ai;
 
+import backend.actor.Actor;
+import backend.actor.enemy.Enemy;
 import backend.main.GameEngine;
 import backend.main.Vector;
 import java.util.Random;
@@ -50,9 +52,11 @@ public class DroneAI implements AI {
 
         if (System.currentTimeMillis() - lastTimeFired > attackDelay * attackDelayFactor) {
 
-            enemy.getCurrentOffensiveModule().activate();
-            lastTimeFired = System.currentTimeMillis();
-            attackDelayFactor = random.nextFloat() + 1;
+            if (enemy.getCurrentOffensiveModule() != null) {
+                enemy.getCurrentOffensiveModule().activate();
+                lastTimeFired = System.currentTimeMillis();
+                attackDelayFactor = random.nextFloat() + 1;
+            }
         }
     }
 

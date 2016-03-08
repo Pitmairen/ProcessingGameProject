@@ -1,5 +1,6 @@
-package backend.actor;
+package backend.actor.ai;
 
+import backend.actor.Actor;
 import backend.main.Timer;
 import backend.main.Vector;
 import java.util.Random;

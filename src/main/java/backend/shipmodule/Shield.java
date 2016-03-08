@@ -31,6 +31,13 @@ public class Shield extends DefensiveModule {
         shieldShader.set("resolution", (float)800f, (float)600f);
         shieldNoise = owner.getGameEngine().getResourceManager().getImage(Image.SHIELD_NOISE);
         shieldBG = owner.getGameEngine().getResourceManager().getImage(Image.SHIELD_BACKGROUND);
+        
+        moduleImage = getImageFromResourceManager(Image.SHIELD_MODULE);
+    }
+    
+    @Override
+    public void draw(){
+        drawModule(moduleImage, -15, 0, defaultModuleWidth/2, defaultModuleHeight/2);
     }
     
     @Override

@@ -2,6 +2,7 @@ package backend.main;
 
 import backend.actor.Actor;
 import backend.level.Level;
+import backend.level.Level1;
 import backend.level.LevelTest;
 import backend.resources.Image;
 import backend.resources.ResourceManager;
@@ -70,9 +71,6 @@ public class GameEngine {
         fadingCanvas.add(rocketManager);
         fadingCanvas.add(fadingCanvasItems);
 
-        resetLevel();
-
-        
         soundManager = new SoundManager(guiHandler, resourceManager);
         
         try {
@@ -81,6 +79,14 @@ public class GameEngine {
             System.out.println("Failed to load sounds");
             System.exit(1);
         }
+        resetLevel();
+    }
+    
+    /**
+     * Ends the current game and resets the level.
+     */
+    public void endCurrentGame(){
+        resetLevel();
     }
 
     /**
@@ -88,32 +94,15 @@ public class GameEngine {
      */
     public void run(double timePassed) {
 
+        checkUserInput(timePassed);
+        
         switch (simulationState) {
-
-            case MENU_SCREEN: {
-                checkUserInput(timePassed);
-                break;
-            }
-            
-            case HELP_SCREEN: {
-                checkUserInput(timePassed);
-                break;
-            }
-            
             case GAMEPLAY: {
-                checkUserInput(timePassed);
                 cleanup(timePassed);
                 actAll(timePassed);
                 break;
             }
-
-            case PAUSE_SCREEN: {
-                checkUserInput(timePassed);
-                break;
-            }
-
             case DEATH_SCREEN: {
-                checkUserInput(timePassed);
                 cleanup(timePassed);
                 actAll(timePassed);
                 break;
@@ -164,40 +153,40 @@ public class GameEngine {
      */
     public void userInput(int keyCode, boolean keyState) {
 
-        if (keyCode == KeyEvent.VK_E) {
+        if (keyCode == KeyEvent.VK_W) {
             up = keyState;
         }
-        if (keyCode == KeyEvent.VK_D) {
+        if (keyCode == KeyEvent.VK_S) {
             down = keyState;
         }
-        if (keyCode == KeyEvent.VK_S) {
+        if (keyCode == KeyEvent.VK_A) {
             left = keyState;
         }
-        if (keyCode == KeyEvent.VK_F) {
+        if (keyCode == KeyEvent.VK_D) {
             right = keyState;
         }
         if (keyCode == 37) {
             offensiveModule = keyState;
         }
-        if (keyCode == 39) {
+        if (keyCode == KeyEvent.VK_E) {
             defensiveModule = keyState;
         }
         if (keyCode == KeyEvent.VK_SPACE) {
             tacticalModule = keyState;
         }
-        if (keyCode == KeyEvent.VK_W) {
+        if (keyCode == KeyEvent.VK_Q) {
             swapOffensive = keyState;
         }
         if (keyCode == KeyEvent.VK_R) {
             swapDefensive = keyState;
         }
-        if (keyCode == KeyEvent.VK_TAB) {
+        if (keyCode == KeyEvent.VK_ESCAPE) {
             pause = keyState;
         }
         if (keyCode == KeyEvent.VK_ENTER) {
             enter = keyState;
         }
-        if (keyCode == KeyEvent.VK_Q) {
+        if (keyCode == KeyEvent.VK_I) {
             spawnEnemies = keyState;
         }
         if (keyCode == KeyEvent.VK_M && keyState) {
@@ -211,10 +200,6 @@ public class GameEngine {
     private void checkUserInput(double timePassed) {
 
         switch (simulationState) {
-
-            case MENU_SCREEN: {
-                break;
-            }
 
             case GAMEPLAY: {
                 if (up) {
@@ -247,21 +232,12 @@ public class GameEngine {
                 if (pause) {
                     if (pauseTimer.timePassed() >= 200) {
                         setSimulationState(SimulationState.PAUSE_SCREEN);
+                        guiHandler.showPauseMenu();
                         pauseTimer.restart();
                     }
                 }
                 if (spawnEnemies) {
                     currentLevel.getActorSpawner().spawnFrigate(1);
-                }
-                break;
-            }
-
-            case PAUSE_SCREEN: {
-                if (pause) {
-                    if (pauseTimer.timePassed() >= 200) {
-                        setSimulationState(SimulationState.GAMEPLAY);
-                        pauseTimer.restart();
-                    }
                 }
                 break;
             }
@@ -281,6 +257,13 @@ public class GameEngine {
                 }
                 break;
             }
+            case HELP_SCREEN_PAUSED: {
+                if (enter) {
+                    setSimulationState(SimulationState.PAUSE_SCREEN);
+                    guiHandler.showPauseMenu();
+                }
+                break;
+            }
         }
     }
 
@@ -289,7 +272,9 @@ public class GameEngine {
      */
     private void resetLevel() {
         fadingCanvasItems.clear();
-        currentLevel = new LevelTest(this, rocketManager, fadingCanvasItems);
+        rocketManager.clear();
+        currentLevel = new Level1(this, rocketManager, fadingCanvasItems);
+        soundManager.stop(Sound.GAME_MUSIC);
     }
 
     private void loadResources() {
@@ -300,12 +285,13 @@ public class GameEngine {
         resourceManager.add(Image.SEEKER_MISSILE, "particle.png");
         resourceManager.add(Image.BACKGROUND_IMAGE, "background.png");
         resourceManager.add(Image.BG_SHADER_NOISE, "shader_noise.png");
+        resourceManager.add(Image.SHIELD_MODULE, "ResizedImages/ShieldModuleV2.png");
         resourceManager.add(Image.SHIELD_NOISE, "shieldNoise.png");
         resourceManager.add(Image.SHIELD_BACKGROUND, "shield.png");
         resourceManager.add(Image.DRONE_LAUNCHER, "HighResAssets/DroneLauncher.png");
         resourceManager.add(Image.ROCKET_LAUNCHER, "HighResAssets/RocketLauncherV2.png");
         resourceManager.add(Image.SEEKER_CANNON, "ResizedImages/BombLauncherRed.png");
-        resourceManager.add(Image.EMP_CANNON, "ResizedImages/ShieldModuleV2.png");
+        resourceManager.add(Image.EMP_CANNON, "ResizedImages/BombLauncherV2.png");
         resourceManager.add(Image.LIGHT_CANNON, "ResizedImages/LightCannonV2.png");
         resourceManager.add(Image.LASER_CANNON, "ResizedImages/Laser.png");
 
@@ -405,7 +391,8 @@ public class GameEngine {
             case PAUSE_SCREEN:
                 soundManager.pause(Sound.GAME_MUSIC);
                 break;
-           case DEATH_SCREEN:
+            case MENU_SCREEN:
+            case DEATH_SCREEN:
                 soundManager.stop(Sound.GAME_MUSIC);
                 break;
         }

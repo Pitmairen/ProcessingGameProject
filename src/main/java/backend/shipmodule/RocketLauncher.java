@@ -1,7 +1,7 @@
 package backend.shipmodule;
 
 import backend.actor.Actor;
-import backend.actor.Rocket;
+import backend.actor.projectile.Rocket;
 import backend.main.RocketManager;
 import backend.main.Timer;
 import backend.resources.Image;
@@ -26,7 +26,6 @@ public class RocketLauncher extends OffensiveModule {
     private Timer timer = new Timer();
 
     private RocketManager rocketManager;
-    private final PImage rocketImg;
 
     /**
      * Constructor.
@@ -36,14 +35,16 @@ public class RocketLauncher extends OffensiveModule {
         super("Rocket Launcher", owner);
 
         this.rocketManager = rocketManager;
-        rocketImg = owner.getGameEngine().getResourceManager().getImage(Image.ROCKET_LAUNCHER);
+        
         launchVelocity = 0.6;
-        projectileDamage = 22;
+        projectileDamage = 25;
+        
+        moduleImage = getImageFromResourceManager(Image.ROCKET_LAUNCHER);
     }
 
     @Override
     public void draw() {
-        drawModule(rocketImg, 0, 0, defaultModuleWidth, defaultModuleHeight);
+        drawModule(moduleImage, 0, 0, defaultModuleWidth, defaultModuleHeight);
     }
 
     /**

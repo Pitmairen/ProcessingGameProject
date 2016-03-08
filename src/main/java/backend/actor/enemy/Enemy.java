@@ -1,5 +1,7 @@
-package backend.actor;
+package backend.actor.enemy;
 
+import backend.actor.ai.AI;
+import backend.actor.Actor;
 import backend.main.GameEngine;
 import backend.main.Vector;
 import java.util.Random;

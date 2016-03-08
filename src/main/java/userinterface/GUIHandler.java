@@ -22,7 +22,6 @@ public class GUIHandler extends PApplet {
     // Game field.
     private int outerWallThickness = 0;
     private int[] outerWallsRGBA = new int[]{153, 153, 253, 255};
-    private int[] backgroundRGBA = new int[]{0, 0, 0, 255};
 
     // Player HUD.
     private int[] hudRGBA = new int[]{80, 150, 40, 255};
@@ -32,11 +31,7 @@ public class GUIHandler extends PApplet {
     private int[] debugHudRGBA = new int[]{255, 255, 255, 255};
     private PFont debugHUDFont;
 
-    // Main menu.
-    private int mainMenuOuterBoxThickness = 5;
-    private int[] mainMenuOuterBoxRGBA = new int[]{153, 153, 253, 255};
-    private int[] mainMenuBackgroundRGBA = new int[]{0, 0, 0, 255};
-    private int[] mainMenuRGBA = new int[]{153, 153, 253, 255};
+    // Main menu
     private PFont menuFont;
 
     // Pause screen.
@@ -66,6 +61,7 @@ public class GUIHandler extends PApplet {
     private Timer timer;
 
     private Menu mainMenu;
+    private Menu pauseMenu;
 
     private boolean debugMode = false;
     
@@ -94,6 +90,7 @@ public class GUIHandler extends PApplet {
         gameEngine = new GameEngine(this);
 
         mainMenu = new Menu("Xeno Blaster 4000", this);
+        pauseMenu = new Menu("Paused", this);
         createMenuItems();
         mainMenu.show();
         titleScreenImage = loadImage("titleScreen.png");
@@ -125,6 +122,7 @@ public class GUIHandler extends PApplet {
                 drawTitleScreenImage();
                 break;
             }
+            case HELP_SCREEN_PAUSED:
             case HELP_SCREEN: {
                 gameEngine.getFadingCanvas().draw();
                 drawHelpScreen();
@@ -141,7 +139,6 @@ public class GUIHandler extends PApplet {
                 gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
                 drawActors();
-                drawPauseScreen();
                 break;
             }
             case DEATH_SCREEN: {
@@ -162,6 +159,13 @@ public class GUIHandler extends PApplet {
      */
     public void showMainMenu() {
         mainMenu.show();
+    }
+    
+    /**
+     * Show the main menu
+     */
+    public void showPauseMenu() {
+        pauseMenu.show();
     }
 
     /**
@@ -214,27 +218,6 @@ public class GUIHandler extends PApplet {
                 + "\n" + "heading: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getHeading().getAngle2D()) + " rad"
                 + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad", width - 200, 20);
     }
-
-    /**
-     * Draws the start screen.
-     */
-    private void drawStartMenu() {
-//        // Background.
-//        strokeWeight(mainMenuOuterBoxThickness);
-//        stroke(mainMenuOuterBoxRGBA[0], mainMenuOuterBoxRGBA[1], mainMenuOuterBoxRGBA[2]);
-//        fill(mainMenuBackgroundRGBA[0], mainMenuBackgroundRGBA[1], mainMenuBackgroundRGBA[2]);
-//        rect(0 + mainMenuOuterBoxThickness / 2,
-//                0 + mainMenuOuterBoxThickness / 2,
-//                width - mainMenuOuterBoxThickness,
-//                height - mainMenuOuterBoxThickness);
-        // Text.
-        fill(mainMenuRGBA[0], mainMenuRGBA[1], mainMenuRGBA[2]);
-        textFont(menuFont);
-        textAlign(CENTER, CENTER);
-        text("Xeno Blaster 4000"
-                + "\n"
-                + "\n" + "Press \"LMB\" to start.", width / 2, height / 2 - 100);
-    }
     
     /**
      * Draws the image for the start screen
@@ -250,42 +233,21 @@ public class GUIHandler extends PApplet {
         fill(pauseScreenRGBA[0], pauseScreenRGBA[1], pauseScreenRGBA[2]);
         textFont(menuFont);
         textAlign(CENTER, CENTER);
-        text("Movement: E, S, D, F"
-                + "\n" + "Activate offensive: LMB"
-                + "\n" + "Activate defensive: RMB"
-                + "\n" + "Activate tactical: SPACE"
-                + "\n" + "Cycle offensive: W"
-                + "\n" + "Cycle defensive: R"
+        text("Movement: W, A, S, D"
+                + "\n" + "Aiming: Mouse"
+                + "\n" + "Fire: LMB"
+                + "\n" + "Shield: E"
+                + "\n" + "EMP Bomb: SPACE"
+                + "\n" + "Change weapon: Q"
+                + "\n"
                 + "\n" + "Pause: TAB"
                 + "\n" + "Quit: ESC"
                 + "\n"
                 + "\n" + "Toggle Sounds: M"
-                + "\n" + "Debug HUD: Z"
-                + "\n" + "Spawn enemies: Q", width / 2, height / 2 - 100);
+                + "\n" + "Debug HUD: K"
+                + "\n" + "Spawn ekstra enemies: I", width / 2, height / 2 - 100);
     }
 
-    /**
-     * Draws the pause screen.
-     */
-    private void drawPauseScreen() {
-        fill(pauseScreenRGBA[0], pauseScreenRGBA[1], pauseScreenRGBA[2]);
-        textFont(menuFont);
-        textAlign(CENTER, CENTER);
-        text("PAUSED"
-                + "\n"
-                + "\n" + "Movement: E, S, D, F"
-                + "\n" + "Activate offensive: LMB"
-                + "\n" + "Activate defensive: RMB"
-                + "\n" + "Activate tactical: SPACE"
-                + "\n" + "Cycle offensive: W"
-                + "\n" + "Cycle defensive: R"
-                + "\n" + "Pause: TAB"
-                + "\n" + "Quit: ESC"
-                + "\n"
-                + "\n" + "Toggle Sounds: M"
-                + "\n" + "Debug HUD: Z"
-                + "\n" + "Spawn enemies: Q", width / 2, height / 2 - 100);
-    }
 
     /**
      * Draws the death screen.
@@ -330,15 +292,33 @@ public class GUIHandler extends PApplet {
             mainMenu.hide();
             gameEngine.setSimulationState(SimulationState.GAMEPLAY);
         });
-        mainMenu.addItem("Help", () -> {
+        mainMenu.addItem("Key Bindings", () -> {
             mainMenu.hide();
             gameEngine.setSimulationState(SimulationState.HELP_SCREEN);
         });
-        
         mainMenu.addItem("Quit", () -> {
             exit();
         });
 
+        pauseMenu.addItem("Resume", () -> {
+            pauseMenu.hide();
+            gameEngine.setSimulationState(SimulationState.GAMEPLAY);
+        });
+        pauseMenu.addItem("Restart", () -> {
+            pauseMenu.hide();
+            gameEngine.endCurrentGame();
+            gameEngine.setSimulationState(SimulationState.GAMEPLAY);
+        });
+        pauseMenu.addItem("Key Bindings", () -> {
+            pauseMenu.hide();
+            gameEngine.setSimulationState(SimulationState.HELP_SCREEN_PAUSED);
+        });
+        pauseMenu.addItem("Quit to Main Menu", () -> {
+            pauseMenu.hide();
+            gameEngine.endCurrentGame();
+            gameEngine.setSimulationState(SimulationState.MENU_SCREEN);
+            showMainMenu();
+        });
     }
 
     /**
@@ -346,8 +326,11 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void keyPressed() {
+        if (key == ESC) {
+            key = 0;  // Hack to prevent ESC from quitting the application
+        }        
         gameEngine.userInput(keyCode, true);
-        if (keyCode == VK_Z) {
+        if (keyCode == VK_K) {
             this.toggleDebugMode();
         }
     }
