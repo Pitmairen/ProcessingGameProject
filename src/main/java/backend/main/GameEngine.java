@@ -192,6 +192,11 @@ public class GameEngine {
         if (keyCode == KeyEvent.VK_M && keyState) {
             soundManager.toggleMuted();
         }
+        if (keyCode == KeyEvent.VK_TAB && keyState) {
+            if (currentLevel.getInitialTimeToNextWave() > 0) {
+                currentLevel.setInitialTimeToNextWave(0);
+            }
+        }
     }
 
     /**

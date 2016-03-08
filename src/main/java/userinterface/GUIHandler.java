@@ -38,7 +38,7 @@ public class GUIHandler extends PApplet {
     private int[] pauseScreenRGBA = new int[]{40, 160, 30, 255};
 
     // Death screen.
-    private int[] deathScreenRGBA = new int[]{255, 50, 40, 255};
+    private int[] deathScreenRGBA = new int[]{255, 25, 25, 255};
 
     // Decimal formats.
     private DecimalFormat format1 = new DecimalFormat("0");
@@ -237,11 +237,9 @@ public class GUIHandler extends PApplet {
                 + "\n" + "Aiming: Mouse"
                 + "\n" + "Fire: LMB"
                 + "\n" + "Shield: E"
-                + "\n" + "EMP Bomb: SPACE"
+                + "\n" + "EMP: SPACE"
                 + "\n" + "Change weapon: Q"
-                + "\n"
-                + "\n" + "Pause: TAB"
-                + "\n" + "Quit: ESC"
+                + "\n" + "Menu: ESC"
                 + "\n"
                 + "\n" + "Toggle Sounds: M"
                 + "\n" + "Debug HUD: K"
@@ -259,10 +257,14 @@ public class GUIHandler extends PApplet {
         if (lastHitBy != null) {
             hitByName = lastHitBy.getName();
         }
-        
-        //stroke(255);
-        //fill(0);
-        //rect(width / 4, height / 3, width / 2, height / 7 + height / 100 );
+
+        // Tint the background.
+        stroke(0);
+        strokeWeight(0);
+        fill(0, 80);
+        rect(0, 0, width, height);
+
+        // Text.
         fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
         textFont(menuFont);
         textAlign(CENTER, CENTER);
