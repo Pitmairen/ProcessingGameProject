@@ -5,7 +5,7 @@ import backend.actor.Actor;
 import backend.actor.enemy.Enemy;
 import backend.actor.Player;
 import backend.actor.projectile.Projectile;
-import backend.item.Item;
+import backend.actor.Item;
 import backend.main.Timer;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;

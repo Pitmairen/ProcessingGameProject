@@ -5,7 +5,7 @@
  */
 package backend.level;
 
-import backend.item.ModuleContainer;
+import backend.actor.ModuleContainer;
 import backend.main.FadingCanvasItemManager;
 import backend.main.GameEngine;
 import backend.main.RocketManager;

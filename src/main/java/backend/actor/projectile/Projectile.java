@@ -2,7 +2,7 @@ package backend.actor.projectile;
 
 import backend.actor.Actor;
 import backend.actor.enemy.Enemy;
-import backend.item.Item;
+import backend.actor.Item;
 import backend.main.Vector;
 import backend.shipmodule.Shield;
 import backend.shipmodule.ShipModule;
@@ -68,13 +68,11 @@ public abstract class Projectile extends Actor implements Drawable {
                     }
                 }
                 else if (target instanceof Item) {
-                        // Projectiles don't interact with items.
-                }
-                else {
+                    // Projectiles don't interact with items.
+                } else {
                     elasticColision(this, target, timePassed);
-                    this.removeHitPoints(target.getCollisionDamageToOthers());
-                    target.removeHitPoints(this.collisionDamageToOthers);
                     this.targetHit();
+                    target.collision(this);
                 }
             }
         }

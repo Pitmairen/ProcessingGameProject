@@ -5,7 +5,7 @@ import backend.actor.enemy.Enemy;
 import backend.main.GameEngine;
 import backend.actor.Player;
 import backend.actor.ai.SlayerAI;
-import backend.item.ModuleContainer;
+import backend.actor.ModuleContainer;
 import backend.main.FadingCanvasItemManager;
 import backend.main.RocketManager;
 import backend.main.Vector;

@@ -1,4 +1,4 @@
-package backend.item;
+package backend.actor;
 
 import backend.actor.Actor;
 import backend.actor.Player;

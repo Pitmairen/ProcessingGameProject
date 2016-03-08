@@ -1,5 +1,6 @@
-package backend.item;
+package backend.actor;
 
+import backend.actor.Item;
 import backend.actor.Actor;
 import backend.actor.Player;
 import backend.main.GameEngine;

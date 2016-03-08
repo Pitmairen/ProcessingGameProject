@@ -273,7 +273,7 @@ public class GameEngine {
     private void resetLevel() {
         fadingCanvasItems.clear();
         rocketManager.clear();
-        currentLevel = new Level1(this, rocketManager, fadingCanvasItems);
+        currentLevel = new LevelTest(this, rocketManager, fadingCanvasItems);
         soundManager.stop(Sound.GAME_MUSIC);
     }
 
