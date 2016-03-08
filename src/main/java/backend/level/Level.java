@@ -19,6 +19,7 @@ public abstract class Level {
 
     protected String levelName = "NAME NOT SET";
     protected int currentWave = 0;
+    protected int previousWave = 0;
     protected double initialTimeToNextWave = 0;
     protected double timeToNextWave = 0;
     protected Timer timer = new Timer();
@@ -47,7 +48,7 @@ public abstract class Level {
      * Spawns the next wave.
      */
     public abstract void nextWave();
-
+    
     // Getters.
     public String getLevelName() {
         return levelName;
@@ -99,6 +100,16 @@ public abstract class Level {
 
     public double getTimeToNextWave() {
         return timeToNextWave;
+    }
+
+    public int getPreviousWave() {
+        return previousWave;
+    }
+
+    // Quick fix, only to be used for the project presentation.
+    @Deprecated
+    public void setInitialTimeToNextWave(double initialTimeToNextWave) {
+        this.initialTimeToNextWave = initialTimeToNextWave;
     }
 
 }
