@@ -305,10 +305,10 @@ public class GameEngine {
         resourceManager.add(Sound.CURSOR, "audio/sfx/cursor.wav");
         resourceManager.add(Sound.CURSOR2, "audio/sfx/cursor2.wav");
 //        resourceManager.add(Sound.EMP, "audio/sfx/emp02.wav");
-        resourceManager.add(Sound.GAMEOVER, "audio/sfx/lose.wav");
-        resourceManager.add(Sound.MISSILE_LAUNCH, "audio/sfx/missile_launch.wav");
-        resourceManager.add(Sound.POWERUP, "audio/sfx/powerup.wav");
-        resourceManager.add(Sound.PICKUP, "audio/sfx/pickup.wav");
+//        resourceManager.add(Sound.GAMEOVER, "audio/sfx/lose.wav");
+//        resourceManager.add(Sound.MISSILE_LAUNCH, "audio/sfx/missile_launch.wav");
+//        resourceManager.add(Sound.POWERUP, "audio/sfx/powerup.wav");
+//        resourceManager.add(Sound.PICKUP, "audio/sfx/pickup.wav");
 
 
         resourceManager.add(Sound.GAME_MUSIC, "audio/sfx/placeholdertune.WAV");
@@ -325,10 +325,10 @@ public class GameEngine {
         soundManager.addLoopingSound(Sound.GAME_MUSIC); //game tune
         
 //        soundManager.addSound(Sound.EMP, 5);
-        soundManager.addSound(Sound.POWERUP, 5);        //picking up powerup modules
-        soundManager.addSound(Sound.DEATH, 5);
-        soundManager.addSound(Sound.GAMEOVER, 5);       //gameover tune, plays when player dies
-        soundManager.addSound(Sound.MISSILE_LAUNCH, 5); //missile launching
+//        soundManager.addSound(Sound.POWERUP, 5);        //picking up powerup modules
+//        soundManager.addSound(Sound.DEATH, 5);
+//        soundManager.addSound(Sound.GAMEOVER, 5);       //gameover tune, plays when player dies
+//        soundManager.addSound(Sound.MISSILE_LAUNCH, 5); //missile launching
 //        soundManager.addSound(Sound.MISSILEMOD_LOAD, 5);
 //        soundManager.addSound(Sound.MISSILE_LAUNCH, 5);
 //       soundManager.addSound(Sound.MISSILE_EXPLOSION, 5);
