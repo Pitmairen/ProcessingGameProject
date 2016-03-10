@@ -86,6 +86,12 @@ public class Shield extends DefensiveModule {
         @Override
         public void act(double timePassed){
             this.getPosition().set(owner.getPosition().copy());
+            
+            // The shield takes energy from the owner
+            owner.removeEnergy(0.4);
+            if(owner.getCurrentEnergy() <= 0){
+                this.die();
+            }
         }
         
         @Override

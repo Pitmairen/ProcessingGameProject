@@ -95,6 +95,9 @@ public abstract class Actor implements Drawable {
         updatePosition(timePassed);
         checkWallCollisions(timePassed);
         checkActorCollisions(timePassed);
+        if(getCurrentEnergy() < getMaxEnergy()){
+            currentEnergy += 0.2;
+        }
     }
 
     /**
@@ -358,6 +361,15 @@ public abstract class Actor implements Drawable {
         killChain = 0;
     }
 
+    /**
+     * Removes energy from the actor.
+     * 
+     * @param energy the amount of energy to remove 
+     */
+    public void removeEnergy(double energy){
+        currentEnergy -= energy;
+    }
+    
     /**
      * Handles what will happen to this actor upon collision with other actors.
      *

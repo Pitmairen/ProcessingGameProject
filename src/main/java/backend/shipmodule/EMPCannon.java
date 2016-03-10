@@ -50,6 +50,11 @@ public class EMPCannon extends TacticalModule {
     @Override
     public void activate() {
 
+        // Check if there is enough energy to create a pulse
+        if(owner.getCurrentEnergy() < 50){
+            return;
+        }
+        
         if (timer.timePassed() >= timeBetweenShots) {   // Check fire rate.
             EMPPulse pulse = new EMPPulse(owner.getPosition().copy(), this);
 
@@ -58,6 +63,8 @@ public class EMPCannon extends TacticalModule {
             fadingCanvasItems.add(pulse);
 
             timer.restart();
+            
+            owner.removeEnergy(50);
         }
     }
 
