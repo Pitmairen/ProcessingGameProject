@@ -3,6 +3,7 @@ package backend.actor.projectile;
 import backend.actor.Player;
 import backend.main.Vector;
 import backend.resources.Image;
+import backend.resources.Sound;
 import backend.shipmodule.ShipModule;
 import processing.core.PGraphics;
 import processing.core.PConstants;
@@ -73,6 +74,7 @@ public class Rocket extends Projectile {
 
     @Override
     public void die() {
+        gameEngine.getSoundManager().play(Sound.MISSILE_EXPLOSION, getPosition());
         gameEngine.getExplosionManager().explodeRocket(this);
         gameEngine.getCurrentLevel().getProjectiles().remove(this);
     }

@@ -106,7 +106,7 @@ public class Boss extends Enemy implements Drawable {
 
     @Override
     public void die() {
-        gameEngine.getSoundManager().play(Sound.EXPLOSION, getPosition());
+        gameEngine.getSoundManager().play(Sound.BOSS_DEATH, getPosition());
         gameEngine.getExplosionManager().explodeEnemy(this);
         gameEngine.getCurrentLevel().getPlayer().increaseScore(this.killValue);
         gameEngine.getCurrentLevel().getPlayer().increaseKillChain(1);

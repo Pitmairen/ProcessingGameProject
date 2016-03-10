@@ -5,6 +5,7 @@ import backend.actor.projectile.EMPPulse;
 import backend.main.FadingCanvasItemManager;
 import backend.main.Timer;
 import backend.resources.Image;
+import backend.resources.Sound;
 import processing.core.PApplet;
 import processing.core.PImage;
 import userinterface.GUIHandler;
@@ -56,6 +57,10 @@ public class EMPCannon extends TacticalModule {
         }
         
         if (timer.timePassed() >= timeBetweenShots) {   // Check fire rate.
+            
+            owner.getGameEngine().getSoundManager().play(Sound.EMP, owner.getPosition());
+
+            
             EMPPulse pulse = new EMPPulse(owner.getPosition().copy(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(pulse);

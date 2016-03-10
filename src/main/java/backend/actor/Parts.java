@@ -5,6 +5,7 @@ import backend.actor.Actor;
 import backend.actor.Player;
 import backend.main.GameEngine;
 import backend.main.Vector;
+import backend.resources.Sound;
 import userinterface.Drawable;
 
 /**
@@ -43,6 +44,7 @@ public class Parts extends Item implements Drawable {
         if (looter instanceof Player) {
             Player player = (Player) looter;
             player.addHitPoints(1);
+            gameEngine.getSoundManager().play(Sound.HEALTH_PICKUP, getPosition());
         }
     }
 

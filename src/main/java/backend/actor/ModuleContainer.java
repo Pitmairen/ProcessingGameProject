@@ -4,6 +4,7 @@ import backend.actor.Item;
 import backend.actor.Actor;
 import backend.main.GameEngine;
 import backend.main.Vector;
+import backend.resources.Sound;
 import backend.shipmodule.DefensiveModule;
 import backend.shipmodule.OffensiveModule;
 import backend.shipmodule.ShipModule;
@@ -62,6 +63,7 @@ public class ModuleContainer extends Item implements Drawable {
                 looter.setTacticalModule(shipModule);
             }
             currentHitPoints = 0;
+            gameEngine.getSoundManager().play(Sound.PICKUP, getPosition());
         }
     }
 

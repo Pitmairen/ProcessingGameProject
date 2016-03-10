@@ -5,6 +5,7 @@ import backend.main.GameEngine;
 import backend.main.Vector;
 import backend.resources.Image;
 import backend.resources.Shader;
+import backend.resources.Sound;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.opengl.PShader;
@@ -45,14 +46,17 @@ public class Shield extends DefensiveModule {
 
         // Create the shield if it has not been avtivated before
         if(shield == null){
+            owner.getGameEngine().getSoundManager().play(Sound.ACTIVATE_SHIELD, owner.getPosition());
             shield = new ShieldActor(owner.getPosition().copy(), owner.getGameEngine());
             owner.getGameEngine().getCurrentLevel().getActors().add(shield);
         }
         // Else reset the shield if it has died
         else if(shield.getCurrentHitPoints() <= 0){
             shield.reset();
-            if(!owner.getGameEngine().getCurrentLevel().getActors().contains(shield))
+            if(!owner.getGameEngine().getCurrentLevel().getActors().contains(shield)){
+                owner.getGameEngine().getSoundManager().play(Sound.ACTIVATE_SHIELD, owner.getPosition());
                 owner.getGameEngine().getCurrentLevel().getActors().add(shield);
+            }
         }
     }
     

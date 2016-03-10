@@ -3,6 +3,7 @@ package backend.actor.projectile;
 import backend.main.FadingCanvasItemManager;
 import backend.main.Vector;
 import backend.resources.Image;
+import backend.resources.Sound;
 import backend.shipmodule.ShipModule;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -93,6 +94,7 @@ public class SeekerMissile extends Projectile implements FadingCanvasItemManager
     
     @Override
     public void die() {
+        gameEngine.getSoundManager().play(Sound.MISSILE_EXPLOSION, getPosition());
         setCurrentHitPoints(0);
         gameEngine.getCurrentLevel().getProjectiles().remove(this);
     }

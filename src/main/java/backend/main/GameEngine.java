@@ -315,11 +315,14 @@ public class GameEngine {
         resourceManager.add(Sound.EMP, "audio/sfx/emp01.wav");
         resourceManager.add(Sound.GAMEOVER, "audio/sfx/gameover.wav");
         resourceManager.add(Sound.MISSILE_LAUNCH, "audio/sfx/missile_launch1.wav");
+        resourceManager.add(Sound.MISSILE_EXPLOSION, "audio/sfx/explosion04.wav");
         resourceManager.add(Sound.POWERUP, "audio/sfx/powerup.wav");
         resourceManager.add(Sound.PICKUP, "audio/sfx/pickup.wav");
+        resourceManager.add(Sound.ACTIVATE_SHIELD, "audio/sfx/pickup.wav");
         resourceManager.add(Sound.HEALTH_PICKUP, "audio/sfx/health.wav");
-
         resourceManager.add(Sound.GAME_MUSIC, "audio/sfx/placeholdertune.WAV");
+        resourceManager.add(Sound.GAMEOVER, "audio/sfx/gameover.wav");
+
     }
     
     private void loadSounds() throws OpenAL.ALError {
@@ -330,6 +333,7 @@ public class GameEngine {
         soundManager.addSound(Sound.COLLISION, 1);              //player bumping into objects
         soundManager.addSound(Sound.CURSOR, 5);                 //moving cursor on the menus
         soundManager.addSound(Sound.CURSOR2, 5);                //moving cursor on the menus
+        soundManager.addSound(Sound.GAMEOVER, 1);
         
         soundManager.addLoopingSound(Sound.GAME_MUSIC);         //game tune
 
@@ -339,6 +343,8 @@ public class GameEngine {
         soundManager.addSound(Sound.BOSS_DEATH, 5);            //to be played when a large drone dies
         soundManager.addSound(Sound.GAMEOVER, 5);               //gameover tune, plays when player dies
         soundManager.addSound(Sound.MISSILE_LAUNCH, 5);         //missile regular/heat seeking launching
+        soundManager.addSound(Sound.MISSILE_EXPLOSION, 5);      //exploding missile
+        soundManager.addSound(Sound.ACTIVATE_SHIELD, 1);       //activate the shield
         soundManager.addSound(Sound.BULLET_IMPACT, 5);          //sound of default weapon projectiles hitting enemy
         soundManager.addSound(Sound.HEALTH_PICKUP, 5);          //sound of picking up health orbs
     }

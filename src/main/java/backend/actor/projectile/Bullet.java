@@ -1,6 +1,7 @@
 package backend.actor.projectile;
 
 import backend.main.Vector;
+import backend.resources.Sound;
 import backend.shipmodule.ShipModule;
 import userinterface.Drawable;
 
@@ -40,6 +41,7 @@ public class Bullet extends Projectile implements Drawable {
 
     @Override
     public void die() {
+        gameEngine.getSoundManager().play(Sound.BULLET_IMPACT, getPosition());
         gameEngine.getCurrentLevel().getProjectiles().remove(this);
     }
 

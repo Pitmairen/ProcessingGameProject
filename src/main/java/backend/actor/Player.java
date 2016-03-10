@@ -136,9 +136,10 @@ public class Player extends Actor implements Drawable {
     @Override
     public void die() {
         gameEngine.getSoundManager().play(Sound.EXPLOSION, getPosition());
+        gameEngine.getSoundManager().play(Sound.GAMEOVER, getPosition());
         gameEngine.getExplosionManager().explodePlayer(this);
         gameEngine.setSimulationState(SimulationState.DEATH_SCREEN);
-        
+
         // Quick fix to stop laser sound when the player dies
         if(currentOffensiveModule != null){
             currentOffensiveModule.deactivated();
@@ -215,6 +216,11 @@ public class Player extends Actor implements Drawable {
         // Wait for timer for each swap.
         if (offensiveModuleTimer.timePassed() >= offensiveModuleSwapDelay) {
             ShipModule module = offensiveModules.get((offensiveModules.indexOf(currentOffensiveModule) + 1) % offensiveModules.size());
+            
+            if(module != currentOffensiveModule){
+                getGameEngine().getSoundManager().play(Sound.POWERUP, getPosition());
+            }
+            
             setCurrentOffensiveModule(module);
             offensiveModuleTimer.restart();
         }
@@ -227,6 +233,11 @@ public class Player extends Actor implements Drawable {
         // Wait for timer for each swap.
         if (defensiveModuleTimer.timePassed() >= defensiveModuleSwapDelay) {
             ShipModule module = defensiveModules.get((defensiveModules.indexOf(currentDefensiveModule) + 1) % defensiveModules.size());
+            
+            if(module != currentOffensiveModule){
+                getGameEngine().getSoundManager().play(Sound.POWERUP, getPosition());
+            }
+            
             setCurrentDefensiveModule(module);
             defensiveModuleTimer.restart();
         }

@@ -7,6 +7,7 @@ import backend.main.FadingCanvasItemManager;
 import backend.main.Timer;
 import backend.main.Vector;
 import backend.resources.Image;
+import backend.resources.Sound;
 import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -70,6 +71,9 @@ public class SeekerCannon extends OffensiveModule {
         SeekerMissile.Target target = selector.getTarget();
 
         if (target != null) {
+            
+            owner.getGameEngine().getSoundManager().play(Sound.MISSILE_LAUNCH, owner.getPosition());
+
             SeekerMissile missile = new SeekerMissile(owner.getPosition().copy(), selector.getTarget(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(missile);

@@ -5,6 +5,7 @@ import backend.actor.projectile.Rocket;
 import backend.main.RocketManager;
 import backend.main.Timer;
 import backend.resources.Image;
+import backend.resources.Sound;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -55,6 +56,9 @@ public class RocketLauncher extends OffensiveModule {
 
         // Wait for timer for each shot.
         if (timer.timePassed() >= timeBetweenShots) {
+            
+            owner.getGameEngine().getSoundManager().play(Sound.MISSILE_LAUNCH, owner.getPosition());
+            
             Rocket rocket = new Rocket(owner.getPosition().copy(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(rocket);
