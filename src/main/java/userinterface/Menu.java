@@ -1,5 +1,8 @@
 package userinterface;
 
+import backend.main.Vector;
+import backend.resources.Sound;
+import backend.sound.SoundManager;
 import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -25,6 +28,7 @@ public class Menu {
     }
 
     private final PApplet app;
+    private final SoundManager soundManager;
     private final ArrayList<Item> items;
 
     private final PFont titleFont;
@@ -66,9 +70,10 @@ public class Menu {
      * @param title the menu title
      * @param app the processing app
      */
-    public Menu(String title, PApplet app) {
+    public Menu(String title, PApplet app, SoundManager soundManager) {
         items = new ArrayList<>();
         this.app = app;
+        this.soundManager = soundManager;
         titleFont = app.createFont("titleFont.ttf", titleSize);
         itemFont = app.createFont("commando.ttf", 40);
         currentItem = 0;
@@ -228,10 +233,13 @@ public class Menu {
     }
 
     private void stepCurrentItem(int step) {
-        currentItem = Math.floorMod(currentItem + step, items.size());
+        setCurrentItem(Math.floorMod(currentItem + step, items.size()));
     }
 
     private void setCurrentItem(int index) {
+        if(currentItem != index){
+            soundManager.play(Sound.CURSOR2, new Vector(app.width/2, app.height/2, 0));
+        }
         currentItem = index;
     }
 

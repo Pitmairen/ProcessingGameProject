@@ -89,8 +89,8 @@ public class GUIHandler extends PApplet {
         
         gameEngine = new GameEngine(this);
 
-        mainMenu = new Menu("Xeno Blaster 4000", this);
-        pauseMenu = new Menu("Paused", this);
+        mainMenu = new Menu("Xeno Blaster 4000", this, gameEngine.getSoundManager());
+        pauseMenu = new Menu("Paused", this, gameEngine.getSoundManager());
         createMenuItems();
         mainMenu.show();
         titleScreenImage = loadImage("titleScreen.png");
