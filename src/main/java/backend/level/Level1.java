@@ -7,23 +7,23 @@ import backend.main.RocketManager;
 import backend.main.Vector;
 
 /**
- * A custom level created specifically for testing purposes.
+ * The first level of the game.
  *
  * @author Kristian Honningsvag.
  */
-public class TestLevel extends Level {
+public class Level1 extends Level {
 
     /**
      * Constructor.
      */
-    public TestLevel(GameEngine gameEngine, RocketManager rocketManager, FadingCanvasItemManager itemManager) {
+    public Level1(GameEngine gameEngine, RocketManager rocketManager, FadingCanvasItemManager itemManager) {
 
         super(gameEngine);
 
         this.rocketManager = rocketManager;
         this.fadingCanvasItems = itemManager;
-        levelName = "TestLevel";
-        baseTimeToNextWave = 999999;
+        levelName = "1";
+        baseTimeToNextWave = 4000;
 
         player = new Player(new Vector(300, 250, 0), gameEngine);
         actors.add(player);
@@ -43,25 +43,18 @@ public class TestLevel extends Level {
                 switch (currentWave) {
 
                     case 1: {
-                        actorSpawner.spawnRocketLauncher(500, 400);
-                        setTimeToNextWave(999999);
+                        actorSpawner.spawnFrigate(1);
+                        setTimeToNextWave(10000);
                         break;
                     }
 
                     case 2: {
-                        actorSpawner.spawnSeekerLauncher(500, 400);
-                        setTimeToNextWave(999999);
+                        actorSpawner.spawnFrigate(3);
+                        setTimeToNextWave(10000);
                         break;
                     }
 
-                    case 3: {
-                        actorSpawner.spawnLaser(500, 400);
-                        setTimeToNextWave(999999);
-                        break;
-                    }
-
-                    case 4: {
-                        actorSpawner.spawnEMP(500, 400);
+                    case 40: {
                         onLastWave = true;
                         break;
                     }

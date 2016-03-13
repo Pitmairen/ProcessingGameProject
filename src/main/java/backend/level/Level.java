@@ -60,6 +60,15 @@ public abstract class Level {
         timer.restart();
     }
 
+    /**
+     * Prematurely spawn the next wave.
+     */
+    public void forceNextWave() {
+        if (timeToNextWave > 900) {
+            setTimeToNextWave(900);
+        }
+    }
+
     // Getters.
     public String getLevelName() {
         return levelName;

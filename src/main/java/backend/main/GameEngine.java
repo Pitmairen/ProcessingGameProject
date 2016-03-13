@@ -1,7 +1,9 @@
 package backend.main;
 
 import backend.actor.Actor;
+import backend.level.Demonstration;
 import backend.level.Level;
+import backend.level.Level1;
 import backend.level.TestLevel;
 import backend.resources.Image;
 import backend.resources.ResourceManager;
@@ -203,13 +205,8 @@ public class GameEngine {
             soundManager.toggleMuted();
         }
         if (keyCode == KeyEvent.VK_TAB && keyState) {
-            // Prematurely spawn next wave. Only supposed to work on the test level.
-            if (currentLevel.getTimeToNextWave() > 500) {
-                if (currentLevel instanceof TestLevel) {
-                    TestLevel testLevel = (TestLevel) currentLevel;
-                    testLevel.forceNextWave();
-                }
-            }
+            // Prematurely spawn next wave.
+            currentLevel.forceNextWave();
         }
     }
 
@@ -310,7 +307,8 @@ public class GameEngine {
         fadingCanvasItems.clear();
         rocketManager.clear();
 //        currentLevel = new Level1(this, rocketManager, fadingCanvasItems);
-        currentLevel = new TestLevel(this, rocketManager, fadingCanvasItems);
+        currentLevel = new Demonstration(this, rocketManager, fadingCanvasItems);
+//        currentLevel = new TestLevel(this, rocketManager, fadingCanvasItems);
         soundManager.stop(Sound.GAME_MUSIC);
     }
 
