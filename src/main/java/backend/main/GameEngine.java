@@ -390,11 +390,11 @@ public class GameEngine {
     
     // Setters.
     public void setSimulationState(SimulationState simulationState) {
+        updateMusic(simulationState, this.simulationState);
         this.simulationState = simulationState;
-        updateMusic(simulationState);
     }
     
-    private void updateMusic(SimulationState newState){
+    private void updateMusic(SimulationState newState, SimulationState oldState){
 
         switch(newState){
             
@@ -407,7 +407,9 @@ public class GameEngine {
                 break;
             case MENU_SCREEN:
                 soundManager.stop(Sound.GAME_MUSIC);
-                soundManager.play(Sound.MENU_MUSIC, new Vector(guiHandler.width/2, guiHandler.height/2, 0));
+                if(oldState != SimulationState.CREDITS_SCREEN && oldState != SimulationState.HELP_SCREEN){
+                    soundManager.play(Sound.MENU_MUSIC, new Vector(guiHandler.width/2, guiHandler.height/2, 0));
+                }
                 break;
             case DEATH_SCREEN:
                 soundManager.stop(Sound.GAME_MUSIC);
