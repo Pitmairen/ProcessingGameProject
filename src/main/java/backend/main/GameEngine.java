@@ -30,7 +30,7 @@ public class GameEngine {
     private RocketManager rocketManager;
     private FadingCanvasItemManager fadingCanvasItems;
     private FadingCanvas fadingCanvas;
-    private SimulationState simulationState = SimulationState.MENU_SCREEN;
+    private SimulationState simulationState;
     private ResourceManager resourceManager;
     private SoundManager soundManager;
 
@@ -80,6 +80,8 @@ public class GameEngine {
             System.exit(1);
         }
         resetLevel();
+        
+        setSimulationState(SimulationState.MENU_SCREEN);
     }
     
     /**
@@ -320,8 +322,10 @@ public class GameEngine {
         resourceManager.add(Sound.PICKUP, "audio/sfx/pickup.wav");
         resourceManager.add(Sound.ACTIVATE_SHIELD, "audio/sfx/pickup.wav");
         resourceManager.add(Sound.HEALTH_PICKUP, "audio/sfx/health.wav");
-        resourceManager.add(Sound.GAME_MUSIC, "audio/sfx/placeholdertune.WAV");
-        resourceManager.add(Sound.GAMEOVER, "audio/sfx/gameover.wav");
+        
+        resourceManager.add(Sound.MENU_MUSIC, "audio/music/menu.wav");
+        resourceManager.add(Sound.GAME_MUSIC, "audio/music/ingame.wav");
+        resourceManager.add(Sound.GAMEOVER, "audio/music/gameover.wav");
 
     }
     
@@ -336,7 +340,8 @@ public class GameEngine {
         soundManager.addSound(Sound.GAMEOVER, 1);
         
         soundManager.addLoopingSound(Sound.GAME_MUSIC);         //game tune
-
+        soundManager.addLoopingSound(Sound.MENU_MUSIC);
+        
         soundManager.addSound(Sound.EMP, 5);
         soundManager.addSound(Sound.PICKUP, 5);                 //picking up power up modules
         soundManager.addSound(Sound.POWERUP, 5);                //swapping between powerup modules
@@ -394,11 +399,15 @@ public class GameEngine {
             
             case GAMEPLAY:
                 soundManager.play(Sound.GAME_MUSIC, new Vector(guiHandler.width/2, guiHandler.height/2, 0));
+                soundManager.stop(Sound.MENU_MUSIC);
                 break;
             case PAUSE_SCREEN:
                 soundManager.pause(Sound.GAME_MUSIC);
                 break;
             case MENU_SCREEN:
+                soundManager.stop(Sound.GAME_MUSIC);
+                soundManager.play(Sound.MENU_MUSIC, new Vector(guiHandler.width/2, guiHandler.height/2, 0));
+                break;
             case DEATH_SCREEN:
                 soundManager.stop(Sound.GAME_MUSIC);
                 break;
