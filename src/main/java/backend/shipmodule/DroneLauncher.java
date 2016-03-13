@@ -16,7 +16,6 @@ import processing.core.PImage;
 public class DroneLauncher extends OffensiveModule {
 
     // Shape and color.
-    private int turretLength = 60;
     private int turretWidth = 30;
     private int[] turretRGBA = new int[]{100, 100, 100, 255};
 

@@ -5,7 +5,6 @@ import backend.actor.Actor;
 import backend.actor.projectile.Bullet;
 import backend.resources.Image;
 import backend.resources.Sound;
-import processing.core.PImage;
 
 /**
  * Automatic cannon that fires bullets. Rapid fire and small damage.
@@ -21,15 +20,16 @@ public class AutoCannon extends OffensiveModule {
 
     private double timeBetweenShots = 130;
     private Timer timer = new Timer();
+
     /**
      * Constructor.
      */
     public AutoCannon(Actor owner) {
         super("Auto Cannon", owner);
 
-        launchVelocity = 1.6;
+        launchVelocity = 1.4;
         projectileDamage = 1.6;
-        
+
         moduleImage = getImageFromResourceManager(Image.LIGHT_CANNON);
     }
 

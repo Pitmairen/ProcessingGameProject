@@ -5,7 +5,6 @@ import backend.actor.Actor;
 import backend.actor.projectile.Bullet;
 import backend.resources.Image;
 import backend.resources.Sound;
-import processing.core.PImage;
 
 /**
  * Cannon that fires single slow moving bullets.
@@ -21,16 +20,16 @@ public class LightCannon extends OffensiveModule {
 
     private double timeBetweenShots = 100;
     private Timer timer = new Timer();
-    
+
     /**
      * Constructor.
      */
     public LightCannon(Actor owner) {
         super("Auto Cannon", owner);
-        
-        launchVelocity = 0.8;
+
+        launchVelocity = 0.7;
         projectileDamage = 10;
-        
+
         moduleImage = getImageFromResourceManager(Image.LIGHT_CANNON);
     }
 

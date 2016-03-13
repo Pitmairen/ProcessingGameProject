@@ -88,7 +88,7 @@ public class SlayerAI implements AI {
     private abstract class State {
 
         public void baseUpdate(double timePassed) {
-            if (puppet.getCurrentHitPoints() < 5) {
+            if (puppet.getCurrentHitPoints() < 20) {
                 setState(new Kamikaze());
             }
             update(timePassed);

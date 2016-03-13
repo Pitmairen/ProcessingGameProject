@@ -6,7 +6,6 @@ import backend.actor.Item;
 import backend.main.GameEngine;
 import backend.main.Vector;
 import backend.resources.Sound;
-import backend.shipmodule.LightCannon;
 import java.util.ArrayList;
 import processing.core.PImage;
 import userinterface.Drawable;
@@ -18,11 +17,9 @@ import userinterface.Drawable;
  */
 public class KamikazeDrone extends Enemy implements Drawable {
 
-    //Image
+    // Images.
     private final PImage enemyGraphics;
 
-//    // Modules.
-//    private LightCannon LightCannon = new LightCannon(this);
     /**
      * Constructor.
      */
@@ -42,8 +39,6 @@ public class KamikazeDrone extends Enemy implements Drawable {
         attackDelay = 1000;
         killValue = 1;
 
-//        offensiveModules.add(LightCannon);
-//        currentOffensiveModule = LightCannon;
         enemyGraphics = guiHandler.loadImage("multishotDrone.png");
     }
 
@@ -97,7 +92,7 @@ public class KamikazeDrone extends Enemy implements Drawable {
                 } else if (target instanceof Item) {
                     // No interaction with items.
                 } else if (target instanceof Enemy) {
-                    if (target instanceof Boss) {
+                    if (target instanceof DroneCarrier) {
                         // No interaction with boss enemies.    
                     } else {
                         // Crashed into some other enemy.

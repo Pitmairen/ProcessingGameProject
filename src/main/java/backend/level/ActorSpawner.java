@@ -1,22 +1,30 @@
 package backend.level;
 
-import backend.actor.enemy.Boss;
+import backend.actor.ModuleContainer;
 import backend.actor.enemy.Enemy;
-import backend.actor.Player;
-import backend.actor.enemy.Slayer;
+import backend.actor.ai.DroneAI;
+import backend.actor.enemy.Frigate;
 import backend.actor.ai.SlayerAI;
-import backend.main.GameEngine;
+import backend.actor.enemy.DroneCarrier;
+import backend.actor.enemy.KamikazeDrone;
 import backend.main.Vector;
+import backend.shipmodule.AutoCannon;
+import backend.shipmodule.EMPCannon;
+import backend.shipmodule.LaserCannon;
+import backend.shipmodule.RocketLauncher;
+import backend.shipmodule.SeekerCannon;
 import java.util.Random;
 
 /**
- * Handles spawning enemies.
+ * Handles spawning actors.
  *
  * @author Kristian Honningsvag.
  */
 public class ActorSpawner {
 
     Level currentLevel;
+    private Enemy enemy;
+    private ModuleContainer moduleContainer;
 
     /**
      * Constructor.
@@ -25,7 +33,21 @@ public class ActorSpawner {
      */
     public ActorSpawner(Level currentLevel) {
         this.currentLevel = currentLevel;
+    }
 
+    /**
+     * Spawns a given number of kamikaze drones at random locations.
+     *
+     * @param amount Number of kamikaze drones to spawn.
+     */
+    public void spawnKamikazeDrone(int amount) {
+        Random random = new Random();
+        for (int i = 0; i < amount; i++) {
+            enemy = new KamikazeDrone(new Vector(randX(random), randY(random), 0), currentLevel.getGameEngine());
+            enemy.setAI(new DroneAI(enemy.getGameEngine(), currentLevel.getPlayer(), enemy));
+            currentLevel.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
+            currentLevel.getGameEngine().getCurrentLevel().getActors().add(enemy);
+        }
     }
 
     /**
@@ -36,61 +58,97 @@ public class ActorSpawner {
     public void spawnFrigate(int amount) {
         Random random = new Random();
         for (int i = 0; i < amount; i++) {
-            Enemy enemy = new Slayer(new Vector(randX(random), randY(random), 0), getGameEngine());
-            enemy.setAI(new SlayerAI(enemy, getPlayer()));
-            addToActorsAndEnemies(enemy);
+            enemy = new Frigate(new Vector(randX(random), randY(random), 0), currentLevel.getGameEngine());
+            enemy.setAI(new SlayerAI(enemy, currentLevel.getPlayer()));
+            currentLevel.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
+            currentLevel.getGameEngine().getCurrentLevel().getActors().add(enemy);
         }
     }
 
     /**
-     * Spawns a specified enemy as many times specified
+     * Spawns a carrier at the given location.
      *
-     * @param enemy the enemy that will be spawned
-     * @param amount the amount of enemies to be spawned
+     * @param x Initial x-position.
+     * @param y Initial y-position.
      */
-    public void spawn(Enemy enemy, int amount) {
-        for (int i = 0; i < amount; i++) {
-            checkEnemyClass(enemy);
-        }
-    }
-
-    private void checkEnemyClass(Enemy enemy) {
-        Random random = new Random();
-        if (classCheck(enemy, Boss.class)) {
-            enemy = new Boss(randomVector(random), getGameEngine());
-            enemy.setAI(new SlayerAI(enemy, getPlayer()));
-        } else if (classCheck(enemy, Slayer.class)) {
-            enemy = new Slayer(randomVector(random), getGameEngine());
-            enemy.setAI(new SlayerAI(enemy, getPlayer()));
-        }
-        addToActorsAndEnemies(enemy);
-    }
-
-    private boolean classCheck(Enemy enemy, Class enemyClass) {
-        return enemy.getClass().isAssignableFrom(enemyClass);
-    }
-
-    private Player getPlayer() {
-        return currentLevel.getPlayer();
-    }
-
-    private GameEngine getGameEngine() {
-        return currentLevel.getGameEngine();
-    }
-
-    private void addToActorsAndEnemies(Enemy enemy) {
+    public void spawnCarrier(int x, int y) {
+        enemy = new DroneCarrier(new Vector(x, y, 0), currentLevel.getGameEngine());
+        enemy.setAI(new SlayerAI(enemy, currentLevel.getPlayer()));
         currentLevel.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
         currentLevel.getGameEngine().getCurrentLevel().getActors().add(enemy);
     }
 
-    private Vector randomVector(Random rand) {
-        return new Vector(randX(rand), randY(rand), 0);
+    /**
+     * Spawns an auto cannon at the given location.
+     *
+     * @param x Initial x-position.
+     * @param y Initial y-position.
+     */
+    public void spawnAutoCannon(int x, int y) {
+        moduleContainer = new ModuleContainer(new Vector(x, y, 0), currentLevel.getGameEngine());
+        moduleContainer.setModule(new AutoCannon(moduleContainer));
+        currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
+        currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
     }
 
+    /**
+     * Spawns a rocket launcher at the given location.
+     *
+     * @param x Initial x-position.
+     * @param y Initial y-position.
+     */
+    public void spawnRocketLauncher(int x, int y) {
+        moduleContainer = new ModuleContainer(new Vector(x, y, 0), currentLevel.getGameEngine());
+        moduleContainer.setModule(new RocketLauncher(moduleContainer, currentLevel.getRocketManager()));
+        currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
+        currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
+    }
+
+    /**
+     * Spawns a seeker launcher at the given location.
+     *
+     * @param x Initial x-position.
+     * @param y Initial y-position.
+     */
+    public void spawnSeekerLauncher(int x, int y) {
+        moduleContainer = new ModuleContainer(new Vector(x, y, 0), currentLevel.getGameEngine());
+        moduleContainer.setModule(new SeekerCannon(moduleContainer, currentLevel.getFadingCanvasItems()));
+        currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
+        currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
+    }
+
+    /**
+     * Spawns a laser cannon at the given location.
+     *
+     * @param x Initial x-position.
+     * @param y Initial y-position.
+     */
+    public void spawnLaser(int x, int y) {
+        moduleContainer = new ModuleContainer(new Vector(x, y, 0), currentLevel.getGameEngine());
+        moduleContainer.setModule(new LaserCannon(moduleContainer));
+        currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
+        currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
+    }
+
+    /**
+     * Spawns a EMP at the given location.
+     *
+     * @param x Initial x-position.
+     * @param y Initial y-position.
+     */
+    public void spawnEMP(int x, int y) {
+        moduleContainer = new ModuleContainer(new Vector(x, y, 0), currentLevel.getGameEngine());
+        moduleContainer.setModule(new EMPCannon(moduleContainer, currentLevel.getFadingCanvasItems()));
+        currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
+        currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
+    }
+
+    // Return a random x-position.
     private int randX(Random rand) {
         return rand.nextInt(currentLevel.getGameEngine().getGuiHandler().getWidth() - 200) + 100;
     }
 
+    // Return a random y-position.
     private int randY(Random rand) {
         return rand.nextInt(currentLevel.getGameEngine().getGuiHandler().getHeight() - 200) + 100;
     }

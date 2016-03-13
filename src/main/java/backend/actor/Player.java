@@ -27,9 +27,9 @@ public class Player extends Actor implements Drawable {
 
     // Shape.
     private int healthBarWidth = 50;
-    private int healthBarHeight = 10;
+    private int healthBarHeight = 13;
     private int energyBarWidth = 50;
-    private int energyBarHeight = 10;
+    private int energyBarHeight = 13;
     private final int backgroundColor;  // Set in constructor.
 
     // Image.
@@ -38,8 +38,8 @@ public class Player extends Actor implements Drawable {
     // Modules.
     private Timer offensiveModuleTimer = new Timer();
     private Timer defensiveModuleTimer = new Timer();
-    private double offensiveModuleSwapDelay = 600;
-    private double defensiveModuleSwapDelay = 600;
+    private double offensiveModuleSwapDelay = 400;
+    private double defensiveModuleSwapDelay = 400;
 
     /**
      * Constructor.

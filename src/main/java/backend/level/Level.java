@@ -6,6 +6,8 @@ import backend.actor.enemy.Enemy;
 import backend.actor.Player;
 import backend.actor.projectile.Projectile;
 import backend.actor.Item;
+import backend.main.FadingCanvasItemManager;
+import backend.main.RocketManager;
 import backend.main.Timer;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -20,7 +22,7 @@ public abstract class Level {
     protected String levelName = "NAME NOT SET";
     protected int currentWave = 0;
     protected int previousWave = 0;
-    protected double initialTimeToNextWave = 0;
+    protected double baseTimeToNextWave = 0;
     protected double timeToNextWave = 0;
     protected Timer timer = new Timer();
     protected boolean onLastWave = false;
@@ -32,6 +34,9 @@ public abstract class Level {
     protected ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     protected ArrayList<Item> items = new ArrayList<Item>();
     protected ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+
+    protected RocketManager rocketManager;
+    protected FadingCanvasItemManager fadingCanvasItems;
 
     /**
      * Constructor.
@@ -48,7 +53,13 @@ public abstract class Level {
      * Spawns the next wave.
      */
     public abstract void nextWave();
-    
+
+    // Set the time until the next wave spawns.
+    protected void setTimeToNextWave(int timeToNextWave) {
+        baseTimeToNextWave = timeToNextWave;
+        timer.restart();
+    }
+
     // Getters.
     public String getLevelName() {
         return levelName;
@@ -87,7 +98,7 @@ public abstract class Level {
     }
 
     public double getInitialTimeToNextWave() {
-        return initialTimeToNextWave;
+        return baseTimeToNextWave;
     }
 
     public Timer getTimer() {
@@ -106,10 +117,16 @@ public abstract class Level {
         return previousWave;
     }
 
-    // Quick fix, only to be used for the project presentation.
-    @Deprecated
-    public void setInitialTimeToNextWave(double initialTimeToNextWave) {
-        this.initialTimeToNextWave = initialTimeToNextWave;
+    public double getBaseTimeToNextWave() {
+        return baseTimeToNextWave;
+    }
+
+    public RocketManager getRocketManager() {
+        return rocketManager;
+    }
+
+    public FadingCanvasItemManager getFadingCanvasItems() {
+        return fadingCanvasItems;
     }
 
 }

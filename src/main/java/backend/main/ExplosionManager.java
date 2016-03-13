@@ -1,9 +1,9 @@
 package backend.main;
 
-import backend.actor.enemy.Boss;
+import backend.actor.enemy.DroneCarrier;
 import backend.actor.enemy.KamikazeDrone;
 import backend.actor.enemy.Enemy;
-import backend.actor.enemy.Slayer;
+import backend.actor.enemy.Frigate;
 import backend.actor.Player;
 import backend.actor.projectile.Rocket;
 import processing.core.PGraphics;
@@ -66,11 +66,11 @@ public class ExplosionManager implements FadingCanvas.Drawable {
      */
     public void explodeEnemy(Enemy enemy) {
 
-        if (enemy instanceof Slayer) {
+        if (enemy instanceof Frigate) {
             this.particles.emitParticles(50,
                     new PVector((float) enemy.getPosition().getX(), (float) enemy.getPosition().getY()), 0xffFF1511, 30.0f, 20.0f);
         }
-        if (enemy instanceof Boss) {
+        if (enemy instanceof DroneCarrier) {
             this.particles.emitParticles(400,
                     new PVector((float) enemy.getPosition().getX(), (float) enemy.getPosition().getY()), 0xffFF1511, 30.0f, 20.0f, 4f, 4f);
         }

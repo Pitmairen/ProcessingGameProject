@@ -2,8 +2,7 @@ package backend.main;
 
 import backend.actor.Actor;
 import backend.level.Level;
-import backend.level.Level1;
-import backend.level.LevelTest;
+import backend.level.TestLevel;
 import backend.resources.Image;
 import backend.resources.ResourceManager;
 import backend.resources.Shader;
@@ -46,8 +45,11 @@ public class GameEngine {
     private boolean swapDefensive = false;
     private boolean pause = false;
     private Timer pauseTimer = new Timer();
+    private Timer spawnTimer = new Timer();
     private boolean enter = false;
-    private boolean spawnEnemies = false;
+    private boolean spawnFrigate = false;
+    private boolean spawnDrone = false;
+    private boolean spawnCarrier = false;
 
     /**
      * Constructor.
@@ -72,7 +74,7 @@ public class GameEngine {
         fadingCanvas.add(fadingCanvasItems);
 
         soundManager = new SoundManager(guiHandler, resourceManager);
-        
+
         try {
             loadSounds();
         } catch (OpenAL.ALError ex) {
@@ -80,14 +82,14 @@ public class GameEngine {
             System.exit(1);
         }
         resetLevel();
-        
+
         setSimulationState(SimulationState.MENU_SCREEN);
     }
-    
+
     /**
      * Ends the current game and resets the level.
      */
-    public void endCurrentGame(){
+    public void endCurrentGame() {
         resetLevel();
     }
 
@@ -97,7 +99,7 @@ public class GameEngine {
     public void run(double timePassed) {
 
         checkUserInput(timePassed);
-        
+
         switch (simulationState) {
             case GAMEPLAY: {
                 cleanup(timePassed);
@@ -188,15 +190,25 @@ public class GameEngine {
         if (keyCode == KeyEvent.VK_ENTER) {
             enter = keyState;
         }
-        if (keyCode == KeyEvent.VK_I) {
-            spawnEnemies = keyState;
+        if (keyCode == KeyEvent.VK_1) {
+            spawnDrone = keyState;
+        }
+        if (keyCode == KeyEvent.VK_2) {
+            spawnFrigate = keyState;
+        }
+        if (keyCode == KeyEvent.VK_3) {
+            spawnCarrier = keyState;
         }
         if (keyCode == KeyEvent.VK_M && keyState) {
             soundManager.toggleMuted();
         }
         if (keyCode == KeyEvent.VK_TAB && keyState) {
-            if (currentLevel.getInitialTimeToNextWave() > 0) {
-                currentLevel.setInitialTimeToNextWave(0);
+            // Prematurely spawn next wave. Only supposed to work on the test level.
+            if (currentLevel.getTimeToNextWave() > 500) {
+                if (currentLevel instanceof TestLevel) {
+                    TestLevel testLevel = (TestLevel) currentLevel;
+                    testLevel.forceNextWave();
+                }
             }
         }
     }
@@ -243,8 +255,24 @@ public class GameEngine {
                         pauseTimer.restart();
                     }
                 }
-                if (spawnEnemies) {
-                    currentLevel.getActorSpawner().spawnFrigate(1);
+                if (spawnDrone) {
+                    if (spawnTimer.timePassed() >= 200) {
+                        currentLevel.getActorSpawner().spawnKamikazeDrone(1);
+                        spawnTimer.restart();
+                    }
+                }
+
+                if (spawnFrigate) {
+                    if (spawnTimer.timePassed() >= 200) {
+                        currentLevel.getActorSpawner().spawnFrigate(1);
+                        spawnTimer.restart();
+                    }
+                }
+                if (spawnCarrier) {
+                    if (spawnTimer.timePassed() >= 200) {
+                        currentLevel.getActorSpawner().spawnCarrier(1000, 200);
+                        spawnTimer.restart();
+                    }
                 }
                 break;
             }
@@ -281,7 +309,8 @@ public class GameEngine {
     private void resetLevel() {
         fadingCanvasItems.clear();
         rocketManager.clear();
-        currentLevel = new LevelTest(this, rocketManager, fadingCanvasItems);
+//        currentLevel = new Level1(this, rocketManager, fadingCanvasItems);
+        currentLevel = new TestLevel(this, rocketManager, fadingCanvasItems);
         soundManager.stop(Sound.GAME_MUSIC);
     }
 
@@ -311,7 +340,7 @@ public class GameEngine {
         resourceManager.add(Sound.BULLET_IMPACT, "audio/sfx/explosion03.wav");
         resourceManager.add(Sound.CURSOR, "audio/sfx/cursor.wav");
         resourceManager.add(Sound.CURSOR2, "audio/sfx/cursor2.wav");
-        
+
         resourceManager.add(Sound.AUTO_CANNON, "audio/sfx/fire.wav");
         resourceManager.add(Sound.LASER, "audio/sfx/laser3.wav");
         resourceManager.add(Sound.COLLISION, "audio/sfx/collision.wav");
@@ -323,13 +352,13 @@ public class GameEngine {
         resourceManager.add(Sound.PICKUP, "audio/sfx/pickup.wav");
         resourceManager.add(Sound.ACTIVATE_SHIELD, "audio/sfx/pickup.wav");
         resourceManager.add(Sound.HEALTH_PICKUP, "audio/sfx/health.wav");
-        
+
         resourceManager.add(Sound.MENU_MUSIC, "audio/music/menu.wav");
         resourceManager.add(Sound.GAME_MUSIC, "audio/music/ingame.wav");
         resourceManager.add(Sound.GAMEOVER, "audio/music/gameover.wav");
 
     }
-    
+
     private void loadSounds() throws OpenAL.ALError {
 
         soundManager.addSound(Sound.EXPLOSION, 5);              //to be played when an actor dies
@@ -339,10 +368,10 @@ public class GameEngine {
         soundManager.addSound(Sound.CURSOR, 5);                 //moving cursor on the menus
         soundManager.addSound(Sound.CURSOR2, 5);                //moving cursor on the menus
         soundManager.addSound(Sound.GAMEOVER, 1);
-        
+
         soundManager.addLoopingSound(Sound.GAME_MUSIC);         //game tune
         soundManager.addLoopingSound(Sound.MENU_MUSIC);
-        
+
         soundManager.addSound(Sound.EMP, 5);
         soundManager.addSound(Sound.PICKUP, 5);                 //picking up power up modules
         soundManager.addSound(Sound.POWERUP, 5);                //swapping between powerup modules
@@ -354,7 +383,7 @@ public class GameEngine {
         soundManager.addSound(Sound.BULLET_IMPACT, 5);          //sound of default weapon projectiles hitting enemy
         soundManager.addSound(Sound.HEALTH_PICKUP, 5);          //sound of picking up health orbs
     }
-    
+
     // Getters.
     public GUIHandler getGuiHandler() {
         return guiHandler;
@@ -383,23 +412,23 @@ public class GameEngine {
     public ResourceManager getResourceManager() {
         return resourceManager;
     }
-    
+
     public SoundManager getSoundManager() {
         return soundManager;
     }
-    
+
     // Setters.
     public void setSimulationState(SimulationState simulationState) {
         updateMusic(simulationState, this.simulationState);
         this.simulationState = simulationState;
     }
-    
-    private void updateMusic(SimulationState newState, SimulationState oldState){
 
-        switch(newState){
-            
+    private void updateMusic(SimulationState newState, SimulationState oldState) {
+
+        switch (newState) {
+
             case GAMEPLAY:
-                soundManager.play(Sound.GAME_MUSIC, new Vector(guiHandler.width/2, guiHandler.height/2, 0));
+                soundManager.play(Sound.GAME_MUSIC, new Vector(guiHandler.width / 2, guiHandler.height / 2, 0));
                 soundManager.stop(Sound.MENU_MUSIC);
                 break;
             case PAUSE_SCREEN:
@@ -407,14 +436,14 @@ public class GameEngine {
                 break;
             case MENU_SCREEN:
                 soundManager.stop(Sound.GAME_MUSIC);
-                if(oldState != SimulationState.CREDITS_SCREEN && oldState != SimulationState.HELP_SCREEN){
-                    soundManager.play(Sound.MENU_MUSIC, new Vector(guiHandler.width/2, guiHandler.height/2, 0));
+                if (oldState != SimulationState.CREDITS_SCREEN && oldState != SimulationState.HELP_SCREEN) {
+                    soundManager.play(Sound.MENU_MUSIC, new Vector(guiHandler.width / 2, guiHandler.height / 2, 0));
                 }
                 break;
             case DEATH_SCREEN:
                 soundManager.stop(Sound.GAME_MUSIC);
                 break;
         }
-        
+
     }
 }

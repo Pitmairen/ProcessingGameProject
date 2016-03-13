@@ -26,7 +26,7 @@ public abstract class Item extends Actor implements Drawable {
 
         currentHitPoints = 1;
         mass = 1;
-        engineThrust = 0.015;
+        engineThrust = 0.008;
         frictionCoefficient = 0.006;
     }
 

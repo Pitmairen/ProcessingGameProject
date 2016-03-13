@@ -6,9 +6,6 @@ import backend.main.FadingCanvasItemManager;
 import backend.main.Timer;
 import backend.resources.Image;
 import backend.resources.Sound;
-import processing.core.PApplet;
-import processing.core.PImage;
-import userinterface.GUIHandler;
 
 /**
  * Fires EMP Pulses
@@ -22,10 +19,10 @@ public class EMPCannon extends TacticalModule {
     private int weaponWidth = 4;
     private int[] weaponRGBA = new int[]{10, 10, 140, 255};
 
-    private double timeBetweenShots = 200;
+    private double timeBetweenShots = 2000;
     private Timer timer = new Timer();
     private FadingCanvasItemManager fadingCanvasItems;
-    
+
     /**
      * Constructor.
      */
@@ -36,13 +33,12 @@ public class EMPCannon extends TacticalModule {
         projectileDamage = 2;
 
         moduleImage = getImageFromResourceManager(Image.EMP_CANNON);
-
     }
 
     @Override
     public void draw() {
-        drawModule(moduleImage, 0, 15, defaultModuleWidth/2, defaultModuleHeight/2);
-        drawModule(moduleImage, 0, -15, defaultModuleWidth/2, defaultModuleHeight/2);
+        drawModule(moduleImage, 0, 15, defaultModuleWidth / 2, defaultModuleHeight / 2);
+        drawModule(moduleImage, 0, -15, defaultModuleWidth / 2, defaultModuleHeight / 2);
     }
 
     /**
@@ -52,15 +48,14 @@ public class EMPCannon extends TacticalModule {
     public void activate() {
 
         // Check if there is enough energy to create a pulse
-        if(owner.getCurrentEnergy() < 50){
+        if (owner.getCurrentEnergy() < 60) {
             return;
         }
-        
+
         if (timer.timePassed() >= timeBetweenShots) {   // Check fire rate.
-            
+
             owner.getGameEngine().getSoundManager().play(Sound.EMP, owner.getPosition());
 
-            
             EMPPulse pulse = new EMPPulse(owner.getPosition().copy(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(pulse);
@@ -68,8 +63,8 @@ public class EMPCannon extends TacticalModule {
             fadingCanvasItems.add(pulse);
 
             timer.restart();
-            
-            owner.removeEnergy(50);
+
+            owner.removeEnergy(60);
         }
     }
 

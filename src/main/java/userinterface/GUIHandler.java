@@ -101,8 +101,8 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void settings() {
-        fullScreen(P3D);
-        //size(1920, 1080, P3D);
+//        fullScreen(P3D);
+        size(1280, 960, P3D);
     }
 
     /**
@@ -188,6 +188,12 @@ public class GUIHandler extends PApplet {
      * Draws the HUD.
      */
     private void drawHUD() {
+
+        String nextWaveIn = "Next Wave: " + format4.format(gameEngine.getCurrentLevel().getTimeToNextWave() / 1000);
+        if (gameEngine.getCurrentLevel().isOnLastWave()) {
+            nextWaveIn = "Final Wave";
+        }
+
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         textFont(hudFont);
         textLeading(22);
@@ -195,11 +201,11 @@ public class GUIHandler extends PApplet {
         text("Level: " + gameEngine.getCurrentLevel().getLevelName()
                 + "\n"
                 + "\n" + "Current Wave: " + gameEngine.getCurrentLevel().getCurrentWave()
-                + "\n" + "Next Wave: " + format4.format(gameEngine.getCurrentLevel().getTimeToNextWave() / 1000)
+                + "\n" + nextWaveIn
                 + "\n"
                 + "\n" + "Kill chain: " + gameEngine.getCurrentLevel().getPlayer().getKillChain()
-                + "\n" + "Score: " + format1.format(gameEngine.getCurrentLevel().getPlayer().getScore()), 20, 20);
-        
+                + "\n" + "Score: " + format1.format(gameEngine.getCurrentLevel().getPlayer().getScore()),
+                20, 20);
     }
 
     /**
@@ -221,7 +227,8 @@ public class GUIHandler extends PApplet {
                 + "\n" + "posY: " + format5.format(gameEngine.getCurrentLevel().getPlayer().getPosition().getY())
                 + "\n" + "speed: " + format10.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().mag())
                 + "\n" + "heading: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getHeading().getAngle2D()) + " rad"
-                + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad", width - 200, 20);
+                + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad",
+                width - 200, 20);
     }
     
     /**
@@ -248,7 +255,8 @@ public class GUIHandler extends PApplet {
                 + "\n"
                 + "\n" + "Toggle Sounds: M"
                 + "\n" + "Debug HUD: K"
-                + "\n" + "Spawn ekstra enemies: I", width / 2, height / 2 - 100);
+                + "\n" + "Spawn ekstra enemies: 1, 2, 3",
+                width / 2, height / 2);
     }
 
     /**
@@ -258,10 +266,24 @@ public class GUIHandler extends PApplet {
         fill(pauseScreenRGBA[0], pauseScreenRGBA[1], pauseScreenRGBA[2]);
         textFont(menuFont);
         textAlign(CENTER, CENTER);
-        text("Credits",
-                width / 2, height / 2 - 100);
+        text("Game design"
+                + "\n" + "Kristian Honningsvag"
+                + "\n"
+                + "\n" + "Artwork"
+                + "\n" + "Tor-Martin Holen"
+                + "\n"
+                + "\n" + "Music"
+                + "\n" + "Kjetil Hammerseth"
+                + "\n"
+                + "\n" + "Sound effects"
+                + "\n" + "Alejandro Gronhaug"
+                + "\n"
+                + "\n" + "Programming"
+                + "\n" + "Kristian Honningsvag"
+                + "\n" + "Per Myren",
+                width / 2, height / 2);
     }
-    
+
     /**
      * Draws the death screen.
      */
@@ -286,7 +308,8 @@ public class GUIHandler extends PApplet {
         text("You Were Defeated By " + hitByName
                 + "\n" + "Press \"ENTER\" to return to Start Menu."
                 + "\n"
-                + "\n" + "Your score: " + gameEngine.getCurrentLevel().getPlayer().getScore(), width / 2, height / 2 - 100);
+                + "\n" + "Your score: " + gameEngine.getCurrentLevel().getPlayer().getScore(),
+                width / 2, height / 2 - 100);
     }
 
     /**

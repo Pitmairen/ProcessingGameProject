@@ -16,7 +16,8 @@ import userinterface.Drawable;
 public class Parts extends Item implements Drawable {
 
     // Color.
-    private int[] bodyRGBA = new int[]{10, 240, 10, 255};
+    private int[] bodyBackgroundRGBA = new int[]{10, 240, 10, 100};
+    private int[] bodyFillRGBA = new int[]{10, 240, 10, 180};
 
     /**
      * Constructor.
@@ -25,17 +26,19 @@ public class Parts extends Item implements Drawable {
 
         super(position, gameEngine);
 
-        hitBoxRadius = 5;
+        hitBoxRadius = 7;
         pullDistance = gameEngine.getCurrentLevel().getPlayer().getHitBoxRadius() * 8;
     }
 
     @Override
     public void draw() {
+
         // Draw main body.
-        guiHandler.strokeWeight(0);
-        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
+        guiHandler.strokeWeight(1);
+        guiHandler.stroke(bodyBackgroundRGBA[0], bodyBackgroundRGBA[1], bodyBackgroundRGBA[2], bodyBackgroundRGBA[3]);
+        guiHandler.fill(bodyFillRGBA[0], bodyFillRGBA[1], bodyFillRGBA[2], bodyFillRGBA[3]);
         guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
+        guiHandler.noFill();
     }
 
     @Override
@@ -43,7 +46,7 @@ public class Parts extends Item implements Drawable {
         currentHitPoints = 0;
         if (looter instanceof Player) {
             Player player = (Player) looter;
-            player.addHitPoints(1);
+            player.addHitPoints(5);
             gameEngine.getSoundManager().play(Sound.HEALTH_PICKUP, getPosition());
         }
     }

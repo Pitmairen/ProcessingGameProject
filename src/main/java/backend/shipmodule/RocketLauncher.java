@@ -6,8 +6,6 @@ import backend.main.RocketManager;
 import backend.main.Timer;
 import backend.resources.Image;
 import backend.resources.Sound;
-import processing.core.PApplet;
-import processing.core.PImage;
 
 /**
  * Fires rockets. Slow rate of fire and large damage.
@@ -36,10 +34,10 @@ public class RocketLauncher extends OffensiveModule {
         super("Rocket Launcher", owner);
 
         this.rocketManager = rocketManager;
-        
+
         launchVelocity = 0.6;
-        projectileDamage = 25;
-        
+        projectileDamage = 29;
+
         moduleImage = getImageFromResourceManager(Image.ROCKET_LAUNCHER);
     }
 
@@ -56,9 +54,9 @@ public class RocketLauncher extends OffensiveModule {
 
         // Wait for timer for each shot.
         if (timer.timePassed() >= timeBetweenShots) {
-            
+
             owner.getGameEngine().getSoundManager().play(Sound.MISSILE_LAUNCH, owner.getPosition());
-            
+
             Rocket rocket = new Rocket(owner.getPosition().copy(), this);
 
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(rocket);

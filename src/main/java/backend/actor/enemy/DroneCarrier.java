@@ -7,56 +7,53 @@ import backend.actor.Parts;
 import backend.main.GameEngine;
 import backend.main.Vector;
 import backend.resources.Sound;
-import backend.shipmodule.LightCannon;
+import backend.shipmodule.DroneLauncher;
 import java.util.ArrayList;
 import processing.core.PImage;
 import userinterface.Drawable;
 
 /**
- * Small and fast.
+ * A big and sturdy enemy that fights by launching drones at the player.
  *
  * @author Kristian Honningsvag.
  */
-public class Slayer extends Enemy implements Drawable {
+public class DroneCarrier extends Enemy implements Drawable {
 
-    // Color.
-    private int[] bodyRGBA = new int[]{200, 30, 30, 255};
+    // Colors.
     private int[] healthBarRGBA = new int[]{20, 200, 20, 255};
 
-    // Shape.
-    private int healthBarWidth = 30;
-    private int healthBarHeight = 7;
+    // Shapes.
+    private int healthBarWidth = 0;
+    private int healthBarHeight = 0;
 
-    //Image
+    // Images.
     private final PImage enemyGraphics;
 
     // Modules.
-    private LightCannon LightCannon = new LightCannon(this);
+    private DroneLauncher DroneLauncher = new DroneLauncher(this);
 
     /**
      * Constructor.
      */
-    public Slayer(Vector position, GameEngine gameEngine) {
+    public DroneCarrier(Vector position, GameEngine gameEngine) {
 
         super(position, gameEngine);
 
-        name = "Slayer";
-        engineThrust = 0.02f;
-        frictionCoefficient = 0.04f;
-        hitBoxRadius = 25;
-        bounceModifier = 0.6f;
-        maxHitPoints = 10;
-        currentHitPoints = 10;
-        mass = 50;
-        collisionDamageToOthers = 10;
-        attackDelay = 2000;
+        name = "Drone Carrier";
+        engineThrust = 0.2f;
+        frictionCoefficient = 0.29f;
+        hitBoxRadius = 75;
+        bounceModifier = 0.4f;
+        maxHitPoints = 300;
+        currentHitPoints = 300;
+        mass = 300;
+        collisionDamageToOthers = 20;
+        attackDelay = 200;
         killValue = 1;
 
-        offensiveModules.add(LightCannon);
-        currentOffensiveModule = LightCannon;
-
-        enemyGraphics = guiHandler.loadImage("Actors/DroneV3Sml.png");
-
+        offensiveModules.add(DroneLauncher);
+        currentOffensiveModule = DroneLauncher;
+        enemyGraphics = guiHandler.loadImage("Actors/DroneV2Lrg.png");
         healthBarWidth = (int) hitBoxRadius * 2;
         healthBarHeight = (int) (healthBarWidth * 0.1);
     }
@@ -65,12 +62,8 @@ public class Slayer extends Enemy implements Drawable {
     public void draw() {
 
         // Draw main body.
-//        guiHandler.strokeWeight(0);
-//        guiHandler.stroke(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-//        guiHandler.fill(bodyRGBA[0], bodyRGBA[1], bodyRGBA[2]);
-//        guiHandler.ellipse((float) this.getPosition().getX(), (float) this.getPosition().getY(), (float) hitBoxRadius * 2, (float) hitBoxRadius * 2);
         guiHandler.tint(255);
-        guiHandler.image(enemyGraphics, (float) this.getPosition().getX() - 25, (float) this.getPosition().getY() - 25);
+        guiHandler.image(enemyGraphics, (float) this.getPosition().getX() - 75, (float) this.getPosition().getY() - 75);
 
         // Draw modules.
         if (currentOffensiveModule != null) {
@@ -83,7 +76,6 @@ public class Slayer extends Enemy implements Drawable {
         // Draw small hud below actor.
         guiHandler.pushMatrix();
         guiHandler.translate((float) this.getPosition().getX() - (healthBarWidth / 2), (float) this.getPosition().getY() + (float) hitBoxRadius + healthBarHeight / 2);
-
         // Health bar.
         float healthPercentage = (float) currentHitPoints / (float) maxHitPoints;
         if (healthPercentage >= 0.66) {
@@ -99,13 +91,12 @@ public class Slayer extends Enemy implements Drawable {
         guiHandler.rect((float) 0, 0, healthBarWidth, healthBarHeight, 6);
         guiHandler.fill(healthBarRGBA[0], healthBarRGBA[1], healthBarRGBA[2]);
         guiHandler.rect(0, 0, healthBarWidth * healthPercentage, healthBarHeight, 3);
-
         guiHandler.popMatrix();
     }
 
     @Override
     public void die() {
-        gameEngine.getSoundManager().play(Sound.EXPLOSION, getPosition());
+        gameEngine.getSoundManager().play(Sound.BOSS_DEATH, getPosition());
         gameEngine.getExplosionManager().explodeEnemy(this);
         gameEngine.getCurrentLevel().getPlayer().increaseScore(this.killValue);
         gameEngine.getCurrentLevel().getPlayer().increaseKillChain(1);
