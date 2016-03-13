@@ -257,6 +257,7 @@ public class GameEngine {
                 }
                 break;
             }
+            case CREDITS_SCREEN:
             case HELP_SCREEN: {
                 if (enter) {
                     setSimulationState(SimulationState.MENU_SCREEN);

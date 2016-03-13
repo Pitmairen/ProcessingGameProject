@@ -148,6 +148,11 @@ public class GUIHandler extends PApplet {
                 drawDeathScreen();
                 break;
             }
+            case CREDITS_SCREEN: {
+                gameEngine.getFadingCanvas().draw();
+                drawCreditsScreen();
+                break;
+            }
         }
         if (debugMode) {
             drawDebugHud();
@@ -246,7 +251,17 @@ public class GUIHandler extends PApplet {
                 + "\n" + "Spawn ekstra enemies: I", width / 2, height / 2 - 100);
     }
 
-
+    /**
+     * Draws the credits screen.
+     */
+    private void drawCreditsScreen() {
+        fill(pauseScreenRGBA[0], pauseScreenRGBA[1], pauseScreenRGBA[2]);
+        textFont(menuFont);
+        textAlign(CENTER, CENTER);
+        text("Credits",
+                width / 2, height / 2 - 100);
+    }
+    
     /**
      * Draws the death screen.
      */
@@ -297,6 +312,10 @@ public class GUIHandler extends PApplet {
         mainMenu.addItem("Key Bindings", () -> {
             mainMenu.hide();
             gameEngine.setSimulationState(SimulationState.HELP_SCREEN);
+        });
+        mainMenu.addItem("Credits", () -> {
+            mainMenu.hide();
+            gameEngine.setSimulationState(SimulationState.CREDITS_SCREEN);
         });
         mainMenu.addItem("Quit", () -> {
             exit();
