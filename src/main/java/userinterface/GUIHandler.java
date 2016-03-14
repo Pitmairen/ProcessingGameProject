@@ -102,6 +102,8 @@ public class GUIHandler extends PApplet {
     @Override
     public void settings() {
 //        fullScreen(P3D);
+//        fullScreen(P3D, 2);
+//        size(1920, 1080, P3D);
         size(1280, 960, P3D);
     }
 
@@ -110,7 +112,7 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void draw() {
-        
+
         gameEngine.run(timer.timePassed());
         timer.restart();
 
@@ -248,7 +250,7 @@ public class GUIHandler extends PApplet {
         text("Movement: W, A, S, D"
                 + "\n" + "Aiming: Mouse"
                 + "\n" + "Fire: LMB"
-                + "\n" + "Shield: E"
+                + "\n" + "Toggle shield: E"
                 + "\n" + "EMP: SPACE"
                 + "\n" + "Change weapon: Q"
                 + "\n" + "Menu: ESC"

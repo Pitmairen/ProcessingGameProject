@@ -23,7 +23,7 @@ public class Player extends Actor implements Drawable {
     // Color.
     private int[] bodyRGBA = new int[]{0, 70, 200, 255};
     private int[] healthBarRGBA = new int[]{20, 200, 20, 255};
-    private int[] energyBarRGBA = new int[]{20, 20, 200, 255};
+    private int[] energyBarRGBA = new int[]{0, 150, 255, 255};
 
     // Shape.
     private int healthBarWidth = 50;

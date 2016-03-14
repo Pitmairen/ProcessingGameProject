@@ -52,6 +52,7 @@ public class GameEngine {
     private boolean spawnFrigate = false;
     private boolean spawnDrone = false;
     private boolean spawnCarrier = false;
+    private boolean escape = false;
 
     /**
      * Constructor.
@@ -188,6 +189,7 @@ public class GameEngine {
         }
         if (keyCode == KeyEvent.VK_ESCAPE) {
             pause = keyState;
+            escape = keyState;
         }
         if (keyCode == KeyEvent.VK_ENTER) {
             enter = keyState;
@@ -284,14 +286,14 @@ public class GameEngine {
             }
             case CREDITS_SCREEN:
             case HELP_SCREEN: {
-                if (enter) {
+                if (escape) {
                     setSimulationState(SimulationState.MENU_SCREEN);
                     guiHandler.showMainMenu();
                 }
                 break;
             }
             case HELP_SCREEN_PAUSED: {
-                if (enter) {
+                if (escape) {
                     setSimulationState(SimulationState.PAUSE_SCREEN);
                     guiHandler.showPauseMenu();
                 }
