@@ -382,6 +382,12 @@ public class GameEngine {
         soundManager.addSound(Sound.ACTIVATE_SHIELD, 1);       //activate the shield
         soundManager.addSound(Sound.BULLET_IMPACT, 5);          //sound of default weapon projectiles hitting enemy
         soundManager.addSound(Sound.HEALTH_PICKUP, 5);          //sound of picking up health orbs
+        
+        
+        soundManager.setVolume(Sound.GAME_MUSIC, 0.7f);
+        soundManager.setVolume(Sound.BULLET_IMPACT, 0.2f);
+
+
     }
 
     // Getters.

@@ -73,6 +73,18 @@ public class SourcePool implements Source {
         al.setPosision(sources.get(currentPosition), x, y, z);
     }
     
+    /**
+     * Set the volume of the source
+     * 
+     * @param volume the volume (range: 0.0 - 1.0)
+     */
+    @Override
+    public void setVolume(float volume){
+        for(int i : sources){
+            al.setGain(i, volume);
+        }
+    }
+    
     private void createPool(int bufferID, int count) throws OpenAL.ALError {
         for (int i = 0; i < count; i++) {
             sources.add(al.addSource(bufferID, false));

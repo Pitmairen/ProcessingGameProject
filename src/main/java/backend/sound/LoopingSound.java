@@ -58,5 +58,14 @@ public class LoopingSound implements Source {
     public void setPosition(float x, float y, float z) {
         al.setPosision(sourceID, x, y, z);
     }
-
+    
+    /**
+     * Set the volume of the source
+     * 
+     * @param volume the volume (range: 0.0 - 1.0)
+     */
+    @Override
+    public void setVolume(float volume){
+        al.setGain(sourceID, volume);
+    }
 }

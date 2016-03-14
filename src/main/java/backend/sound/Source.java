@@ -33,4 +33,11 @@ public interface Source {
      * @param z z-position (range: -1.0 - 1.0)
      */
     public void setPosition(float x, float y, float z);
+    
+    /**
+     * Set the volume of the source
+     * 
+     * @param volume the volume (range: 0.0 - 1.0)
+     */
+    public void setVolume(float volume);
 }

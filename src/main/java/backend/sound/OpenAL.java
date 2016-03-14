@@ -6,6 +6,7 @@ import com.jogamp.openal.util.ALut;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -20,6 +21,9 @@ public class OpenAL {
     // List of all the loaded buffers. 
     // A buffer coresponds to a single file.
     private final ArrayList<Integer> buffers = new ArrayList<>();
+    
+    // Stores the individual gain value for each source 
+    private final HashMap<Integer, Float> sourceGain = new HashMap<>();
 
     // List of all the loaded sources
     // A source can be played and make sound. A source is connected 
@@ -102,6 +106,17 @@ public class OpenAL {
         al.alSourcefv(sourceId, AL.AL_VELOCITY, values, 0);
     }
 
+    /**
+     * Set the gain of the source
+     *
+     * @param sourceId the source ID
+     * @param gain the gain value (range: 0.0 - 1.0)
+     */
+    public void setGain(int sourceId, float gain) {
+        al.alSourcef(sourceId, AL.AL_GAIN, gain);
+        sourceGain.put(sourceId, gain);
+    }
+    
     /**
      * Create a new buffer.
      *
@@ -192,7 +207,7 @@ public class OpenAL {
     public void setGlobalGain(float value){
         globalGain = value;
         for(int i : sources){
-            al.alSourcef(i, AL.AL_GAIN, value);
+            al.alSourcef(i, AL.AL_GAIN, value * sourceGain.getOrDefault(i, 1.0f));
         }
     }
     
@@ -205,7 +220,7 @@ public class OpenAL {
             super(msg);
         }
     }
-
+    
     private void init() {
 
         ALut.alutInit();
@@ -236,6 +251,8 @@ public class OpenAL {
         }
         buffers.clear();
 
+        sourceGain.clear();
+        
         ALut.alutExit();
     }
 

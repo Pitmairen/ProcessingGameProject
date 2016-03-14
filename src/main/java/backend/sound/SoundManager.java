@@ -76,6 +76,16 @@ public class SoundManager {
         float y = (2 * (float) pos.getY() - gui.height) / gui.height;
         sounds.get(soundID).setPosition(x, y, 0f);
     }
+
+    /**
+     * Sets the specified sound's volume.
+     *
+     * @param soundID the sound ID
+     * @param volume the volume of the sound. (range: 0.0 -> 1.0)
+     */
+    public void setVolume(Sound soundID, float volume) {
+        sounds.get(soundID).setVolume(volume);
+    }
     
     /**
      * Add a new sound to the manager
