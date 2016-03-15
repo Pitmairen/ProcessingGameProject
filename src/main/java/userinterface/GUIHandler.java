@@ -40,6 +40,9 @@ public class GUIHandler extends PApplet {
     // Death screen.
     private int[] deathScreenRGBA = new int[]{255, 25, 25, 255};
 
+    // Victory screen.
+    private int[] victoryScreenRGBA = new int[]{80, 150, 40, 255};
+
     // Decimal formats.
     private DecimalFormat format1 = new DecimalFormat("0");
     private DecimalFormat format2 = new DecimalFormat("00");
@@ -148,6 +151,13 @@ public class GUIHandler extends PApplet {
                 drawOuterWalls();
                 drawActors();
                 drawDeathScreen();
+                break;
+            }
+            case VICTORY_SCREEN: {
+                gameEngine.getFadingCanvas().draw();
+                drawOuterWalls();
+                drawActors();
+                drawVictoryScreen();
                 break;
             }
             case CREDITS_SCREEN: {
@@ -309,6 +319,28 @@ public class GUIHandler extends PApplet {
         textFont(menuFont);
         textAlign(CENTER, CENTER);
         text("You Were Defeated By " + hitByName
+                + "\n" + "Press \"ENTER\" to return to Start Menu."
+                + "\n"
+                + "\n" + "Your score: " + gameEngine.getCurrentLevel().getPlayer().getScore(),
+                width / 2, height / 2 - 100);
+    }
+
+    /**
+     * Draws the death screen.
+     */
+    private void drawVictoryScreen() {
+
+        // Tint the background.
+        stroke(0);
+        strokeWeight(0);
+        fill(0, 80);
+        rect(0, 0, width, height);
+
+        // Text.
+        fill(victoryScreenRGBA[0], victoryScreenRGBA[1], victoryScreenRGBA[2]);
+        textFont(menuFont);
+        textAlign(CENTER, CENTER);
+        text("Victory achieved"
                 + "\n" + "Press \"ENTER\" to return to Start Menu."
                 + "\n"
                 + "\n" + "Your score: " + gameEngine.getCurrentLevel().getPlayer().getScore(),

@@ -13,6 +13,7 @@ public enum SimulationState {
     GAMEPLAY,
     PAUSE_SCREEN,
     DEATH_SCREEN,
+    VICTORY_SCREEN,
     CREDITS_SCREEN,
     
 }

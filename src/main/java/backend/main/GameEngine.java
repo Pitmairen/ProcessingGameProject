@@ -109,7 +109,8 @@ public class GameEngine {
                 actAll(timePassed);
                 break;
             }
-            case DEATH_SCREEN: {
+            case DEATH_SCREEN:
+            case VICTORY_SCREEN: {
                 cleanup(timePassed);
                 actAll(timePassed);
                 break;
@@ -273,6 +274,9 @@ public class GameEngine {
                         spawnTimer.restart();
                     }
                 }
+                if (currentLevel.isOnLastWave() && currentLevel.getEnemies().isEmpty()) {
+                    simulationState = SimulationState.VICTORY_SCREEN;
+                }
                 break;
             }
 
@@ -284,6 +288,43 @@ public class GameEngine {
                 }
                 break;
             }
+
+            case VICTORY_SCREEN: {
+                if (up) {
+                    currentLevel.getPlayer().accelerate("up", timePassed);
+                }
+                if (down) {
+                    currentLevel.getPlayer().accelerate("down", timePassed);
+                }
+                if (left) {
+                    currentLevel.getPlayer().accelerate("left", timePassed);
+                }
+                if (right) {
+                    currentLevel.getPlayer().accelerate("right", timePassed);
+                }
+                if (offensiveModule) {
+                    currentLevel.getPlayer().activateOffensiveModule();
+                }
+                if (defensiveModule) {
+                    currentLevel.getPlayer().activateDefensiveModule();
+                }
+                if (tacticalModule) {
+                    currentLevel.getPlayer().activateTacticalModule();
+                }
+                if (swapOffensive) {
+                    currentLevel.getPlayer().swapOffensiveModule();
+                }
+                if (swapDefensive) {
+                    currentLevel.getPlayer().swapDefensiveModule();
+                }
+                if (enter) {
+                    resetLevel();
+                    setSimulationState(SimulationState.MENU_SCREEN);
+                    guiHandler.showMainMenu();
+                }
+                break;
+            }
+
             case CREDITS_SCREEN:
             case HELP_SCREEN: {
                 if (escape) {
@@ -309,8 +350,8 @@ public class GameEngine {
         fadingCanvasItems.clear();
         rocketManager.clear();
 //        currentLevel = new Level1(this, rocketManager, fadingCanvasItems);
-        currentLevel = new Demonstration(this, rocketManager, fadingCanvasItems);
-//        currentLevel = new TestLevel(this, rocketManager, fadingCanvasItems);
+//        currentLevel = new Demonstration(this, rocketManager, fadingCanvasItems);
+        currentLevel = new TestLevel(this, rocketManager, fadingCanvasItems);
         soundManager.stop(Sound.GAME_MUSIC);
     }
 
