@@ -242,14 +242,19 @@ public class GUIHandler extends PApplet {
                 + "\n" + "course: " + format7.format(gameEngine.getCurrentLevel().getPlayer().getSpeedT().getAngle2D()) + " rad",
                 width - 200, 20);
     }
-    
+
     /**
      * Draws the image for the start screen
      */
-    private void drawTitleScreenImage(){
+    private void drawTitleScreenImage() {
         image(titleScreenImage, 0, 0, width, height);
+
+        fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
+        textFont(debugHUDFont);
+        textAlign(LEFT, BOTTOM);
+        text("Version: 20160315-alpha", 5, height - 5);
     }
-    
+
     /**
      * Draws the help screen.
      */
