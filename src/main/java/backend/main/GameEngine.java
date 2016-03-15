@@ -16,6 +16,7 @@ import userinterface.GUIHandler;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
+import sun.audio.AudioPlayer;
 
 /**
  * Handles the simulation.
@@ -275,7 +276,7 @@ public class GameEngine {
                     }
                 }
                 if (currentLevel.isOnLastWave() && currentLevel.getEnemies().isEmpty()) {
-                    simulationState = SimulationState.VICTORY_SCREEN;
+                    setSimulationState(SimulationState.VICTORY_SCREEN);
                 }
                 break;
             }
@@ -489,6 +490,10 @@ public class GameEngine {
                 break;
             case DEATH_SCREEN:
                 soundManager.stop(Sound.GAME_MUSIC);
+                break;
+            case VICTORY_SCREEN:
+                soundManager.stop(Sound.GAME_MUSIC);
+                soundManager.play(Sound.GAMEOVER, currentLevel.getPlayer().getPosition());
                 break;
         }
 
