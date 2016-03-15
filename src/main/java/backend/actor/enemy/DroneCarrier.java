@@ -8,6 +8,7 @@ import backend.main.GameEngine;
 import backend.main.Vector;
 import backend.resources.Sound;
 import backend.shipmodule.DroneLauncher;
+import backend.shipmodule.Shield.ShieldActor;
 import java.util.ArrayList;
 import processing.core.PImage;
 import userinterface.Drawable;
@@ -139,6 +140,8 @@ public class DroneCarrier extends Enemy implements Drawable {
                         // Crashed into some other enemy.
                         elasticColision(this, target, timePassed);
                     }
+                } else if (target instanceof ShieldActor) {
+                    // Shields only interacts with projectiles.
                 } else {
                     // Crashed into some other actor.
                     elasticColision(this, target, timePassed);

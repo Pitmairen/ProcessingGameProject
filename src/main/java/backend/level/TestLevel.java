@@ -43,25 +43,29 @@ public class TestLevel extends Level {
                 switch (currentWave) {
 
                     case 1: {
-                        actorSpawner.spawnRocketLauncher(300, 400);
+                        actorSpawner.spawnRocketLauncher(250, 400);
                         setTimeToNextWave(999999);
                         break;
                     }
 
                     case 2: {
-                        actorSpawner.spawnSeekerLauncher(300, 400);
+                        actorSpawner.spawnSeekerLauncher(250, 400);
                         setTimeToNextWave(999999);
                         break;
                     }
 
                     case 3: {
-                        actorSpawner.spawnLaser(300, 400);
+                        actorSpawner.spawnLaser(250, 400);
                         setTimeToNextWave(999999);
                         break;
                     }
 
                     case 4: {
-                        actorSpawner.spawnEMP(300, 400);
+                        actorSpawner.spawnEMP(250, 400);
+                        setTimeToNextWave(999999);
+                        break;
+                    }
+                    case 5: {
                         onLastWave = true;
                         break;
                     }

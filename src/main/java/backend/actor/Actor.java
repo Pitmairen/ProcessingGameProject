@@ -96,7 +96,7 @@ public abstract class Actor implements Drawable {
         checkWallCollisions(timePassed);
         checkActorCollisions(timePassed);
         if(getCurrentEnergy() < getMaxEnergy()){
-            currentEnergy += 0.2;
+            currentEnergy += 0.15;
         }
     }
 

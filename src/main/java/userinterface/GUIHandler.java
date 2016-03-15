@@ -270,7 +270,7 @@ public class GUIHandler extends PApplet {
                 + "\n" + "Change weapon: Q"
                 + "\n" + "Menu: ESC"
                 + "\n"
-                + "\n" + "Spawn ekstra enemies: 1, 2, 3"
+                + "\n" + "Spawn extra enemies: 1, 2, 3"
                 + "\n" + "Force next wave: TAB"
                 + "\n" + "Toggle music: N"
                 + "\n" + "Mute sounds: M"

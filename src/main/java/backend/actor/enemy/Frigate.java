@@ -8,6 +8,7 @@ import backend.main.GameEngine;
 import backend.main.Vector;
 import backend.resources.Sound;
 import backend.shipmodule.LightCannon;
+import backend.shipmodule.Shield;
 import java.util.ArrayList;
 import processing.core.PImage;
 import userinterface.Drawable;
@@ -141,6 +142,8 @@ public class Frigate extends Enemy implements Drawable {
                         // Crashed into some other enemy.
                         elasticColision(this, target, timePassed);
                     }
+                } else if (target instanceof Shield.ShieldActor) {
+                    // Shields only interacts with projectiles.
                 } else {
                     // Crashed into some other actor.
                     elasticColision(this, target, timePassed);

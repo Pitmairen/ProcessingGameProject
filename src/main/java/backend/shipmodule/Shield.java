@@ -1,6 +1,7 @@
 package backend.shipmodule;
 
 import backend.actor.Actor;
+import backend.actor.projectile.Projectile;
 import backend.main.GameEngine;
 import backend.main.Timer;
 import backend.main.Vector;
@@ -96,8 +97,11 @@ public class Shield extends DefensiveModule {
             this.getPosition().set(owner.getPosition().copy());
 
             // The shield takes energy from the owner
-            owner.removeEnergy(0.4);
+            owner.removeEnergy(0.2);
             if (owner.getCurrentEnergy() <= 0) {
+                this.die();
+            }
+            if (owner.getCurrentHitPoints() <= 0) {
                 this.die();
             }
         }
@@ -133,7 +137,10 @@ public class Shield extends DefensiveModule {
 
         @Override
         public void collision(Actor actor) {
-            removeHitPoints(actor.getCollisionDamageToOthers());
+            if (actor instanceof Projectile) {
+                // Shields only interacts with projectiles.
+                removeHitPoints(actor.getCollisionDamageToOthers());
+            }
         }
 
         /**
