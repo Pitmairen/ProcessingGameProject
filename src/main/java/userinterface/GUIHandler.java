@@ -267,7 +267,8 @@ public class GUIHandler extends PApplet {
                 + "\n"
                 + "\n" + "Spawn ekstra enemies: 1, 2, 3"
                 + "\n" + "Force next wave: TAB"
-                + "\n" + "Toggle Sounds: M"
+                + "\n" + "Toggle music: N"
+                + "\n" + "Mute sounds: M"
                 + "\n" + "Debug HUD: K",
                 width / 2, height / 2);
     }

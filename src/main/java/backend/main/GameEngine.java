@@ -16,7 +16,6 @@ import userinterface.GUIHandler;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
-import sun.audio.AudioPlayer;
 
 /**
  * Handles the simulation.
@@ -54,6 +53,11 @@ public class GameEngine {
     private boolean spawnDrone = false;
     private boolean spawnCarrier = false;
     private boolean escape = false;
+
+    // Sound levels.
+    private float menuMusicLevel = 0.5f;
+    private float gameMusicLevel = 0.4f;
+    private boolean musicMuted = false;
 
     /**
      * Constructor.
@@ -204,6 +208,17 @@ public class GameEngine {
         }
         if (keyCode == KeyEvent.VK_3) {
             spawnCarrier = keyState;
+        }
+        if (keyCode == KeyEvent.VK_N && keyState) {
+            if (musicMuted) {
+                soundManager.setVolume(Sound.GAME_MUSIC, gameMusicLevel);
+                soundManager.setVolume(Sound.MENU_MUSIC, menuMusicLevel);
+                musicMuted = false;
+            } else {
+                soundManager.setVolume(Sound.GAME_MUSIC, 0f);
+                soundManager.setVolume(Sound.MENU_MUSIC, 0f);
+                musicMuted = true;
+            }
         }
         if (keyCode == KeyEvent.VK_M && keyState) {
             soundManager.toggleMuted();
@@ -409,27 +424,26 @@ public class GameEngine {
         soundManager.addSound(Sound.COLLISION, 1);              //player bumping into objects
         soundManager.addSound(Sound.CURSOR, 5);                 //moving cursor on the menus
         soundManager.addSound(Sound.CURSOR2, 5);                //moving cursor on the menus
+        soundManager.setVolume(Sound.CURSOR2, 0.6f);
         soundManager.addSound(Sound.GAMEOVER, 1);
-
+        soundManager.setVolume(Sound.GAMEOVER, 0.7f);
         soundManager.addLoopingSound(Sound.GAME_MUSIC);         //game tune
+        soundManager.setVolume(Sound.GAME_MUSIC, gameMusicLevel);
         soundManager.addLoopingSound(Sound.MENU_MUSIC);
-
+        soundManager.setVolume(Sound.MENU_MUSIC, menuMusicLevel);
         soundManager.addSound(Sound.EMP, 5);
         soundManager.addSound(Sound.PICKUP, 5);                 //picking up power up modules
+        soundManager.setVolume(Sound.PICKUP, 0.6f);
         soundManager.addSound(Sound.POWERUP, 5);                //swapping between powerup modules
-        soundManager.addSound(Sound.BOSS_DEATH, 5);            //to be played when a large drone dies
+        soundManager.addSound(Sound.BOSS_DEATH, 5);             //to be played when a large drone dies
         soundManager.addSound(Sound.GAMEOVER, 5);               //gameover tune, plays when player dies
         soundManager.addSound(Sound.MISSILE_LAUNCH, 5);         //missile regular/heat seeking launching
         soundManager.addSound(Sound.MISSILE_EXPLOSION, 5);      //exploding missile
-        soundManager.addSound(Sound.ACTIVATE_SHIELD, 1);       //activate the shield
+        soundManager.addSound(Sound.ACTIVATE_SHIELD, 1);        //activate the shield
         soundManager.addSound(Sound.BULLET_IMPACT, 5);          //sound of default weapon projectiles hitting enemy
+        soundManager.setVolume(Sound.BULLET_IMPACT, 0.3f);
         soundManager.addSound(Sound.HEALTH_PICKUP, 5);          //sound of picking up health orbs
-        
-        
-        soundManager.setVolume(Sound.GAME_MUSIC, 0.7f);
-        soundManager.setVolume(Sound.BULLET_IMPACT, 0.2f);
-
-
+        soundManager.setVolume(Sound.HEALTH_PICKUP, 0.8f);
     }
 
     // Getters.

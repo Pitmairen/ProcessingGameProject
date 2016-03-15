@@ -23,8 +23,8 @@ public class DroneCarrier extends Enemy implements Drawable {
     private int[] healthBarRGBA = new int[]{20, 200, 20, 255};
 
     // Shapes.
-    private int healthBarWidth = 0;
-    private int healthBarHeight = 0;
+    private int healthBarWidth;
+    private int healthBarHeight;
 
     // Images.
     private final PImage enemyGraphics;
@@ -49,7 +49,7 @@ public class DroneCarrier extends Enemy implements Drawable {
         mass = 300;
         collisionDamageToOthers = 20;
         attackDelay = 200;
-        killValue = 1;
+        killValue = 57;
 
         offensiveModules.add(DroneLauncher);
         currentOffensiveModule = DroneLauncher;

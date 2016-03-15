@@ -23,8 +23,8 @@ public class Frigate extends Enemy implements Drawable {
     private int[] healthBarRGBA = new int[]{20, 200, 20, 255};
 
     // Shapes.
-    private int healthBarWidth = 30;
-    private int healthBarHeight = 9;
+    private int healthBarWidth;
+    private int healthBarHeight;
 
     // Images.
     private final PImage enemyGraphics;
@@ -49,7 +49,7 @@ public class Frigate extends Enemy implements Drawable {
         mass = 50;
         collisionDamageToOthers = 10;
         attackDelay = 2000;
-        killValue = 1;
+        killValue = 7;
 
         offensiveModules.add(LightCannon);
         currentOffensiveModule = LightCannon;
