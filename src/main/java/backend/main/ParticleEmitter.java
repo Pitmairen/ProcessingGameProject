@@ -125,6 +125,16 @@ public class ParticleEmitter {
             }
         }
     }
+    
+    /**
+     * Kills all the live particles.
+     */
+    public void killAllParticles(){
+        for (int i = 0; i < this.particleCount; i++) {
+            this.particles[i].kill();
+        }
+        this.particleCount = 0;
+    }
 
     /**
      * Draws the particles onto the canvas
@@ -219,6 +229,13 @@ public class ParticleEmitter {
          */
         public boolean isAlive() {
             return this.life > 0;
+        }
+        
+        /**
+         * Kills the particle
+         */
+        public void kill(){
+            this.life = 0;
         }
 
     }

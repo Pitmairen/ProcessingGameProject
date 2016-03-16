@@ -100,4 +100,11 @@ public class ExplosionManager implements FadingCanvas.Drawable {
                 new PVector((float) player.getPosition().getX(), (float) player.getPosition().getY()), player.getBackgroundColor(), 30f, 20f, 2f, 2f);
     }
 
+    
+    /**
+     * Clears all the particles used in the explosions
+     */
+    public void clear(){
+        this.particles.killAllParticles();
+    }
 }
