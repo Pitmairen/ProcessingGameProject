@@ -366,8 +366,8 @@ public class GameEngine {
         fadingCanvasItems.clear();
         rocketManager.clear();
 //        currentLevel = new Level1(this, rocketManager, fadingCanvasItems);
-//        currentLevel = new Demonstration(this, rocketManager, fadingCanvasItems);
-        currentLevel = new TestLevel(this, rocketManager, fadingCanvasItems);
+        currentLevel = new Demonstration(this, rocketManager, fadingCanvasItems);
+//        currentLevel = new TestLevel(this, rocketManager, fadingCanvasItems);
         soundManager.stop(Sound.GAME_MUSIC);
     }
 

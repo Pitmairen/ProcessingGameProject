@@ -49,22 +49,29 @@ public class Demonstration extends Level {
                         actorSpawner.spawnEMP(150, 300);
 
                         actorSpawner.spawnCarrier(1000, 400);
-                        actorSpawner.spawnFrigate(4);
-                        actorSpawner.spawnKamikazeDrone(2);
-                        setTimeToNextWave(10000);
+                        actorSpawner.spawnFrigate(2);
+                        actorSpawner.spawnKamikazeDrone(1);
+                        setTimeToNextWave(12000);
                         break;
                     }
 
                     case 2: {
-                        actorSpawner.spawnFrigate(4);
-                        actorSpawner.spawnKamikazeDrone(2);
-                        setTimeToNextWave(5000);
+                        actorSpawner.spawnFrigate(3);
+                        actorSpawner.spawnKamikazeDrone(1);
+                        setTimeToNextWave(9000);
                         break;
                     }
 
                     case 3: {
-                        actorSpawner.spawnFrigate(2);
-                        actorSpawner.spawnKamikazeDrone(2);
+                        actorSpawner.spawnFrigate(3);
+                        actorSpawner.spawnKamikazeDrone(1);
+                        setTimeToNextWave(9000);
+                        break;
+                    }
+
+                    case 4: {
+                        actorSpawner.spawnFrigate(3);
+                        actorSpawner.spawnKamikazeDrone(1);
                         onLastWave = true;
                         break;
                     }

@@ -144,12 +144,14 @@ public class GUIHandler extends PApplet {
                 gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
                 drawActors();
+                tintScreen();
                 break;
             }
             case DEATH_SCREEN: {
                 gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
                 drawActors();
+                tintScreen();
                 drawDeathScreen();
                 break;
             }
@@ -157,6 +159,7 @@ public class GUIHandler extends PApplet {
                 gameEngine.getFadingCanvas().draw();
                 drawOuterWalls();
                 drawActors();
+                tintScreen();
                 drawVictoryScreen();
                 break;
             }
@@ -256,6 +259,17 @@ public class GUIHandler extends PApplet {
     }
 
     /**
+     * Tints the screen.
+     */
+    private void tintScreen() {
+        // Tint the background.
+        stroke(0);
+        strokeWeight(0);
+        fill(0, 80);
+        rect(0, 0, width, height);
+    }
+
+    /**
      * Draws the help screen.
      */
     private void drawHelpScreen() {
@@ -314,12 +328,6 @@ public class GUIHandler extends PApplet {
             hitByName = lastHitBy.getName();
         }
 
-        // Tint the background.
-        stroke(0);
-        strokeWeight(0);
-        fill(0, 80);
-        rect(0, 0, width, height);
-
         // Text.
         fill(deathScreenRGBA[0], deathScreenRGBA[1], deathScreenRGBA[2]);
         textFont(menuFont);
@@ -335,12 +343,6 @@ public class GUIHandler extends PApplet {
      * Draws the death screen.
      */
     private void drawVictoryScreen() {
-
-        // Tint the background.
-        stroke(0);
-        strokeWeight(0);
-        fill(0, 80);
-        rect(0, 0, width, height);
 
         // Text.
         fill(victoryScreenRGBA[0], victoryScreenRGBA[1], victoryScreenRGBA[2]);
