@@ -95,6 +95,19 @@ public class GameEngine {
     }
 
     /**
+     * Creates the currentLevel.
+     */
+    private void resetLevel() {
+        fadingCanvasItems.clear();
+        rocketManager.clear();
+        explosionManager.clear();
+//        currentLevel = new Level1(this, rocketManager, fadingCanvasItems);
+        currentLevel = new Demonstration(this, rocketManager, fadingCanvasItems);
+//        currentLevel = new TestLevel(this, rocketManager, fadingCanvasItems);
+        soundManager.stop(Sound.GAME_MUSIC);
+    }
+
+    /**
      * Ends the current game and resets the level.
      */
     public void endCurrentGame() {
@@ -286,7 +299,7 @@ public class GameEngine {
                 }
                 if (spawnCarrier) {
                     if (spawnTimer.timePassed() >= 200) {
-                        currentLevel.getActorSpawner().spawnCarrier(1000, 200);
+                        currentLevel.getActorSpawner().spawnCarrier(1);
                         spawnTimer.restart();
                     }
                 }
@@ -357,19 +370,6 @@ public class GameEngine {
                 break;
             }
         }
-    }
-
-    /**
-     * Creates the currentLevel.
-     */
-    private void resetLevel() {
-        fadingCanvasItems.clear();
-        rocketManager.clear();
-        explosionManager.clear();
-//        currentLevel = new Level1(this, rocketManager, fadingCanvasItems);
-        currentLevel = new Demonstration(this, rocketManager, fadingCanvasItems);
-//        currentLevel = new TestLevel(this, rocketManager, fadingCanvasItems);
-        soundManager.stop(Sound.GAME_MUSIC);
     }
 
     private void loadResources() {

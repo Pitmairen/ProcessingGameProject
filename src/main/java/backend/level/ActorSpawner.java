@@ -1,6 +1,8 @@
 package backend.level;
 
+import backend.actor.Actor;
 import backend.actor.ModuleContainer;
+import backend.actor.Player;
 import backend.actor.enemy.Enemy;
 import backend.actor.ai.DroneAI;
 import backend.actor.enemy.Frigate;
@@ -36,9 +38,9 @@ public class ActorSpawner {
     }
 
     /**
-     * Spawns a given number of kamikaze drones at random locations.
+     * Spawns a given number of Kamikaze drones at random locations.
      *
-     * @param amount Number of kamikaze drones to spawn.
+     * @param amount Number of Kamikaze drones to spawn.
      */
     public void spawnKamikazeDrone(int amount) {
         Random random = new Random();
@@ -47,13 +49,14 @@ public class ActorSpawner {
             enemy.setAI(new DroneAI(enemy.getGameEngine(), currentLevel.getPlayer(), enemy));
             currentLevel.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
             currentLevel.getGameEngine().getCurrentLevel().getActors().add(enemy);
+            checkForCollisionWithPlayer(enemy);
         }
     }
 
     /**
-     * Spawns a given number of frigates at random locations.
+     * Spawns a given number of Frigates at random locations.
      *
-     * @param amount Number of frigates to spawn.
+     * @param amount Number of Frigates to spawn.
      */
     public void spawnFrigate(int amount) {
         Random random = new Random();
@@ -62,6 +65,23 @@ public class ActorSpawner {
             enemy.setAI(new SlayerAI(enemy, currentLevel.getPlayer()));
             currentLevel.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
             currentLevel.getGameEngine().getCurrentLevel().getActors().add(enemy);
+            checkForCollisionWithPlayer(enemy);
+        }
+    }
+
+    /**
+     * Spawns a given number of Carriers at random locations.
+     *
+     * @param amount Number of frigates to spawn.
+     */
+    public void spawnCarrier(int amount) {
+        Random random = new Random();
+        for (int i = 0; i < amount; i++) {
+            enemy = new DroneCarrier(new Vector(randX(random), randY(random), 0), currentLevel.getGameEngine());
+            enemy.setAI(new SlayerAI(enemy, currentLevel.getPlayer()));
+            currentLevel.getGameEngine().getCurrentLevel().getEnemies().add(enemy);
+            currentLevel.getGameEngine().getCurrentLevel().getActors().add(enemy);
+            checkForCollisionWithPlayer(enemy);
         }
     }
 
@@ -79,6 +99,18 @@ public class ActorSpawner {
     }
 
     /**
+     * Spawns an Auto cannon at a random location.
+     */
+    public void spawnAutoCannon() {
+        Random random = new Random();
+        moduleContainer = new ModuleContainer(new Vector(randX(random), randY(random), 0), currentLevel.getGameEngine());
+        moduleContainer.setModule(new AutoCannon(moduleContainer));
+        currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
+        currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
+        checkForCollisionWithPlayer(moduleContainer);
+    }
+
+    /**
      * Spawns an auto cannon at the given location.
      *
      * @param x Initial x-position.
@@ -89,6 +121,18 @@ public class ActorSpawner {
         moduleContainer.setModule(new AutoCannon(moduleContainer));
         currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
         currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
+    }
+
+    /**
+     * Spawns a Rocket launcher at a random location.
+     */
+    public void spawnRocketLauncher() {
+        Random random = new Random();
+        moduleContainer = new ModuleContainer(new Vector(randX(random), randY(random), 0), currentLevel.getGameEngine());
+        moduleContainer.setModule(new RocketLauncher(moduleContainer, currentLevel.getRocketManager()));
+        currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
+        currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
+        checkForCollisionWithPlayer(moduleContainer);
     }
 
     /**
@@ -105,6 +149,18 @@ public class ActorSpawner {
     }
 
     /**
+     * Spawns a Seeker launcher at a random location.
+     */
+    public void spawnSeekerLauncher() {
+        Random random = new Random();
+        moduleContainer = new ModuleContainer(new Vector(randX(random), randY(random), 0), currentLevel.getGameEngine());
+        moduleContainer.setModule(new SeekerCannon(moduleContainer, currentLevel.getFadingCanvasItems()));
+        currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
+        currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
+        checkForCollisionWithPlayer(moduleContainer);
+    }
+
+    /**
      * Spawns a seeker launcher at the given location.
      *
      * @param x Initial x-position.
@@ -115,6 +171,18 @@ public class ActorSpawner {
         moduleContainer.setModule(new SeekerCannon(moduleContainer, currentLevel.getFadingCanvasItems()));
         currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
         currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
+    }
+
+    /**
+     * Spawns a Laser cannon at a random location.
+     */
+    public void spawnLaser() {
+        Random random = new Random();
+        moduleContainer = new ModuleContainer(new Vector(randX(random), randY(random), 0), currentLevel.getGameEngine());
+        moduleContainer.setModule(new LaserCannon(moduleContainer));
+        currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
+        currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
+        checkForCollisionWithPlayer(moduleContainer);
     }
 
     /**
@@ -131,6 +199,18 @@ public class ActorSpawner {
     }
 
     /**
+     * Spawns an EMP at a random location.
+     */
+    public void spawnEMP() {
+        Random random = new Random();
+        moduleContainer = new ModuleContainer(new Vector(randX(random), randY(random), 0), currentLevel.getGameEngine());
+        moduleContainer.setModule(new EMPCannon(moduleContainer, currentLevel.getFadingCanvasItems()));
+        currentLevel.getGameEngine().getCurrentLevel().getItems().add(moduleContainer);
+        currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
+        checkForCollisionWithPlayer(moduleContainer);
+    }
+
+    /**
      * Spawns a EMP at the given location.
      *
      * @param x Initial x-position.
@@ -143,14 +223,29 @@ public class ActorSpawner {
         currentLevel.getGameEngine().getCurrentLevel().getActors().add(moduleContainer);
     }
 
+    /**
+     * Checks whether the new actor spawned on top of the player. If it did,
+     * then teleport the new actor to a random location.
+     *
+     * @param actor The actor to check.
+     */
+    private void checkForCollisionWithPlayer(Actor actor) {
+        for (Actor actorInList : currentLevel.getGameEngine()
+                .getCollisionDetector().detectActorCollision(enemy)) {
+            if (actorInList instanceof Player) {
+                actor.teleport();
+            }
+        }
+    }
+
     // Return a random x-position.
     private int randX(Random rand) {
-        return rand.nextInt(currentLevel.getGameEngine().getGuiHandler().getWidth() - 200) + 100;
+        return rand.nextInt(currentLevel.getGameEngine().getGuiHandler().getWidth() - 160) + 80;
     }
 
     // Return a random y-position.
     private int randY(Random rand) {
-        return rand.nextInt(currentLevel.getGameEngine().getGuiHandler().getHeight() - 200) + 100;
+        return rand.nextInt(currentLevel.getGameEngine().getGuiHandler().getHeight() - 160) + 80;
     }
 
 }

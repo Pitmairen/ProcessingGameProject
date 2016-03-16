@@ -95,7 +95,7 @@ public abstract class Actor implements Drawable {
         updatePosition(timePassed);
         checkWallCollisions(timePassed);
         checkActorCollisions(timePassed);
-        if(getCurrentEnergy() < getMaxEnergy()){
+        if (getCurrentEnergy() < getMaxEnergy()) {
             currentEnergy += 0.15;
         }
     }
@@ -215,18 +215,25 @@ public abstract class Actor implements Drawable {
         if (outOfBoundsCounter > 2) {
             // Out of bonds for more than 2 turns in a row.
             // Assume actor is stuck out of bonds and teleport it back in.
-            this.getSpeedT().set(0, 0, 0);
-
-            Random random = new Random();
-            int randX = random.nextInt(guiHandler.getWidth() - 200) + 100;
-            int randY = random.nextInt(guiHandler.getHeight() - 200) + 100;
-            this.getPosition().set(randX, randY, 0);
+            this.teleport();
         }
 
         // Handle wall collisions.
         for (String wallCollision : wallCollisions) {
             wallBounce(wallCollision, timePassed);
         }
+    }
+
+    /**
+     * Teleports the actor to a random location.
+     */
+    public void teleport() {
+        this.getSpeedT().set(0, 0, 0);
+
+        Random random = new Random();
+        int randX = random.nextInt(guiHandler.getWidth() - ((int) hitBoxRadius) * 2) + (int) hitBoxRadius;
+        int randY = random.nextInt(guiHandler.getHeight() - ((int) hitBoxRadius) * 2) + (int) hitBoxRadius;
+        this.getPosition().set(randX, randY, 0);
     }
 
     /**
@@ -363,13 +370,13 @@ public abstract class Actor implements Drawable {
 
     /**
      * Removes energy from the actor.
-     * 
-     * @param energy the amount of energy to remove 
+     *
+     * @param energy the amount of energy to remove
      */
-    public void removeEnergy(double energy){
+    public void removeEnergy(double energy) {
         currentEnergy -= energy;
     }
-    
+
     /**
      * Handles what will happen to this actor upon collision with other actors.
      *
@@ -528,23 +535,23 @@ public abstract class Actor implements Drawable {
     public void setTacticalModule(ShipModule tacticalModule) {
         setCurrentTacticalModule(tacticalModule);
     }
-    
+
     protected void setCurrentOffensiveModule(ShipModule module) {
-        if(currentOffensiveModule != null) {
+        if (currentOffensiveModule != null) {
             currentOffensiveModule.deactivated();
         }
         currentOffensiveModule = module;
     }
-    
+
     protected void setCurrentDefensiveModule(ShipModule module) {
-        if(currentDefensiveModule != null) {
+        if (currentDefensiveModule != null) {
             currentDefensiveModule.deactivated();
         }
         currentDefensiveModule = module;
     }
-    
+
     protected void setCurrentTacticalModule(ShipModule module) {
-        if(tacticalModule != null) {
+        if (tacticalModule != null) {
             tacticalModule.deactivated();
         }
         tacticalModule = module;

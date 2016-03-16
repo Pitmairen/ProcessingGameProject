@@ -21,7 +21,7 @@ import backend.resources.Sound;
  */
 public class RocketLauncher extends OffensiveModule {
 
-    private double timeBetweenShots = 900;
+    private double timeBetweenShots = 1100;
     private Timer timer = new Timer();
 
     private RocketManager rocketManager;
@@ -36,7 +36,7 @@ public class RocketLauncher extends OffensiveModule {
         this.rocketManager = rocketManager;
 
         launchVelocity = 0.6;
-        projectileDamage = 29;
+        projectileDamage = 34;
 
         moduleImage = getImageFromResourceManager(Image.ROCKET_LAUNCHER);
     }

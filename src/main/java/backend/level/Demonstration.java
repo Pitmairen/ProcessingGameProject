@@ -7,7 +7,7 @@ import backend.main.RocketManager;
 import backend.main.Vector;
 
 /**
- * Demonstration level.
+ * Demonstration level. Made specifically for the presentation.
  *
  * @author Kristian Honningsvag.
  */
@@ -48,7 +48,7 @@ public class Demonstration extends Level {
                         actorSpawner.spawnLaser(150, 300);
                         actorSpawner.spawnEMP(150, 300);
 
-                        actorSpawner.spawnCarrier(1000, 400);
+                        actorSpawner.spawnCarrier(1);
                         actorSpawner.spawnFrigate(2);
                         actorSpawner.spawnKamikazeDrone(1);
                         setTimeToNextWave(12000);

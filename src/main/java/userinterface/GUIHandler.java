@@ -19,6 +19,8 @@ import processing.core.PImage;
  */
 public class GUIHandler extends PApplet {
 
+    private final String versionNumber = "Version: 20160316-alpha";
+
     // Game field.
     private int outerWallThickness = 0;
     private int[] outerWallsRGBA = new int[]{153, 153, 253, 255};
@@ -127,7 +129,12 @@ public class GUIHandler extends PApplet {
                 drawTitleScreenImage();
                 break;
             }
-            case HELP_SCREEN_PAUSED:
+            case HELP_SCREEN_PAUSED: {
+                gameEngine.getFadingCanvas().draw();
+                tintScreen();
+                drawHelpScreen();
+                break;
+            }
             case HELP_SCREEN: {
                 gameEngine.getFadingCanvas().draw();
                 drawHelpScreen();
@@ -255,7 +262,7 @@ public class GUIHandler extends PApplet {
         fill(hudRGBA[0], hudRGBA[1], hudRGBA[2]);
         textFont(debugHUDFont);
         textAlign(LEFT, BOTTOM);
-        text("Version: 20160315-alpha", 5, height - 5);
+        text(versionNumber, 5, height - 5);
     }
 
     /**
@@ -333,7 +340,7 @@ public class GUIHandler extends PApplet {
         textFont(menuFont);
         textAlign(CENTER, CENTER);
         text("You Were Defeated By " + hitByName
-                + "\n" + "Press \"ENTER\" to return to Start Menu."
+                + "\n" + "Press \"ENTER\" to return to Start Menu"
                 + "\n"
                 + "\n" + "Your score: " + gameEngine.getCurrentLevel().getPlayer().getScore(),
                 width / 2, height / 2 - 100);
@@ -349,7 +356,7 @@ public class GUIHandler extends PApplet {
         textFont(menuFont);
         textAlign(CENTER, CENTER);
         text("Victory achieved"
-                + "\n" + "Press \"ENTER\" to return to Start Menu."
+                + "\n" + "Press \"ENTER\" to return to Start Menu"
                 + "\n"
                 + "\n" + "Your score: " + gameEngine.getCurrentLevel().getPlayer().getScore(),
                 width / 2, height / 2 - 100);
