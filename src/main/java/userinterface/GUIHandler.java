@@ -19,7 +19,7 @@ import processing.core.PImage;
  */
 public class GUIHandler extends PApplet {
 
-    private final String versionNumber = "Version: 20160316-alpha";
+    private final String versionNumber = "Version: 20160317-alpha";
 
     // Game field.
     private int outerWallThickness = 0;
@@ -69,7 +69,7 @@ public class GUIHandler extends PApplet {
     private Menu pauseMenu;
 
     private boolean debugMode = false;
-    
+
     private PImage titleScreenImage;
 
     /**
@@ -84,14 +84,14 @@ public class GUIHandler extends PApplet {
         menuFont = createFont("hudFont.otf", 28, true);
         frameRate(60);
         cursor(CROSS);
-        
+
         keyRepeatEnabled = true;   // Needed for enhanced keyboard input reading.
-        
+
         String OS = System.getProperty("os.name");
-        if(OS.startsWith("Windows")){
+        if (OS.startsWith("Windows")) {
             keyRepeatEnabled = false; //Needed to fix input error on windows
         }
-        
+
         gameEngine = new GameEngine(this);
 
         mainMenu = new Menu("Xeno Blaster 4000", this, gameEngine.getSoundManager());
@@ -106,10 +106,8 @@ public class GUIHandler extends PApplet {
      */
     @Override
     public void settings() {
-//        fullScreen(P3D);
-//        fullScreen(P3D, 2);
+        fullScreen(P3D);
 //        size(1920, 1080, P3D);
-        size(1280, 960, P3D);
     }
 
     /**
@@ -187,7 +185,7 @@ public class GUIHandler extends PApplet {
     public void showMainMenu() {
         mainMenu.show();
     }
-    
+
     /**
      * Show the main menu
      */
@@ -422,7 +420,7 @@ public class GUIHandler extends PApplet {
     public void keyPressed() {
         if (key == ESC) {
             key = 0;  // Hack to prevent ESC from quitting the application
-        }        
+        }
         gameEngine.userInput(keyCode, true);
         if (keyCode == VK_K) {
             this.toggleDebugMode();

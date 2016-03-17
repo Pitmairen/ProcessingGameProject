@@ -23,9 +23,9 @@ public class TestLevel extends Level {
         this.rocketManager = rocketManager;
         this.fadingCanvasItems = itemManager;
         levelName = "TestLevel";
-        baseTimeToNextWave = 999999;
+        baseTimeToNextWave = 120000;
 
-        player = new Player(new Vector(300, 250, 0), gameEngine);
+        player = new Player(new Vector(390, 370, 0), gameEngine);
         actors.add(player);
     }
 
@@ -43,29 +43,15 @@ public class TestLevel extends Level {
                 switch (currentWave) {
 
                     case 1: {
-                        actorSpawner.spawnRocketLauncher(250, 400);
-                        setTimeToNextWave(999999);
+                        actorSpawner.spawnRocketLauncher(200, 400);
+                        actorSpawner.spawnSeekerLauncher(200, 500);
+                        actorSpawner.spawnLaser(200, 600);
+                        actorSpawner.spawnEMP(200, 700);
+                        setTimeToNextWave(120000);
                         break;
                     }
 
                     case 2: {
-                        actorSpawner.spawnSeekerLauncher(250, 400);
-                        setTimeToNextWave(999999);
-                        break;
-                    }
-
-                    case 3: {
-                        actorSpawner.spawnLaser(250, 400);
-                        setTimeToNextWave(999999);
-                        break;
-                    }
-
-                    case 4: {
-                        actorSpawner.spawnEMP(250, 400);
-                        setTimeToNextWave(999999);
-                        break;
-                    }
-                    case 5: {
                         onLastWave = true;
                         break;
                     }

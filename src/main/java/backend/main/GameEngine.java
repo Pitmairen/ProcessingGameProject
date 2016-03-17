@@ -1,7 +1,6 @@
 package backend.main;
 
 import backend.actor.Actor;
-import backend.level.Demonstration;
 import backend.level.Level;
 import backend.level.Level1;
 import backend.level.TestLevel;
@@ -101,9 +100,8 @@ public class GameEngine {
         fadingCanvasItems.clear();
         rocketManager.clear();
         explosionManager.clear();
-//        currentLevel = new Level1(this, rocketManager, fadingCanvasItems);
-        currentLevel = new Demonstration(this, rocketManager, fadingCanvasItems);
 //        currentLevel = new TestLevel(this, rocketManager, fadingCanvasItems);
+        currentLevel = new Level1(this, rocketManager, fadingCanvasItems);
         soundManager.stop(Sound.GAME_MUSIC);
     }
 
@@ -491,6 +489,7 @@ public class GameEngine {
         switch (newState) {
 
             case GAMEPLAY:
+                resetLevel();
                 soundManager.play(Sound.GAME_MUSIC, new Vector(guiHandler.width / 2, guiHandler.height / 2, 0));
                 soundManager.stop(Sound.MENU_MUSIC);
                 break;
