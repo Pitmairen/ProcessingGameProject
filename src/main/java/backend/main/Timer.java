@@ -61,4 +61,10 @@ public class Timer {
             paused = false;
         }
     }
+
+    // Getters.
+    public boolean isPaused() {
+        return paused;
+    }
+
 }

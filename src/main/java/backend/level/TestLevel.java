@@ -36,7 +36,7 @@ public class TestLevel extends Level {
 
             timeToNextWave = baseTimeToNextWave - timer.timePassed();
 
-            if (timeToNextWave <= 0) {
+            if ((timeToNextWave <= 0 || (enemies.isEmpty() && currentWaveIsAutoSkippable)) && player.getCurrentHitPoints() > 0) {
 
                 currentWave++;
 

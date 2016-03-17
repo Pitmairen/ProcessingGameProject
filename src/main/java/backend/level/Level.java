@@ -65,7 +65,7 @@ public abstract class Level {
      * Prematurely spawn the next wave.
      */
     public void forceNextWave() {
-        if (timeToNextWave > 400) {
+        if (timeToNextWave > 400 && !timer.isPaused()) {
             setTimeToNextWave(400);
         }
     }

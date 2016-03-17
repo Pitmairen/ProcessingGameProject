@@ -37,7 +37,7 @@ public class Level1 extends Level {
 
             timeToNextWave = baseTimeToNextWave - timer.timePassed();
 
-            if (timeToNextWave <= 0 || (enemies.isEmpty() && currentWaveIsAutoSkippable)) {
+            if ((timeToNextWave <= 0 || (enemies.isEmpty() && currentWaveIsAutoSkippable)) && player.getCurrentHitPoints() > 0) {
 
                 currentWave++;
 
