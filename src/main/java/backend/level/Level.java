@@ -58,7 +58,7 @@ public abstract class Level {
     // Set the time until the next wave spawns.
     protected void setTimeToNextWave(int timeToNextWave) {
         baseTimeToNextWave = timeToNextWave;
-        timer.restart();
+        timer.reset();
     }
 
     /**

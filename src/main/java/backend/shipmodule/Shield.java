@@ -64,7 +64,7 @@ public class Shield extends DefensiveModule {
             } else {
                 shield.die();
             }
-            shieldActivateTimer.restart();
+            shieldActivateTimer.reset();
         }
     }
 

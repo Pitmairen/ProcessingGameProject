@@ -222,7 +222,7 @@ public class Player extends Actor implements Drawable {
             }
             
             setCurrentOffensiveModule(module);
-            offensiveModuleTimer.restart();
+            offensiveModuleTimer.reset();
         }
     }
 
@@ -239,7 +239,7 @@ public class Player extends Actor implements Drawable {
             }
             
             setCurrentDefensiveModule(module);
-            defensiveModuleTimer.restart();
+            defensiveModuleTimer.reset();
         }
     }
 

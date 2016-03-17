@@ -8,30 +8,57 @@ package backend.main;
 public class Timer {
 
     private double time = 0;
+    private double pauseTime = 0;
+    private boolean paused = false;
 
     /**
      * Constructor.
      */
     public Timer() {
-        restart();
+        reset();
     }
 
     /**
-     * Restarts the timer.
+     * Resets the timer.
      */
-    public void restart() {
+    public void reset() {
         time = System.currentTimeMillis();
+        paused = false;
     }
 
     /**
-     * Returns the time passed since last restart.
-     *
-     * @return
+     * Returns the time passed since last reset.
      */
     public double timePassed() {
 
-        double timePassed = System.currentTimeMillis() - time;
+        double timePassed;
+
+        if (!paused) {
+            timePassed = System.currentTimeMillis() - time;
+        } else {
+            timePassed = pauseTime - time;
+        }
+
         return timePassed;
     }
 
+    /**
+     * Pauses the timer.
+     */
+    public void pause() {
+        if (!paused) {
+            pauseTime = System.currentTimeMillis();
+            paused = true;
+        }
+    }
+
+    /**
+     * Starts the timer.
+     */
+    public void start() {
+        if (paused) {
+            time = time + (System.currentTimeMillis() - pauseTime);
+            paused = false;
+        }
+    }
 }

@@ -73,7 +73,7 @@ public class SlayerAI implements AI {
     private void fireAtTarget() {
         if (fireTimer.timePassed() > (attackDelay + fireVariance)) {
             puppet.getCurrentOffensiveModule().activate();
-            fireTimer.restart();
+            fireTimer.reset();
             fireVariance = getRandomNumber(0, 1000);
         }
     }
@@ -146,7 +146,7 @@ public class SlayerAI implements AI {
             // Switch direction
             if (moveTimer.timePassed() > moveTimeout) {
                 direction *= -1;
-                moveTimer.restart();
+                moveTimer.reset();
             }
 
             // Move sideways

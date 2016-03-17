@@ -85,7 +85,7 @@ public class DroneLauncher extends OffensiveModule {
             owner.getGameEngine().getCurrentLevel().getEnemies().add(drone);
             owner.getGameEngine().getCurrentLevel().getActors().add(drone);
 
-            timer.restart();
+            timer.reset();
         }
     }
 

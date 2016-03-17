@@ -63,7 +63,7 @@ public class RocketLauncher extends OffensiveModule {
             owner.getGameEngine().getCurrentLevel().getActors().add(rocket);
             rocketManager.addRocket(rocket);
 
-            timer.restart();
+            timer.reset();
         }
     }
 

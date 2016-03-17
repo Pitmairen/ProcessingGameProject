@@ -62,7 +62,7 @@ public class EMPCannon extends TacticalModule {
             owner.getGameEngine().getCurrentLevel().getActors().add(pulse);
             fadingCanvasItems.add(pulse);
 
-            timer.restart();
+            timer.reset();
 
             owner.removeEnergy(60);
         }

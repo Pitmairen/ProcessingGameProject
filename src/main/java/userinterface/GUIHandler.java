@@ -117,7 +117,7 @@ public class GUIHandler extends PApplet {
     public void draw() {
 
         gameEngine.run(timer.timePassed());
-        timer.restart();
+        timer.reset();
 
         switch (gameEngine.getSimulationState()) {
 

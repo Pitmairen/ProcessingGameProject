@@ -52,7 +52,7 @@ public class AutoCannon extends OffensiveModule {
             owner.getGameEngine().getCurrentLevel().getProjectiles().add(bullet);
             owner.getGameEngine().getCurrentLevel().getActors().add(bullet);
 
-            timer.restart();
+            timer.reset();
         }
     }
 

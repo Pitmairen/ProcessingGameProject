@@ -279,26 +279,26 @@ public class GameEngine {
                     if (pauseTimer.timePassed() >= 200) {
                         setSimulationState(SimulationState.PAUSE_SCREEN);
                         guiHandler.showPauseMenu();
-                        pauseTimer.restart();
+                        pauseTimer.reset();
                     }
                 }
                 if (spawnDrone) {
                     if (spawnTimer.timePassed() >= 200) {
                         currentLevel.getActorSpawner().spawnKamikazeDrone(1);
-                        spawnTimer.restart();
+                        spawnTimer.reset();
                     }
                 }
 
                 if (spawnFrigate) {
                     if (spawnTimer.timePassed() >= 200) {
                         currentLevel.getActorSpawner().spawnFrigate(1);
-                        spawnTimer.restart();
+                        spawnTimer.reset();
                     }
                 }
                 if (spawnCarrier) {
                     if (spawnTimer.timePassed() >= 200) {
                         currentLevel.getActorSpawner().spawnCarrier(1);
-                        spawnTimer.restart();
+                        spawnTimer.reset();
                     }
                 }
                 if (currentLevel.isOnLastWave() && currentLevel.getEnemies().isEmpty()) {
@@ -489,11 +489,12 @@ public class GameEngine {
         switch (newState) {
 
             case GAMEPLAY:
-                resetLevel();
+                currentLevel.getTimer().start();
                 soundManager.play(Sound.GAME_MUSIC, new Vector(guiHandler.width / 2, guiHandler.height / 2, 0));
                 soundManager.stop(Sound.MENU_MUSIC);
                 break;
             case PAUSE_SCREEN:
+                currentLevel.getTimer().pause();
                 soundManager.pause(Sound.GAME_MUSIC);
                 break;
             case MENU_SCREEN:

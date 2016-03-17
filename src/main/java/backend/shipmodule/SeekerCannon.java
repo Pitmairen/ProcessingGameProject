@@ -49,7 +49,7 @@ public class SeekerCannon extends OffensiveModule {
         if (owner.getGameEngine().getCurrentLevel().getEnemies().size() > 0) {
             if (timer.timePassed() >= timeBetweenShots) {
                 selector = findTarget();
-                timer.restart();
+                timer.reset();
             }
         }
     }
