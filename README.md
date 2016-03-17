@@ -1,18 +1,19 @@
- __  __               ___ _         _
+<code>
+ __  __               ___           _
  \ \/ /___ _ _  ___  | _ ) |__ _ __| |_ ___ _ _
   >  </ -_) ' \/ _ \ | _ \ / _` (_-<  _/ -_) '_|
  /_/\_\___|_||_\___/ |___/_\__,_/__/\__\___|_|
            | | | /  \ /  \ /  \
            |_  _| () | () | () |
              |_| \__/ \__/ \__/
-             
-            
+</code>
+
 This was a group project in the course "ID202712 Systems development and modeling" at NTNU Aalesund, spring 2016.
 
-<b>Project documentation</b><br>
+<b>Project documentation</b>
 Project documentation can be found <a href="https://drive.google.com/folderview?id=0Bx2Kmz6QDvgPTlNOaHVDMDhnUXc&usp=sharing" target="_blank">here</a>.
 
-<b>How to install</b><br>
+<b>How to install</b>
 This application is written in Java, so in theory it should run on any
 platform as long as Java is installed.
 
@@ -24,6 +25,3 @@ platform as long as Java is installed.
    No installation is required, simply run the file as a standard executable.
    This usually means double clicking the file if you are running windows.
    On Linux you can use the following command: java -jar XB4K.jar
-
-All source code is available at the following link:
-https://github.com/hasirak/ProcessingGameProject
